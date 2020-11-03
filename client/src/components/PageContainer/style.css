@@ -1,0 +1,12 @@
+.hiding {
+    display: none;
+}
+
+.showing {
+    display: block;
+}
+
+.pagination {
+    margin: 0 auto;
+    size: small;
+}
