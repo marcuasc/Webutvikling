@@ -6,7 +6,8 @@ const {Schema} = mongoose;
 const UserSchema = new Schema({
     username: {type: String},
     hash: {type: String},
-    salt: {type: String}
+    salt: {type: String},
+    ratings: {Array{ObjectID}}
 });
 
 const User = mongoose.model('User', UserSchema);
