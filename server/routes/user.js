@@ -5,7 +5,7 @@ const passport = require('passport');
 const utils = require('../middleware/utils');
 
 router.get('/protected', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    res.status(200).json({sucess: true, msg: 'You are succesfully authenticated to this route!'});
+    res.status(200).json({success: true, msg: 'You are succesfully authenticated to this route!'});
 
 });
 
