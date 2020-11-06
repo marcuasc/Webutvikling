@@ -6,12 +6,13 @@ const path = require('path');
 const pathToKey = path.join(__dirname, '..', 'id_rsa_priv.pem');
 const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 
-
+//Checks is the password is correct
 function validPassword(password, hash, salt) {
     const hashVerify = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
     return hash === hashVerify;
 }
 
+//Generates a hashed password, based on the users chosen password
 function genPassword(password) {
     const salt = crypto.randomBytes(32).toString('hex');
     const genHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');

@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 
-
+//Method for generating a pub-priv keypair
 function genKeyPair(){
     const keyPair = crypto.generateKeyPairSync('rsa',{
         modulusLength: 4096,

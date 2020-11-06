@@ -1,22 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-const passport = require("passport");
 const utils = require("../middleware/utils");
 
+//Method for logging in as a user.
 router.post("/login", function (req, res, next) {
     User.findOne({username: req.body.username})
         .then((user) => {
             if (!user) {
+                //Checks if user exists
                 res.status(401).json({sucess: false, msg: "Could not find user"});
             }
-
+            //Check is the saved hash and salt is correct for the users password
             const isValid = utils.validPassword(
                 req.body.password,
                 user.hash,
                 user.salt
             );
-
+            //Gives the user a token if the login info is correct
             if (isValid) {
                 const tokenObject = utils.issueJWT(user);
                 tokenObject.success = true;
@@ -32,8 +33,11 @@ router.post("/login", function (req, res, next) {
         });
 });
 
+//Method for adding a new user
 router.post("/register", async (req, res, next) => {
+    //Checks if username is taken
     if (!(await User.exists({username: req.body.username}))) {
+        //Hashes the users password
         const saltHash = utils.genPassword(req.body.password);
 
         const salt = saltHash.salt;
@@ -46,6 +50,7 @@ router.post("/register", async (req, res, next) => {
         });
 
         try {
+            //Saves the new user, and issues a valid token
             newUser.save().then((user) => {
                 const tokenObject = utils.issueJWT(user);
                 tokenObject.success = true;
