@@ -49,4 +49,10 @@ router.post(
   }
 );
 
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {}
+);
+
 module.exports = router;
