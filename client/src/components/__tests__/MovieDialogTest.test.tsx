@@ -4,7 +4,7 @@ import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
 import rootReducer from "../../redux/rootReducer";
-import { openResultModal } from "../../redux/result/resultActions";
+import { openMovieDialog } from "../../redux/movie/movieActions";
 import thunk from "redux-thunk";
 
 /*  Lager en ny store med thunk middleware 
@@ -12,7 +12,7 @@ import thunk from "redux-thunk";
     */
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
-store.dispatch(openResultModal("heijegerid"));
+store.dispatch(openMovieDialog("heijegerid"));
 
 // Tester at de finnes et element med alt="This is the poster of the movie" i Moviemodal etter det er renderet
 test("renders Search-button", () => {

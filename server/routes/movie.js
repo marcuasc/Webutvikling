@@ -40,23 +40,23 @@ const makeFindObject = (queryObject) => {
 const makeSortObject = (queryObject) => {
   let descending = 0;
   //Checks if the queryObject includes sorting
-  if (queryObject.sortBy) {
+  if (queryObject.sort) {
     //Decides what way to sort.
-    if (queryObject.sortBy.descending === "true") {
+    if (queryObject.sort.descending === "true") {
       descending = -1;
     } else {
       descending = 1;
     }
     //if queryObject sort on title, sort on title
-    if (queryObject.sortBy.type === "title") {
+    if (queryObject.sort.type === "title") {
       return { title: -descending };
     }
     //if queryObject sorts on duration, sort on duration
-    if (queryObject.sortBy.type === "duration") {
+    if (queryObject.sort.type === "duration") {
       return { duration: descending };
     }
     //if queryObject sort on budget, sort on budget
-    if (queryObject.sortBy.type === "budget") {
+    if (queryObject.sort.type === "budget") {
       return { budget: descending };
     }
   }
