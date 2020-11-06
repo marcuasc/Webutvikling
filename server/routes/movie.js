@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Movie = require("../models/movie");
 const qs = require("qs");
+const Review = require("../models/review");
 
 // Generates an FindObject that the get(/) method uses to filter.
 const makeFindObject = (queryObject) => {
@@ -103,26 +104,24 @@ router.get("/", async (req, res) => {
 });
 
 //Return a movie from id aswell as the average rating-score
-router.get("/id/:id", async (req, res) => {
-  try {
-    let data = await Movie.find({ _id: req.params.id }).exec();
-    res.json(data);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-//Updates a movie from id
-router.put("/id/:id", (req, res, next) => {
-  if (Movie.find({ _id: req.params.id })) {
-    Movie.updateOne({ _id: req.params.id }, req.body)
-      .then((data) => res.json(data))
-      .catch(next);
-  } else {
-    res.json({
-      error: "Movie does not exist",
+router.get("/:id", async (req, res) => {
+  await Movie.findOne({ _id: req.params.id })
+    .then(async (movie) => {
+      let avarageReview = null;
+      await Review.find({ movieID: movie._id })
+        .then((reviews) => {
+          for (review of reviews) {
+            avarageReview += review.rating;
+          }
+          avarageReview =
+            Math.round((avarageReview / reviews.length) * 100) / 100;
+        })
+        .catch({ error: "An error occured" });
+      res.json({ movie: movie, avarageRating: avarageReview });
+    })
+    .catch((_) => {
+      res.json({ error: "Could not get movie " + req.params.id });
     });
-  }
 });
 
 module.exports = router;
