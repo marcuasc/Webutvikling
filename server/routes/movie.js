@@ -103,21 +103,23 @@ router.get("/", async (req, res) => {
   }
 });
 
-//Return a movie from id aswell as the average rating-score
+//Return a movie from id aswell as the average rating-score from the review-objects connected to the movie
 router.get("/:id", async (req, res) => {
   await Movie.findOne({ _id: req.params.id })
     .then(async (movie) => {
-      let avarageReview = null;
+      //Sets the average review score to null on default
+      let averageReview = null;
+      //Finds the related reviews, iterates over them and finds the average rating.
       await Review.find({ movieID: movie._id })
         .then((reviews) => {
           for (review of reviews) {
-            avarageReview += review.rating;
+            averageReview += review.rating;
           }
-          avarageReview =
+          averageReview =
             Math.round((avarageReview / reviews.length) * 100) / 100;
         })
-        .catch({ error: "An error occured" });
-      res.json({ movie: movie, avarageRating: avarageReview });
+        .catch({error: "An error occured" });
+      res.json({ movie: movie, averageRating: averageReview });
     })
     .catch((_) => {
       res.json({ error: "Could not get movie " + req.params.id });
