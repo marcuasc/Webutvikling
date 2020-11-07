@@ -59,11 +59,11 @@ router.post("/register", async (req, res, next) => {
         responseObject.userID = user._id;
         res.status(200).json(responseObject);
       });
-    } catch (err) {
-      res.json({ success: false, msg: err });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error });
     }
   } else {
-    res.json({ error: "Username already taken" });
+    res.status(401).json({ error: "Username already taken" });
   }
 });
 
@@ -97,11 +97,13 @@ router.delete(
             return deletedUser;
           })
           .then((deletedUser) => {
-            res.json({ message: `User ${deletedUser.username} deleted` });
+            res
+              .status(200)
+              .json({ message: `User ${deletedUser.username} deleted` });
           })
           .catch(next);
       } else {
-        res.json({ error: "Not your user" });
+        res.status(403).json({ error: "Not your user" });
       }
     });
   }

@@ -92,14 +92,14 @@ router.get("/", async (req, res) => {
       .sort(makeSortObject(queryObject))
       .exec();
 
-    res.json({
+    res.status(200).json({
       movies,
       //Return the movies, as well as totalPages and currentPage
       totalPages: Math.ceil(count / parseInt(pageLimit)),
       currentPage: queryObject.page * 1, // The *1 is to make currentPage a number
     });
-  } catch (err) {
-    console.error(err.message);
+  } catch {
+    res.status(400).json({ error: "Could not fetch on query" });
   }
 });
 
@@ -118,11 +118,11 @@ router.get("/:id", async (req, res) => {
           averageReview =
             Math.round((avarageReview / reviews.length) * 100) / 100;
         })
-        .catch({error: "An error occured" });
-      res.json({ movie: movie, averageRating: averageReview });
+        .catch({ error: "An error occured" });
+      res.status(200).json({ movie: movie, averageRating: averageReview });
     })
     .catch((_) => {
-      res.json({ error: "Could not get movie " + req.params.id });
+      res.status(400).json({ error: "Could not get movie " + req.params.id });
     });
 });
 
