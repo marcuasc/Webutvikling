@@ -1,5 +1,5 @@
-import resultReducer from "../../redux/result/resultReducer";
-import { Result, ResultActionTypes } from "../../redux/result/resultTypes";
+import resultReducer from "../../redux/movie/movieReducer";
+import { MovieActionTypes } from "../../redux/movie/movieTypes";
 
 /*Staten open bestemmer om dialogen skal være fremme eller ikkke
  Denne testen sjekker at OPEN_RESULT_MODAL faktisk endrer på staten "open", ved å sjekke previous og expected state
@@ -11,9 +11,9 @@ test("should return expected state for OPEN_RESULT_MODAL action type and specifi
     open: false,
     loading: false,
     error: "",
-    result: {
+    movie: {
       genre: [],
-      ratings: [],
+      reviews: [],
       _id: "",
       title: "",
       poster_path: "",
@@ -21,19 +21,20 @@ test("should return expected state for OPEN_RESULT_MODAL action type and specifi
       budget: -1,
       release_date: "",
       duration: -1,
+      avarageRating: -1,
     },
   };
-  const action: ResultActionTypes = {
-    type: "OPEN_RESULT_MODAL",
+  const action: MovieActionTypes = {
+    type: "OPEN_MOVIE_DIALOG",
     payload: "",
   };
   const expectedState = {
     open: true,
     loading: false,
     error: "",
-    result: {
+    movie: {
       genre: [],
-      ratings: [],
+      reviews: [],
       _id: "",
       title: "",
       poster_path: "",
@@ -41,6 +42,7 @@ test("should return expected state for OPEN_RESULT_MODAL action type and specifi
       budget: -1,
       release_date: "",
       duration: -1,
+      avarageRating: -1,
     },
   };
   expect(resultReducer(previousState, action)).toEqual(expectedState);
@@ -56,9 +58,9 @@ test("should return expected state for CLOSE_RESULT_MODAL action type and specif
     open: true,
     loading: false,
     error: "",
-    result: {
+    movie: {
       genre: [],
-      ratings: [],
+      reviews: [],
       _id: "",
       title: "",
       poster_path: "",
@@ -66,18 +68,19 @@ test("should return expected state for CLOSE_RESULT_MODAL action type and specif
       budget: -1,
       release_date: "",
       duration: -1,
+      avarageRating: -1,
     },
   };
-  const action: ResultActionTypes = {
-    type: "CLOSE_RESULT_MODAL",
+  const action: MovieActionTypes = {
+    type: "CLOSE_MOVIE_DIALOG",
   };
   const expectedState = {
     open: false,
     loading: false,
     error: "",
-    result: {
+    movie: {
       genre: [],
-      ratings: [],
+      reviews: [],
       _id: "",
       title: "",
       poster_path: "",
@@ -85,6 +88,7 @@ test("should return expected state for CLOSE_RESULT_MODAL action type and specif
       budget: -1,
       release_date: "",
       duration: -1,
+      avarageRating: -1,
     },
   };
   expect(resultReducer(previousState, action)).toEqual(expectedState);

@@ -2,11 +2,11 @@ import React from "react";
 import Rating from "@material-ui/lab/Rating";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import "./style.css";
-import { Result } from "../../redux/result/resultTypes";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { connect, ConnectedProps } from "react-redux";
-import { putRatings } from "../../redux/result/resultActions";
+import { putRatings } from "../../redux/movie/movieActions";
+import { RootState } from "../../interfaces/RootState";
 
 /* 
 
@@ -29,26 +29,17 @@ When the component is exported (at the bottom), the component gets connected to 
 
 */
 
-interface RootState {
-    resultInfo: {
-        open: boolean;
-        loading: boolean;
-        error: string;
-        result: Result;
-    };
-}
-
 const mapStateToProps = (state: RootState) => {
-    return {
-        resultData: state.resultInfo,
-    };
+  return {
+    movieInfo: state.movieInfo,
+  };
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-    return {
-        putRatings: (ratings: Array<number>, id: string) =>
-            dispatch(putRatings(ratings, id)),
-    };
+  return {
+    putRatings: (ratings: Array<number>, id: string) =>
+      dispatch(putRatings(ratings, id)),
+  };
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -58,63 +49,63 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
 const CustomizedRatings: React.FunctionComponent<Props> = (props) => {
-    // Sets a disabled attribute in the component state. Initially false.
-    // Will be used to disable rating when user has rated movie.
-    const [disabled, setDisabled] = React.useState(false);
+  // Sets a disabled attribute in the component state. Initially false.
+  // Will be used to disable rating when user has rated movie.
+  const [disabled, setDisabled] = React.useState(false);
 
-    // Sets a userRaing attribute in the component state. Initially 0.
-    // Will be used to store users rating when user has rated movie.
-    const [userRating, setUserRating] = React.useState<number | null>(0);
+  // Sets a userRaing attribute in the component state. Initially 0.
+  // Will be used to store users rating when user has rated movie.
+  const [userRating, setUserRating] = React.useState<number | null>(0);
 
-    // Extracts relevant properties from the redux state.
-    const result = props.resultData.result;
-    const id = result._id;
+  // Extracts relevant properties from the redux state.
+  const movie = props.movieInfo.movie;
+  const id = movie._id;
 
-    // Function that triggers when user rates movie. Takes in ChangeEvent (which isnt used), and value.
-    const handleChange = (
-        _: React.ChangeEvent<unknown>,
-        value: number | null
-    ) => {
-        // If the value is not null, push the rating to a copy of the movie's ratings. Then it runs the putRatings action with the newRatings and movie id as input.
-        // It stores the rating on the movie in session storage, sets the userRating state to the rating and sets the disabled state to true.
-        if (value !== null) {
-            const newRatings = result.ratings;
-            newRatings.push(value);
-            props.putRatings(newRatings, result._id);
-            sessionStorage.setItem(id, String(value));
-            setUserRating(value);
-            setDisabled(true);
-        }
-    };
+  // Function that triggers when user rates movie. Takes in ChangeEvent (which isnt used), and value.
+  const handleChange = (
+    _: React.ChangeEvent<unknown>,
+    value: number | null
+  ) => {
+    // If the value is not null, push the rating to a copy of the movie's ratings. Then it runs the putRatings action with the newRatings and movie id as input.
+    // It stores the rating on the movie in session storage, sets the userRating state to the rating and sets the disabled state to true.
+    // if (value !== null) {
+    //     const newRatings = movie.ratings;
+    //     newRatings.push(value);
+    //     props.putRatings(newRatings, movie._id);
+    //     sessionStorage.setItem(id, String(value));
+    //     setUserRating(value);
+    //     setDisabled(true);
+    // }
+  };
 
-    // useEffect hook triggers when component mounts and everytime id or disabled updates.
-    // Checks if user has rating of movie in session storage. If it does, set the userRating state to the rating in storage and disabled to true.
-    // Else, set disabled to false.
-    React.useEffect(() => {
-        const tmp = sessionStorage.getItem(id);
-        if (tmp !== null) {
-            setUserRating(parseInt(tmp));
-            setDisabled(true);
-        } else {
-            setDisabled(false);
-        }
-    }, [id, disabled]);
+  // useEffect hook triggers when component mounts and everytime id or disabled updates.
+  // Checks if user has rating of movie in session storage. If it does, set the userRating state to the rating in storage and disabled to true.
+  // Else, set disabled to false.
+  React.useEffect(() => {
+    const tmp = sessionStorage.getItem(id);
+    if (tmp !== null) {
+      setUserRating(parseInt(tmp));
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [id, disabled]);
 
-    return (
-        <div>
-            {/* Rating component from MUI Lab. Value set to the userRating value in state and disabled to the disabled value in state. 
+  return (
+    <div>
+      {/* Rating component from MUI Lab. Value set to the userRating value in state and disabled to the disabled value in state. 
             When changed, triggers handleChange. Uses MUI StarBorderIcon*/}
-            <Rating
-                className="rating"
-                name="customized-empty"
-                value={userRating}
-                precision={1}
-                onChange={handleChange}
-                disabled={disabled}
-                emptyIcon={<StarBorderIcon />}
-            />
-        </div>
-    );
+      <Rating
+        className="rating"
+        name="customized-empty"
+        value={userRating}
+        precision={1}
+        onChange={handleChange}
+        disabled={disabled}
+        emptyIcon={<StarBorderIcon />}
+      />
+    </div>
+  );
 };
 
 export default connector(CustomizedRatings);

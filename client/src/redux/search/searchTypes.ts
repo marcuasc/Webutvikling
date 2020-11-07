@@ -15,47 +15,47 @@ export const UPDATE_TOTAL_PAGES = "UPDATE_TOTAL_PAGES";
 export const UPDATE_CURRENT_PAGE = "UPDATE_CURRENT_PAGE";
 
 interface FetchResultsRequestAction {
-    type: typeof FETCH_RESULTS_REQUEST;
+  type: typeof FETCH_RESULTS_REQUEST;
 }
 
 interface FetchResultsSuccessAction {
-    type: typeof FETCH_RESULTS_SUCCESS;
-    payload: Array<any>;
+  type: typeof FETCH_RESULTS_SUCCESS;
+  payload: Array<any>;
 }
 
 interface FetchResultsFailureAction {
-    type: typeof FETCH_RESULTS_FAILURE;
-    payload: string;
+  type: typeof FETCH_RESULTS_FAILURE;
+  payload: string;
 }
 
 interface UpdateSearchQueryAction {
-    type: typeof UPDATE_SEARCH_QUERY;
-    payload: string;
+  type: typeof UPDATE_SEARCH_QUERY;
+  payload: string;
 }
 
 interface UpdateTotalPages {
-    type: typeof UPDATE_TOTAL_PAGES;
-    payload: number;
+  type: typeof UPDATE_TOTAL_PAGES;
+  payload: number;
 }
 
 interface UpdateCurrentPage {
-    type: typeof UPDATE_CURRENT_PAGE;
-    payload: number;
+  type: typeof UPDATE_CURRENT_PAGE;
+  payload: number;
 }
 
 export interface Search {
-    loading: Boolean;
-    results: Array<any>;
-    error: string;
-    query: string;
-    totalPages: number;
-    currentPage: number;
+  loading: Boolean;
+  results: Array<any>;
+  error: string;
+  query: string;
+  totalPages: number;
+  currentPage: number;
 }
 
 export type SearchActionTypes =
-    | FetchResultsRequestAction
-    | FetchResultsSuccessAction
-    | FetchResultsFailureAction
-    | UpdateSearchQueryAction
-    | UpdateCurrentPage
-    | UpdateTotalPages;
+  | FetchResultsRequestAction
+  | FetchResultsSuccessAction
+  | FetchResultsFailureAction
+  | UpdateSearchQueryAction
+  | UpdateCurrentPage
+  | UpdateTotalPages;

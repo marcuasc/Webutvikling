@@ -3,6 +3,7 @@ import React from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
+import { RootState } from "../../interfaces/RootState";
 import { updateCurrentPage } from "../../redux/search/searchActions";
 import "./style.css";
 
@@ -27,25 +28,16 @@ When the component is exported (at the bottom), the component gets connected to 
 
 */
 
-interface RootState {
-    search: {
-        results: Array<any>;
-        loading: boolean;
-        currentPage: number;
-        totalPages: number;
-    };
-}
-
 const mapStateToProps = (state: RootState) => {
-    return {
-        searchData: state.search,
-    };
+  return {
+    searchData: state.search,
+  };
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-    return {
-        updateCurrentPage: (page: number) => dispatch(updateCurrentPage(page)),
-    };
+  return {
+    updateCurrentPage: (page: number) => dispatch(updateCurrentPage(page)),
+  };
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -55,55 +47,55 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
 const PageContainer: React.FunctionComponent<Props> = (props) => {
-    // Extracts necassary action and properties from the redux state.
-    const updateCurrentPage = props.updateCurrentPage;
-    const results = props.searchData.results;
-    const loading = props.searchData.loading;
+  // Extracts necassary action and properties from the redux state.
+  const updateCurrentPage = props.updateCurrentPage;
+  const results = props.searchData.results;
+  const loading = props.searchData.loading;
 
-    // Set the width of the page in the state.
-    const [width, setWidth] = React.useState(window.innerWidth);
+  // Set the width of the page in the state.
+  const [width, setWidth] = React.useState(window.innerWidth);
 
-    // Set the class of the component in the state. Initially set to "hiding"
-    // This is to be used to not display the component when there are no results.
-    const [style, setStyle] = React.useState("hiding");
+  // Set the class of the component in the state. Initially set to "hiding"
+  // This is to be used to not display the component when there are no results.
+  const [style, setStyle] = React.useState("hiding");
 
-    // Sets an eventlistener on the window. When it resizes, it updates the components width state with the current width of the page.
-    window.addEventListener("resize", () => setWidth(window.innerWidth));
+  // Sets an eventlistener on the window. When it resizes, it updates the components width state with the current width of the page.
+  window.addEventListener("resize", () => setWidth(window.innerWidth));
 
-    // Function that triggers when any page is clicked. Takes in a ChangeEvent and value. The change event is not used, and the value corresponds to the page number that was clicked.
-    // Updates the current page in the redux state with the page that was clicked.
-    const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
-        updateCurrentPage(value);
-    };
+  // Function that triggers when any page is clicked. Takes in a ChangeEvent and value. The change event is not used, and the value corresponds to the page number that was clicked.
+  // Updates the current page in the redux state with the page that was clicked.
+  const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    updateCurrentPage(value);
+  };
 
-    // useEffect hook triggers when the component mounts and everytime one of the dependencies from the dependency list changes.
-    React.useEffect(() => {
-        // If there are no results and it's not loading, set the style state of the component to hiding.
-        if (results.length === 0 && !loading) {
-            setStyle("hiding");
-        } else {
-            // else set it to showing
-            setStyle("showing");
-        }
-    }, [results, loading]);
+  // useEffect hook triggers when the component mounts and everytime one of the dependencies from the dependency list changes.
+  React.useEffect(() => {
+    // If there are no results and it's not loading, set the style state of the component to hiding.
+    if (results.length === 0 && !loading) {
+      setStyle("hiding");
+    } else {
+      // else set it to showing
+      setStyle("showing");
+    }
+  }, [results, loading]);
 
-    return (
-        // Pagination component from MUI. Sets the size according to the window width.
-        // className according to the style state.
-        // count according to the current total pages from redux state.
-        // page according to the current page from redux state.
-        // Triggers handleChange when a new page is clicked.
-        <Pagination
-            color="primary"
-            shape="rounded"
-            size={width <= 430 ? "small" : width <= 520 ? "medium" : "large"}
-            variant="text"
-            className={"pagination " + style}
-            count={props.searchData.totalPages}
-            page={props.searchData.currentPage}
-            onChange={handleChange}
-        />
-    );
+  return (
+    // Pagination component from MUI. Sets the size according to the window width.
+    // className according to the style state.
+    // count according to the current total pages from redux state.
+    // page according to the current page from redux state.
+    // Triggers handleChange when a new page is clicked.
+    <Pagination
+      color="primary"
+      shape="rounded"
+      size={width <= 430 ? "small" : width <= 520 ? "medium" : "large"}
+      variant="text"
+      className={"pagination " + style}
+      count={props.searchData.totalPages}
+      page={props.searchData.currentPage}
+      onChange={handleChange}
+    />
+  );
 };
 
 export default connector(PageContainer);
