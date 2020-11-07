@@ -69,3 +69,5 @@ const userReducer = (
       return state;
   }
 };
+
+export default userReducer;

@@ -3,6 +3,7 @@ import searchReducer from "./search/searchReducer";
 import filterReducer from "./filter/filterReducer";
 import sortReducer from "./sort/sortReducer";
 import movieReducer from "./movie/movieReducer";
+import userReducer from "./user/userReducer";
 
 // Creates a root reducer from all the reducers.
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   filter: filterReducer,
   sort: sortReducer,
   movieInfo: movieReducer,
+  userInfo: userReducer,
 });
 
 export default rootReducer;
