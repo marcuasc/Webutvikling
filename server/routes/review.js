@@ -22,7 +22,10 @@ router.post(
     if (req.body.rating !== undefined || req.body.text !== undefined) {
       let reviewExists = await Review.exists(
         //Checks if a review with the same movie-user combination exists already
-        { movieID: req.body.movieID } && { userID: req.body.userID }
+        {
+          movieID: req.body.movieID.toString(),
+          userID: req.user._id.toString(),
+        }
       );
       if (!reviewExists) {
         let newReview = req.body;
@@ -82,7 +85,7 @@ router.delete(
               return deletedReview;
             })
             .then((deletedReview) => {
-              res.json({ msg: `Review ${deletedReview._id} deleted` });
+              res.json({ message: `Review ${deletedReview._id} deleted` });
             })
             .catch(next);
         } else {

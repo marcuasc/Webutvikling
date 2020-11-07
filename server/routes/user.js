@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 const utils = require("../middleware/utils");
+const Review = require("../models/review");
+const Movie = require("../models/movie");
+const passport = require("passport");
 
 //Method for logging in as a user.
 router.post("/login", function (req, res, next) {
@@ -51,9 +54,10 @@ router.post("/register", async (req, res, next) => {
     try {
       //Saves the new user, and issues a valid token
       newUser.save().then((user) => {
-        const tokenObject = utils.issueJWT(user);
-        tokenObject.success = true;
-        res.status(200).json(tokenObject);
+        const responseObject = utils.issueJWT(user);
+        responseObject.success = true;
+        responseObject.userID = user._id;
+        res.status(200).json(responseObject);
       });
     } catch (err) {
       res.json({ success: false, msg: err });
@@ -62,5 +66,45 @@ router.post("/register", async (req, res, next) => {
     res.json({ error: "Username already taken" });
   }
 });
+
+//Method for deleting users
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {
+    //Check is the chosen id exists before deleting
+    await User.findOne({ _id: req.params.id }).then((user) => {
+      //Checks if the chosen user is the user that is logged in
+      if (user._id.toString() === req.user._id.toString()) {
+        // Finds user and deletes it
+        User.findOneAndDelete({ _id: req.params.id })
+          .then((deletedUser) => {
+            // Gets the reviews of the deleted user
+            const reviews = deletedUser.reviews;
+            for (reviewID of reviews) {
+              // For each reviewID, Find review and delete it
+              Review.findOneAndDelete({
+                _id: reviewID,
+              }).then((deletedReview) => {
+                // Update movie reviews list when review is deleted
+                Movie.findOneAndUpdate(
+                  { _id: deletedReview.movieID },
+                  { $pull: { reviews: deletedReview._id } },
+                  { new: true, useFindAndModify: false }
+                ).then();
+              });
+            }
+            return deletedUser;
+          })
+          .then((deletedUser) => {
+            res.json({ message: `User ${deletedUser.username} deleted` });
+          })
+          .catch(next);
+      } else {
+        res.json({ error: "Not your user" });
+      }
+    });
+  }
+);
 
 module.exports = router;
