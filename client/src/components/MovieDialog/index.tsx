@@ -132,7 +132,7 @@ const MovieDialog: React.FunctionComponent<Props> = (props) => {
                                 movie.ratings.reduce((a, b) => a + b, 0) /
                                 movie.ratings.length
                             ).toFixed(1) + "/5"} */}
-              "WIP"
+              {movie.avarageRating === null ? "N/A" : movie.avarageRating}
             </span>
           </div>
           <div>
