@@ -12,7 +12,9 @@ router.post("/login", function (req, res, next) {
     .then((user) => {
       if (!user) {
         //Checks if user exists
-        res.status(401).json({ sucess: false, msg: "Could not find user" });
+        res
+          .status(401)
+          .json({ success: false, message: "Could not find user" });
       }
       //Check is the saved hash and salt is correct for the users password
       const isValid = utils.validPassword(
@@ -27,7 +29,7 @@ router.post("/login", function (req, res, next) {
         responseObject.userID = user._id;
         res.status(200).json(responseObject);
       } else {
-        res.status(401).json({ success: false, msg: "Wrong password" });
+        res.status(401).json({ success: false, message: "Wrong password" });
       }
     })
     .catch((err) => {
@@ -59,11 +61,11 @@ router.post("/register", async (req, res, next) => {
         responseObject.userID = user._id;
         res.status(200).json(responseObject);
       });
-    } catch (err) {
-      res.json({ success: false, msg: err });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error });
     }
   } else {
-    res.json({ error: "Username already taken" });
+    res.status(401).json({ error: "Username already taken" });
   }
 });
 
@@ -97,11 +99,13 @@ router.delete(
             return deletedUser;
           })
           .then((deletedUser) => {
-            res.json({ message: `User ${deletedUser.username} deleted` });
+            res
+              .status(200)
+              .json({ message: `User ${deletedUser.username} deleted` });
           })
           .catch(next);
       } else {
-        res.json({ error: "Not your user" });
+        res.status(403).json({ error: "Not your user" });
       }
     });
   }

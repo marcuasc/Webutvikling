@@ -6,9 +6,9 @@ const User = require("../models/user");
 const passport = require("passport");
 
 //Method for retrieving a review from id. Does not need to check token, as everyone should be able to see reviews
-router.get("/id/:id", (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   Review.find({ _id: req.params.id })
-    .then((data) => res.json(data))
+    .then((data) => res.status(200).json(data))
     .catch(next);
 });
 
@@ -47,13 +47,13 @@ router.post(
             ).then();
             return newReview;
           })
-          .then((newReview) => res.json(newReview))
+          .then((newReview) => res.status(201).json(newReview))
           .catch(next);
       } else {
-        res.json({ error: "You have already reviewed this movie" });
+        res.status(409).json({ error: "You have already reviewed this movie" });
       }
     } else {
-      res.json({ error: "Not a valid review" });
+      res.status(400).json({ error: "Not a valid review" });
     }
   }
 );
@@ -85,11 +85,13 @@ router.delete(
               return deletedReview;
             })
             .then((deletedReview) => {
-              res.json({ message: `Review ${deletedReview._id} deleted` });
+              res
+                .status(200)
+                .json({ message: `Review ${deletedReview._id} deleted` });
             })
             .catch(next);
         } else {
-          res.json({ error: "Not your review" });
+          res.status(403).json({ error: "Not your review" });
         }
       })
       .catch(next);
@@ -112,13 +114,13 @@ router.put(
               { _id: req.params.id },
               { rating: req.body.rating, text: req.body.text }
             )
-              .then(res.json({ msg: "Review updated" }))
+              .then(res.status(200).json({ msg: "Review updated" }))
               .catch(next);
           } else {
-            res.json({ error: "Not a valid review" });
+            res.status(400).json({ error: "Not a valid review" });
           }
         } else {
-          res.json({ error: "Not your review" });
+          res.status(403).json({ error: "Not your review" });
         }
       })
       .catch(next);
