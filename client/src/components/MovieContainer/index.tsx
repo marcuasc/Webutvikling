@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../interfaces/RootState";
@@ -50,12 +51,14 @@ type Props = PropsFromRedux & {
   posterPath: string;
 };
 
-const ResultContainer: React.FunctionComponent<Props> = (props) => {
+const MovieContainer: React.FunctionComponent<Props> = (props) => {
+  const history = useHistory();
+
   return (
     // Returns a Box (MUI) with an image and title according to the props it got from the SearchResults component.
     // When clicked, triggers openMovieDialog action with the current id from redux state.
     <Box
-      onClick={() => props.openMovieDialog(props.id)}
+      onClick={() => history.push("movie/" + props.id)}
       className="result"
       bgcolor="secondary.light"
       boxShadow={3}
@@ -71,4 +74,4 @@ const ResultContainer: React.FunctionComponent<Props> = (props) => {
   );
 };
 
-export default connector(ResultContainer);
+export default connector(MovieContainer);

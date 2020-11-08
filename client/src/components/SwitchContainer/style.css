@@ -3,3 +3,9 @@
   margin: 0 auto;
   padding-top: 100px;
 }
+
+#searchContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}

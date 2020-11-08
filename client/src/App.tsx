@@ -11,7 +11,6 @@ import {
 import "./App.css";
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import MovieDialog from "./components/MovieDialog";
 import { Brightness5, Brightness7 } from "@material-ui/icons";
 import { BrowserRouter as Router } from "react-router-dom";
 import SwitchContainer from "./components/SwitchContainer";
@@ -102,8 +101,6 @@ function App() {
               </Toolbar>
             </AppBar>
             <SwitchContainer />
-            {/* MovieDialog that pops up when a movie is selected */}
-            <MovieDialog />
           </Box>
         </Router>
       </MuiThemeProvider>

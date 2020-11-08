@@ -1,18 +1,32 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import SearchContainer from "../SearchContainer";
+import MoviePage from "../MoviePage";
+import PageContainer from "../PageContainer";
+import SearchBar from "../SearchBar";
+import SearchResults from "../SearchResults";
+import UserPage from "../UserPage";
 import "./style.css";
 
 const SwitchContainer: React.FunctionComponent = () => {
   return (
     <div id="switchContainer">
       <Switch>
-        <Route path="/test">
-          <div>test</div>
+        <Route exact path="/">
+          <div id="searchContainer">
+            <SearchBar />
+            <PageContainer />
+            <SearchResults />
+            <PageContainer />
+          </div>
+        </Route>
+        <Route path="/movie/:movieID">
+          <MoviePage />
+        </Route>
+        <Route path="/user/:userID">
+          <UserPage />
         </Route>
         <Route>
-          {/* SearchContainer for all search related things */}
-          <SearchContainer />
+          <p>404</p>
         </Route>
       </Switch>
     </div>

@@ -3,7 +3,7 @@ import { AnyAction } from "redux";
 import { connect, ConnectedProps } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { fetchResults } from "../../redux/search/searchActions";
-import ResultContainer from "../MovieContainer";
+import MovieContainer from "../MovieContainer";
 import "./style.css";
 import { ParamsInterface } from "../../interfaces/ParamsInterface";
 import { RootState } from "../../interfaces/RootState";
@@ -96,7 +96,7 @@ const SearchResults: React.FunctionComponent<Props> = (props) => {
       } else {
         // ... and length is larger than zero, map each element in results to a ResultContainer with corresponding props.
         return props.searchData.results.map((result) => (
-          <ResultContainer
+          <MovieContainer
             key={result._id}
             id={result._id}
             title={result.title}
