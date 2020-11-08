@@ -118,10 +118,12 @@ router.get("/:id", async (req, res) => {
           averageReview =
             Math.round((avarageReview / reviews.length) * 100) / 100;
         })
+        .then(
+          res.status(200).json({ movie: movie, averageRating: averageReview })
+        )
         .catch({ error: "An error occured" });
-      res.status(200).json({ movie: movie, averageRating: averageReview });
     })
-    .catch((_) => {
+    .catch((error) => {
       res.status(400).json({ error: "Could not get movie " + req.params.id });
     });
 });
