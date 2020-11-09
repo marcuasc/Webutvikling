@@ -5,7 +5,6 @@ import { useHistory } from "react-router-dom";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../interfaces/RootState";
-import { openMovieDialog } from "../../redux/movie/movieActions";
 import "./style.css";
 
 /* 
@@ -36,9 +35,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    openMovieDialog: (id: string) => dispatch(openMovieDialog(id)),
-  };
+  return {};
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

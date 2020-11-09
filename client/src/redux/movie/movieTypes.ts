@@ -18,14 +18,6 @@ export const PUT_RATINGS_REQUEST = "PUT_RATINGS_REQUEST";
 export const PUT_RATINGS_SUCCESS = "PUT_RATINGS_SUCCESS";
 export const PUT_RATINGS_FAILURE = "PUT_RATINGS_FAILURE";
 
-interface OpenMovieDialogAction {
-  type: typeof OPEN_MOVIE_DIALOG;
-  payload: string;
-}
-
-interface CloseMovieDialogAction {
-  type: typeof CLOSE_MOVIE_DIALOG;
-}
 interface FetchMovieRequestAction {
   type: typeof FETCH_MOVIE_REQUEST;
 }
@@ -52,15 +44,12 @@ export interface Movie {
 }
 
 export interface MovieInfo {
-  open: boolean;
   loading: boolean;
   error: string;
   movie: Movie;
 }
 
 export type MovieActionTypes =
-  | OpenMovieDialogAction
-  | CloseMovieDialogAction
   | FetchMovieFailureAction
   | FetchMovieRequestAction
   | FetchMovieSuccessAction;
