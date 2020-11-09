@@ -24,7 +24,7 @@ const initialState: MovieInfo = {
     budget: -1,
     release_date: "",
     duration: -1,
-    avarageRating: -1,
+    averageRating: -1,
   },
 };
 

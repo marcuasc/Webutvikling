@@ -112,16 +112,18 @@ router.get("/:id", async (req, res) => {
       //Finds the related reviews, iterates over them and finds the average rating.
       await Review.find({ movieID: movie._id })
         .then((reviews) => {
-          for (review of reviews) {
-            averageReview += review.rating;
+          if (reviews.length > 0) {
+            for (review of reviews) {
+              averageReview += review.rating;
+            }
+            averageReview =
+              Math.round((avarageReview / reviews.length) * 100) / 100;
           }
-          averageReview =
-            Math.round((avarageReview / reviews.length) * 100) / 100;
         })
         .then(
           res.status(200).json({ movie: movie, averageRating: averageReview })
         )
-        .catch({ error: "An error occured" });
+        .catch((error) => res.json({ error: "An error occured" }));
     })
     .catch((error) => {
       res.status(400).json({ error: "Could not get movie " + req.params.id });

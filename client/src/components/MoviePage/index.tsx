@@ -123,7 +123,9 @@ const MoviePage: React.FunctionComponent<Props> = (props) => {
                                 movie.ratings.reduce((a, b) => a + b, 0) /
                                 movie.ratings.length
                             ).toFixed(1) + "/5"} */}
-                {movie.avarageRating === null ? "N/A" : movie.avarageRating}
+                {movie.averageRating === null
+                  ? "No reviews yet"
+                  : movie.averageRating}
               </span>
             </div>
             <div>
