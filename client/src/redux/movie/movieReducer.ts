@@ -2,8 +2,6 @@ import {
   FETCH_MOVIE_REQUEST,
   FETCH_MOVIE_SUCCESS,
   FETCH_MOVIE_FAILURE,
-  OPEN_MOVIE_DIALOG,
-  CLOSE_MOVIE_DIALOG,
   MovieInfo,
   MovieActionTypes,
 } from "./movieTypes";
@@ -11,7 +9,6 @@ import {
 // Uses MovieInfo interface for state.
 // The initial state of the reducer is set to:
 const initialState: MovieInfo = {
-  open: false,
   loading: false,
   error: "",
   movie: {
@@ -36,20 +33,6 @@ const movieReducer = (
   // Switch an the type of action it takes in.
   // The different cases are quite self-explanetory
   switch (action.type) {
-    case OPEN_MOVIE_DIALOG:
-      return {
-        ...state,
-        open: true,
-        movie: {
-          ...state.movie,
-          _id: action.payload,
-        },
-      };
-    case CLOSE_MOVIE_DIALOG:
-      return {
-        ...state,
-        open: false,
-      };
     case FETCH_MOVIE_REQUEST:
       return {
         ...state,

@@ -5,7 +5,6 @@ import "./style.css";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { connect, ConnectedProps } from "react-redux";
-import { putRatings } from "../../redux/movie/movieActions";
 import { RootState } from "../../interfaces/RootState";
 
 /* 
@@ -36,10 +35,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    putRatings: (ratings: Array<number>, id: string) =>
-      dispatch(putRatings(ratings, id)),
-  };
+  return {};
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

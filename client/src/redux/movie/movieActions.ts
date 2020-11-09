@@ -9,26 +9,11 @@ import {
   FETCH_MOVIE_REQUEST,
   FETCH_MOVIE_SUCCESS,
   FETCH_MOVIE_FAILURE,
-  OPEN_MOVIE_DIALOG,
-  CLOSE_MOVIE_DIALOG,
   Movie,
   MovieActionTypes,
 } from "./movieTypes";
 import Axios from "axios";
 import { Dispatch } from "redux";
-
-export const openMovieDialog = (id: string): MovieActionTypes => {
-  return {
-    type: OPEN_MOVIE_DIALOG,
-    payload: id,
-  };
-};
-
-export const closeMovieDialog = (): MovieActionTypes => {
-  return {
-    type: CLOSE_MOVIE_DIALOG,
-  };
-};
 
 const fetchMovieRequest = (): MovieActionTypes => {
   return {
@@ -68,13 +53,5 @@ export const fetchMovie = (id: string) => {
         const errorMsg = error.message;
         dispatch(fetchMovieFailure(errorMsg));
       });
-  };
-};
-
-// Async action to put ratings on a movie on id.
-export const putRatings = (ratings: Array<number>, id: string) => {
-  // Takes in list of ratings and id of movie to put on
-  return (dispatch: Dispatch) => {
-    // First dispatch putRatingsRequest with the ratings as input.
   };
 };
