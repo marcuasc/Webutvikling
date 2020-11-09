@@ -48,7 +48,7 @@ export interface Movie {
   budget: number;
   release_date: string;
   duration: number;
-  avarageRating: number;
+  averageRating: number;
 }
 
 export interface MovieInfo {
