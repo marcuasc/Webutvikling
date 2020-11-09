@@ -102,6 +102,11 @@ function App() {
             </AppBar>
             <SwitchContainer />
           </Box>
+          <Box id="footer" bgcolor="secondary.light" color="text.secondary">
+            <div id="footerContent">
+              <span>Made with love {"<3"}</span>
+            </div>
+          </Box>
         </Router>
       </MuiThemeProvider>
     </Provider>

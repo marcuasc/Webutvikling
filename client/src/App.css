@@ -1,11 +1,29 @@
+:root {
+  --footer-height: 100px;
+}
+
 .App {
-    min-height: 100vh;
+  min-height: calc(100vh - var(--footer-height));
 }
 
 #logo {
-    width: 70px;
+  width: 70px;
 }
 
 .grow {
-    flex-grow: 1;
+  flex-grow: 1;
+}
+
+#footer {
+  height: var(--footer-height);
+  margin: 0;
+}
+
+#footerContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 0 20px;
+  text-align: center;
 }
