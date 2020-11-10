@@ -1,0 +1,15 @@
+.MuiPaper-elevation6{
+    background-color: aliceblue;
+}
+
+
+#rootContainer{
+    width: 100%;
+}
+
+#paperContainer{
+    margin: 8%;
+    border-radius: 10px;
+    width:90%;
+    height: 50%;
+}
