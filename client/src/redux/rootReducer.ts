@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
   sort: sortReducer,
   movieInfo: movieReducer,
   userInfo: userReducer,
-  review: reviewReducer,
+  reviewInfo: reviewReducer,
 });
 
 export default rootReducer;

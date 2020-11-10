@@ -14,6 +14,7 @@ import {
 } from "./movieTypes";
 import Axios from "axios";
 import { Dispatch } from "redux";
+import { fetchReviews } from "../review/reviewActions";
 
 const fetchMovieRequest = (): MovieActionTypes => {
   return {
@@ -47,6 +48,7 @@ export const fetchMovie = (id: string) => {
         let movie = response.data.movie;
         movie.averageRating = response.data.averageRating;
         dispatch(fetchMovieSuccess(movie));
+        dispatch(fetchReviews("movie", id) as any);
       })
       .catch((error) => {
         // If it fails, dispatch MovieFailure, with the errorMsg extracted from the response.

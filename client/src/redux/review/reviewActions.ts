@@ -18,10 +18,9 @@ import {
   RecievedReview,
 } from "./reviewTypes";
 
-const postReviewRequest = (review: Review): ReviewActionTypes => {
+const postReviewRequest = (): ReviewActionTypes => {
   return {
     type: POST_REVIEW_REQUEST,
-    payload: review,
   };
 };
 
@@ -38,10 +37,9 @@ const postReviewFailure = (error: string): ReviewActionTypes => {
   };
 };
 
-const updateReviewRequest = (review: Review): ReviewActionTypes => {
+const updateReviewRequest = (): ReviewActionTypes => {
   return {
     type: UPDATE_REVIEW_REQUEST,
-    payload: review,
   };
 };
 
@@ -58,10 +56,9 @@ const updateReviewFailure = (error: string): ReviewActionTypes => {
   };
 };
 
-const deleteReviewRequest = (_id: string): ReviewActionTypes => {
+const deleteReviewRequest = (): ReviewActionTypes => {
   return {
     type: DELETE_REVIEW_REQUEST,
-    payload: _id,
   };
 };
 
@@ -78,10 +75,9 @@ const deleteReviewFailure = (error: string): ReviewActionTypes => {
   };
 };
 
-const fetchReviewsRequest = (movieID: string): ReviewActionTypes => {
+const fetchReviewsRequest = (): ReviewActionTypes => {
   return {
     type: FETCH_REVIEWS_REQUEST,
-    payload: movieID,
   };
 };
 
@@ -107,7 +103,7 @@ const getConfig = (token: string) => {
 
 export const postReview = (review: Review, token: string) => {
   return (dispatch: Dispatch) => {
-    dispatch(postReviewRequest(review));
+    dispatch(postReviewRequest());
     Axios.post("http://localhost:5000/review/", review, getConfig(token))
       .then((response) => {
         dispatch(postReviewSuccess());
@@ -121,7 +117,7 @@ export const postReview = (review: Review, token: string) => {
 
 export const updateReview = (review: RecievedReview, token: string) => {
   return (dispatch: Dispatch) => {
-    dispatch(updateReviewRequest(review));
+    dispatch(updateReviewRequest());
     const updatedReview = {
       rating: review.rating,
       text: review.text,
@@ -144,7 +140,7 @@ export const updateReview = (review: RecievedReview, token: string) => {
 
 export const deleteReview = (review: RecievedReview, token: string) => {
   return (dispatch: Dispatch) => {
-    dispatch(deleteReviewRequest(review._id));
+    dispatch(deleteReviewRequest());
     Axios.delete("http://localhost:5000/review/" + review._id, getConfig(token))
       .then((response) => {
         dispatch(deleteReviewSuccess());
@@ -152,6 +148,20 @@ export const deleteReview = (review: RecievedReview, token: string) => {
       .catch((error) => {
         const errorMsg = error.message;
         dispatch(deleteReviewFailure(errorMsg));
+      });
+  };
+};
+
+export const fetchReviews = (type: "movie" | "user", id: string) => {
+  return (dispatch: Dispatch) => {
+    dispatch(fetchReviewsRequest());
+    Axios.get("http://localhost:5000/" + type + "/" + id + "/reviews/")
+      .then((response) => {
+        dispatch(fetchReviewsSuccess(response.data.reviews));
+      })
+      .catch((error) => {
+        const errorMsg = error.message;
+        dispatch(fetchReviewsFailure(errorMsg));
       });
   };
 };

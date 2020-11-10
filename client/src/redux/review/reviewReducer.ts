@@ -18,7 +18,29 @@ import {
 const initialState: ReviewInfo = {
   loading: false,
   error: "",
-  reviews: [],
+  reviews: [
+    {
+      _id: "123",
+      rating: 5,
+      text: "Bra film",
+      movieID: "1234",
+      userID: "12345",
+    },
+    {
+      _id: "124",
+      rating: 3,
+      text: "Ok film",
+      movieID: "1234",
+      userID: "12345",
+    },
+    {
+      _id: "125",
+      rating: 4,
+      text: "grei film",
+      movieID: "1234",
+      userID: "12345",
+    },
+  ],
 };
 
 const reviewReducer = (

@@ -130,4 +130,17 @@ router.get("/:id", async (req, res) => {
     });
 });
 
+router.get("/:id/reviews", async (req, res) => {
+  Review.find({ movieID: req.params.id })
+    .then((reviews) => {
+      res.status(200).json({ reviews: reviews });
+      console.log("Error!!!!");
+    })
+    .catch((error) => {
+      res
+        .status(400)
+        .json({ error: "Could not get reviews from movie " + req.params.id });
+    });
+});
+
 module.exports = router;

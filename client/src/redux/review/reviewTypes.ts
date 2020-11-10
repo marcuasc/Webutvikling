@@ -17,7 +17,7 @@ export const FETCH_REVIEWS_FAILURE = "FETCH_REVIEWS_FAILURE";
 export interface ReviewInfo {
   loading: boolean;
   error: string;
-  reviews: Array<any>;
+  reviews: Array<RecievedReview>;
 }
 
 export interface RecievedReview {
@@ -36,7 +36,6 @@ export interface Review {
 
 interface PostReviewRequestAction {
   type: typeof POST_REVIEW_REQUEST;
-  payload: Review;
 }
 
 interface PostReviewSuccessAction {
@@ -50,7 +49,6 @@ interface PostReviewFailureAction {
 
 interface UpdateReviewRequestAction {
   type: typeof UPDATE_REVIEW_REQUEST;
-  payload: Review;
 }
 
 interface UpdateReviewSuccessAction {
@@ -64,7 +62,6 @@ interface UpdateReviewFailureAction {
 
 interface DeleteReviewRequestAction {
   type: typeof DELETE_REVIEW_REQUEST;
-  payload: string;
 }
 
 interface DeleteReviewSuccessAction {
@@ -78,7 +75,6 @@ interface DeleteReviewFailureAction {
 
 interface FetchReviewsRequestAction {
   type: typeof FETCH_REVIEWS_REQUEST;
-  payload: string;
 }
 
 interface FetchReviewsSuccessAction {
