@@ -21,4 +21,18 @@ export interface RootState {
     filters: Filters;
   };
   sort: { type: "title" | "duration" | "budget"; descending: boolean };
+  userInfo: {
+    loading: false;
+    error: "";
+    user: {
+      username: "";
+      userID: "";
+      token: "";
+    };
+  };
+  reviewInfo: {
+    loading: false;
+    error: "";
+    reviews: [];
+  };
 }

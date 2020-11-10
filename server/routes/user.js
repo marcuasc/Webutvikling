@@ -111,4 +111,16 @@ router.delete(
   }
 );
 
+router.get("/:id/reviews", async (req, res) => {
+  await Review.find({ userID: req.params.id })
+    .then((reviews) => {
+      res.status(200).json({ reviews: reviews });
+    })
+    .catch(() => {
+      res
+        .status(400)
+        .json({ error: "Could not get reviews from user " + req.params.id });
+    });
+});
+
 module.exports = router;
