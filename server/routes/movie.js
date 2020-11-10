@@ -134,7 +134,6 @@ router.get("/:id/reviews", async (req, res) => {
   Review.find({ movieID: req.params.id })
     .then((reviews) => {
       res.status(200).json({ reviews: reviews });
-      console.log("Error!!!!");
     })
     .catch((error) => {
       res
