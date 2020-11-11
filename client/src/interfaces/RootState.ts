@@ -1,9 +1,9 @@
 import { Filters } from "../redux/filter/filterTypes";
 import { Movie } from "../redux/movie/movieTypes";
+import { RecievedReview } from "../redux/review/reviewTypes";
 
 export interface RootState {
   movieInfo: {
-    open: boolean;
     loading: boolean;
     error: string;
     movie: Movie;
@@ -22,17 +22,18 @@ export interface RootState {
   };
   sort: { type: "title" | "duration" | "budget"; descending: boolean };
   userInfo: {
-    loading: false;
-    error: "";
+    loggedIn: boolean;
+    loading: boolean;
+    error: string;
     user: {
-      username: "";
-      userID: "";
-      token: "";
+      username: string;
+      userID: string;
+      token: string;
     };
   };
   reviewInfo: {
     loading: false;
-    error: "";
-    reviews: [];
+    error: string;
+    reviews: Array<RecievedReview>;
   };
 }

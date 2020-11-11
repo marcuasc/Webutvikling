@@ -9,6 +9,7 @@ export const USER_REGISTER_FAILURE = "USER_REGISTER_FAILURE";
 export const USER_LOGOUT = "USER_LOGOUT";
 
 export interface UserInfo {
+  loggedIn: boolean;
   loading: boolean;
   error: string;
   user: UserObject;
