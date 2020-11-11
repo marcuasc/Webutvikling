@@ -12,6 +12,7 @@ import "./App.css";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { Brightness5, Brightness7 } from "@material-ui/icons";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { BrowserRouter as Router } from "react-router-dom";
 import SwitchContainer from "./components/SwitchContainer";
 
@@ -97,6 +98,9 @@ function App() {
                             Current icon is based on the darkMode state */}
                 <IconButton onClick={() => setDarkMode(!darkMode)}>
                   {darkMode ? <Brightness5 /> : <Brightness7 />}
+                </IconButton>
+                <IconButton>
+                  <AccountCircleIcon />
                 </IconButton>
               </Toolbar>
             </AppBar>

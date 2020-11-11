@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import LoginPage from "../LoginPage";
 import MoviePage from "../MoviePage";
 import PageContainer from "../PageContainer";
 import SearchBar from "../SearchBar";
@@ -23,7 +24,7 @@ const SwitchContainer: React.FunctionComponent = () => {
           <MoviePage />
         </Route>
         <Route path="/user/:userID">
-          <UserPage />
+          <LoginPage open={true} />
         </Route>
         <Route>
           <p>404</p>
