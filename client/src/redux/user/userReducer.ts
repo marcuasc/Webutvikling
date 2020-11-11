@@ -11,6 +11,7 @@ import {
 } from "./userTypes";
 
 const initialState: UserInfo = {
+  loggedIn: false,
   loading: false,
   error: "",
   user: {
@@ -33,6 +34,7 @@ const userReducer = (
     case USER_LOGIN_SUCCESS:
       return {
         ...state,
+        loggedIn: true,
         loading: false,
         user: action.payload,
         error: "",
@@ -40,6 +42,7 @@ const userReducer = (
     case USER_LOGIN_FAILURE:
       return {
         ...state,
+        loggedIn: false,
         loading: false,
         user: initialState.user,
         error: action.payload,
