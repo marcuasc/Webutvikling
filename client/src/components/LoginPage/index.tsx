@@ -13,10 +13,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import "./style.css";
 
-interface RootState {
-  open: boolean;
-}
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -56,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginPage: React.FunctionComponent<RootState> = (props) => {
+const LoginPage: React.FunctionComponent = () => {
   const classes = useStyles();
 
   return (
