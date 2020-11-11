@@ -3,10 +3,10 @@ import { AnyAction } from "redux";
 import { connect, ConnectedProps } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { fetchResults } from "../../redux/search/searchActions";
-import ResultContainer from "../ResultContainer";
+import MovieContainer from "../MovieContainer";
 import "./style.css";
 import { ParamsInterface } from "../../interfaces/ParamsInterface";
-import { Filters } from "../../redux/filter/filterTypes";
+import { RootState } from "../../interfaces/RootState";
 
 /* 
 
@@ -29,36 +29,18 @@ When the component is exported (at the bottom), the component gets connected to 
 
 */
 
-interface RootState {
-    search: {
-        loading: boolean;
-        results: Array<any>;
-        error: string;
-        query: string;
-        currentPage: number;
-    };
-    filter: {
-        filters: Filters;
-    };
-    sortBy: {
-        type: "title" | "duration" | "budget";
-        descending: boolean;
-    };
-}
-
 const mapStateToProps = (state: RootState) => {
-    return {
-        searchData: state.search,
-        filterData: state.filter,
-        sortData: state.sortBy,
-    };
+  return {
+    searchData: state.search,
+    filterData: state.filter,
+    sortData: state.sort,
+  };
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-    return {
-        fetchResults: (params: ParamsInterface) =>
-            dispatch(fetchResults(params)),
-    };
+  return {
+    fetchResults: (params: ParamsInterface) => dispatch(fetchResults(params)),
+  };
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -68,65 +50,65 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
 const SearchResults: React.FunctionComponent<Props> = (props) => {
-    // Extract properties and action from the redux state.
-    const sortBy = props.sortData;
-    const filters = props.filterData.filters;
-    const currentPage = props.searchData.currentPage;
-    const query = props.searchData.query;
-    const fetchResults = props.fetchResults;
+  // Extract properties and action from the redux state.
+  const sort = props.sortData;
+  const filters = props.filterData.filters;
+  const currentPage = props.searchData.currentPage;
+  const query = props.searchData.query;
+  const fetchResults = props.fetchResults;
 
-    // Function for creating a config object according to the ParamsInterface.
-    // Because of the useCallback hook, this function only updates what it does when a dependency from the dependency list updates and not every time the component updates.
-    const createConfig = React.useCallback(() => {
-        let paramsObject: ParamsInterface = {
-            q: query,
-            page: currentPage,
-            genre: filters.genre,
-            duration: filters.duration,
-            budget: filters.budget,
-            sortBy: {
-                type: sortBy.type,
-                descending: sortBy.descending,
-            },
-        };
-        return paramsObject;
-    }, [query, currentPage, filters, sortBy]);
-
-    // useEffect hook triggers when the component mounts and when any of the dependencies from the dependencies
-    // Fetches results based on the current config file.
-    React.useEffect(() => {
-        fetchResults(createConfig());
-    }, [query, currentPage, filters, sortBy, fetchResults, createConfig]);
-
-    // Function that returns jsx based on the current redux state
-    const getResults = () => {
-        // If loading, return loading
-        if (props.searchData.loading) {
-            return <p>Loading</p>;
-        } else if (props.searchData.error) {
-            // If error, return error
-            return <p>{props.searchData.error}</p>;
-        } else if (props.searchData.results) {
-            // If results exist ...
-            // ... and length is zero, return query gave no results.
-            if (props.searchData.results.length === 0) {
-                return <p>Your query gave no results</p>;
-            } else {
-                // ... and length is larger than zero, map each element in results to a ResultContainer with corresponding props.
-                return props.searchData.results.map((result) => (
-                    <ResultContainer
-                        key={result._id}
-                        id={result._id}
-                        title={result.title}
-                        posterPath={result.poster_path}
-                    />
-                ));
-            }
-        }
+  // Function for creating a config object according to the ParamsInterface.
+  // Because of the useCallback hook, this function only updates what it does when a dependency from the dependency list updates and not every time the component updates.
+  const createConfig = React.useCallback(() => {
+    let paramsObject: ParamsInterface = {
+      q: query,
+      page: currentPage,
+      genre: filters.genre,
+      duration: filters.duration,
+      budget: filters.budget,
+      sort: {
+        type: sort.type,
+        descending: sort.descending,
+      },
     };
+    return paramsObject;
+  }, [query, currentPage, filters, sort]);
 
-    // Returns the result from getResults.
-    return <div id="results">{getResults()}</div>;
+  // useEffect hook triggers when the component mounts and when any of the dependencies from the dependencies
+  // Fetches results based on the current config file.
+  React.useEffect(() => {
+    fetchResults(createConfig());
+  }, [query, currentPage, filters, sort, fetchResults, createConfig]);
+
+  // Function that returns jsx based on the current redux state
+  const getResults = () => {
+    // If loading, return loading
+    if (props.searchData.loading) {
+      return <p>Loading</p>;
+    } else if (props.searchData.error) {
+      // If error, return error
+      return <p>{props.searchData.error}</p>;
+    } else if (props.searchData.results) {
+      // If results exist ...
+      // ... and length is zero, return query gave no results.
+      if (props.searchData.results.length === 0) {
+        return <p>Your query gave no results</p>;
+      } else {
+        // ... and length is larger than zero, map each element in results to a ResultContainer with corresponding props.
+        return props.searchData.results.map((result) => (
+          <MovieContainer
+            key={result._id}
+            id={result._id}
+            title={result.title}
+            posterPath={result.poster_path}
+          />
+        ));
+      }
+    }
+  };
+
+  // Returns the result from getResults.
+  return <div id="results">{getResults()}</div>;
 };
 
 export default connector(SearchResults);

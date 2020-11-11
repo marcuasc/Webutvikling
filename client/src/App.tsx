@@ -9,12 +9,12 @@ import {
   Toolbar,
 } from "@material-ui/core";
 import "./App.css";
-import SearchContainer from "./components/SearchContainer";
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import MovieDialog from "./components/MovieDialog";
 import { Brightness5, Brightness7 } from "@material-ui/icons";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { BrowserRouter as Router } from "react-router-dom";
+import SwitchContainer from "./components/SwitchContainer";
 
 function App() {
   // State to hold the value for darkmade. Set to true by default.
@@ -81,35 +81,37 @@ function App() {
     <Provider store={store}>
       {/*  Wraps the entire application in the MUI theme provider so that every component can access the current theme. */}
       <MuiThemeProvider theme={theme}>
-        {/* Box works as a div, but has the possibility to dynamically change bg and text color based on the current theme. Imported from MUI */}
-        <Box className="App" bgcolor="secondary.main" color="text.secondary">
-          {/* AppBar is imported from MUI. Fixed to the top of the screen. 
+        <Router>
+          {/* Box works as a div, but has the possibility to dynamically change bg and text color based on the current theme. Imported from MUI */}
+          <Box className="App" bgcolor="secondary.main" color="text.secondary">
+            {/* AppBar is imported from MUI. Fixed to the top of the screen. 
                     Makes use of the class "appBar" created with makeStyles. This overwrites the standard bgColor.*/}
-          <AppBar position="fixed" className={classes.appBar}>
-            {/* AppBar should always be used with the Toolbar component from MUI */}
-            <Toolbar>
-              {/* the logo of the website */}
-              <img id="logo" src="./resources/images/logo.png" alt="logo" />
-              {/* div that occupies remaining space of the Toolbar
+            <AppBar position="fixed" className={classes.appBar}>
+              {/* AppBar should always be used with the Toolbar component from MUI */}
+              <Toolbar>
+                {/* the logo of the website */}
+                <img id="logo" src="./resources/images/logo.png" alt="logo" />
+                {/* div that occupies remaining space of the Toolbar
                             This is to space the IconButton to the right side of the toolbar */}
-              <div className={"grow"} />
-              {/* IconButton from MUI. When clicked, flips the darkMode state.
+                <div className={"grow"} />
+                {/* IconButton from MUI. When clicked, flips the darkMode state.
                             Current icon is based on the darkMode state */}
-              <IconButton onClick={() => setDarkMode(!darkMode)}>
-                {darkMode ? <Brightness5 /> : <Brightness7 />}
-              </IconButton>
-              <br />
-              <IconButton>
-                <AccountCircleIcon />
-              </IconButton>
-            </Toolbar>
-          </AppBar>
-          {/* SearchContainer for all search related things */}
-          <SearchContainer />
-
-          {/* MovieDialog that pops up when a movie is selected */}
-          <MovieDialog />
-        </Box>
+                <IconButton onClick={() => setDarkMode(!darkMode)}>
+                  {darkMode ? <Brightness5 /> : <Brightness7 />}
+                </IconButton>
+                <IconButton>
+                  <AccountCircleIcon />
+                </IconButton>
+              </Toolbar>
+            </AppBar>
+            <SwitchContainer />
+          </Box>
+          <Box id="footer" bgcolor="secondary.light" color="text.secondary">
+            <div id="footerContent">
+              <span>Made with love {"<3"}</span>
+            </div>
+          </Box>
+        </Router>
       </MuiThemeProvider>
     </Provider>
   );

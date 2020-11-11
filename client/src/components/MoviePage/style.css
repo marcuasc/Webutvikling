@@ -1,0 +1,42 @@
+#moviePage {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  margin: 0;
+}
+
+.movieInfo {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.contentContainerLeft {
+  max-width: 300px;
+  object-fit: contain;
+  align-self: flex-start;
+  margin: 0 auto;
+}
+
+.contentContainerRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  flex: 1;
+  margin: 0 auto;
+  min-width: 200px;
+}
+
+.infoTitle {
+  font-weight: bold;
+}
+
+.poster {
+  width: 100%;
+  border-radius: var(--border-radius);
+}

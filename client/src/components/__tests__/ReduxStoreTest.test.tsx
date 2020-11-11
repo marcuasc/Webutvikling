@@ -1,10 +1,4 @@
-import MovieDialog from "../MovieDialog/index";
-import React from "react";
-import { render } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { applyMiddleware, createStore } from "redux";
-import rootReducer from "../../redux/rootReducer";
-import { openResultModal } from "../../redux/result/resultActions";
+import { openMovieDialog } from "../../redux/movie/movieActions";
 import thunk from "redux-thunk";
 import configureStore from "redux-mock-store"; //ES6 modules
 
@@ -22,37 +16,21 @@ const initialState = {
     totalPages: 1,
     currentPage: 1,
   },
-  result: {
-    open: false,
-    loading: false,
-    error: "",
-    result: {
-      genre: [],
-      ratings: [],
-      _id: "",
-      title: "",
-      poster_path: "",
-      desc: "",
-      budget: -1,
-      release_date: "",
-      duration: -1,
-    },
-  },
   filter: {
     open: false,
     filters: {},
   },
-  sortBy: {
+  sort: {
     type: "title",
     descending: true,
   },
-  resultInfo: {
+  movieInfo: {
     open: false,
     loading: false,
     error: "",
-    result: {
+    movie: {
       genre: [],
-      ratings: [],
+      reviews: [],
       _id: "",
       title: "",
       poster_path: "",
@@ -60,6 +38,7 @@ const initialState = {
       budget: -1,
       release_date: "",
       duration: -1,
+      avarageRating: -1,
     },
   },
 };
@@ -68,9 +47,9 @@ const initialState = {
 const store = mockStore(initialState);
 
 test("Dispatches correct action in redux store", () => {
-  store.dispatch(openResultModal("heijegerid"));
+  store.dispatch(openMovieDialog("heijegerid"));
 
   const actions = store.getActions();
-  const expectedPayload = { type: "OPEN_RESULT_MODAL", payload: "heijegerid" };
+  const expectedPayload = { type: "OPEN_MOVIE_DIALOG", payload: "heijegerid" };
   expect(actions).toEqual([expectedPayload]);
 });

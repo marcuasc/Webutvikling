@@ -1,8 +1,0 @@
-#searchContainer {
-    width: 80%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-    padding-top: 100px;
-}

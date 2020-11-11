@@ -1,0 +1,27 @@
+:root {
+  --width: 200px;
+  --border-radius: 15px;
+}
+
+.result {
+  width: var(--width);
+  min-width: var(--width);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition-property: opacity;
+  transition-duration: 1s;
+}
+
+.resultImg {
+  width: 200px;
+  border-radius: calc(var(--border-radius) * 0.7);
+}
+
+.title {
+  padding: 20px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
