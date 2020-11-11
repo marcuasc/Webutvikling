@@ -12,16 +12,24 @@ require("dotenv").config();
 const app = express();
 
 //Connects to the DB
-mongoose
-  .connect(
-    "mongodb://amdb:amdb@it2810-59.idi.ntnu.no:27017/amdb_v2?authSource=amdb",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => console.log(`Database connected successfully`))
-  .catch((err) => console.log(err));
+const connectToDB = new Promise((resolve, reject) => {
+  mongoose
+    .connect(
+      "mongodb://amdb:amdb@it2810-59.idi.ntnu.no:27017/amdb_v2?authSource=amdb",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    )
+    .then(() => {
+      console.log("Database connected successfully");
+      resolve();
+    })
+    .catch((err) => {
+      console.log(err);
+      reject();
+    });
+});
 
 require("./config/passport")(passport);
 
@@ -58,8 +66,15 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// app.listen(port, () => {
+//   console.log(`Server running on port ${port}`);
+// });
+
+connectToDB.then(() => {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+    app.emit("serverReady");
+  });
 });
 
 module.exports = app;
