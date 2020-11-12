@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { Dispatch } from "redux";
+import { closeAlert, setAlert } from "../alert/alertActions";
 import {
   UserActionTypes,
   UserObject,
@@ -72,10 +73,14 @@ export const loginUser = (username: string, password: string) => {
           token: response.data.token,
           expires: response.data.expires,
         };
+        dispatch(
+          setAlert({ type: "success", message: "Successfully logged in!" })
+        );
         dispatch(userLoginSuccess(userObject));
       })
       .catch((error) => {
         const errorMsg = error.message;
+        dispatch(setAlert({ type: "error", message: errorMsg }));
         dispatch(userLoginFailure(errorMsg));
       });
   };
@@ -95,10 +100,17 @@ export const registerUser = (username: string, password: string) => {
           token: response.data.token,
           expires: response.data.expires,
         };
+        dispatch(
+          setAlert({
+            type: "success",
+            message: "Successfully registered user!",
+          })
+        );
         dispatch(userRegisterSuccess(userObject));
       })
       .catch((error) => {
         const errorMsg = error.message;
+        dispatch(setAlert({ type: "error", message: errorMsg }));
         dispatch(userRegisterFailure(errorMsg));
       });
   };

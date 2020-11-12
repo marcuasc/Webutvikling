@@ -5,6 +5,7 @@ import sortReducer from "./sort/sortReducer";
 import movieReducer from "./movie/movieReducer";
 import userReducer from "./user/userReducer";
 import reviewReducer from "./review/reviewReducer";
+import alertReducer from "./alert/alertReducer";
 
 // Creates a root reducer from all the reducers.
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   movieInfo: movieReducer,
   userInfo: userReducer,
   reviewInfo: reviewReducer,
+  alertInfo: alertReducer,
 });
 
 export default rootReducer;

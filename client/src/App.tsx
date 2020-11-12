@@ -11,10 +11,11 @@ import {
 import "./App.css";
 import { Brightness5, Brightness7 } from "@material-ui/icons";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import SwitchContainer from "./components/SwitchContainer";
 import { RootState } from "./interfaces/RootState";
 import { connect, ConnectedProps } from "react-redux";
+import CustomSnackbar from "./components/CustomSnackbar";
 
 /* 
 
@@ -143,6 +144,7 @@ const App: React.FunctionComponent<Props> = (props) => {
         </AppBar>
         <SwitchContainer />
       </Box>
+      <CustomSnackbar />
       <Box
         id="footer"
         bgcolor="secondary.light"
