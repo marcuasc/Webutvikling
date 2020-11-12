@@ -37,4 +37,11 @@ export interface RootState {
     error: string;
     reviews: Array<RecievedReview>;
   };
+  alertInfo: {
+    open: boolean;
+    alert: {
+      type: "error" | "warning" | "info" | "success";
+      message: string;
+    };
+  };
 }
