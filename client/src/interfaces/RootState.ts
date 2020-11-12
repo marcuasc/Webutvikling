@@ -29,6 +29,7 @@ export interface RootState {
       username: string;
       userID: string;
       token: string;
+      expires: number;
     };
   };
   reviewInfo: {

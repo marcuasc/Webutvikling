@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
-import LoginPage from "../LoginPage";
+import LoginRegisterContainer from "../LoginRegisterContainer";
 import MoviePage from "../MoviePage";
 import PageContainer from "../PageContainer";
 import SearchBar from "../SearchBar";
@@ -31,7 +31,10 @@ const SwitchContainer: React.FunctionComponent = () => {
           <UserPage />
         </Route>
         <Route path="/login">
-          <LoginPage />
+          <LoginRegisterContainer type="login" />
+        </Route>
+        <Route path="/register">
+          <LoginRegisterContainer type="register" />
         </Route>
         <Route>
           <p>404</p>

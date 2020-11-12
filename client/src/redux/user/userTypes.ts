@@ -19,6 +19,7 @@ export interface UserObject {
   username: string;
   userID: string;
   token: string;
+  expires: number;
 }
 
 interface UserLoginRequestAction {
