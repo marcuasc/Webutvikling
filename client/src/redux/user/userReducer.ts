@@ -9,17 +9,34 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
 } from "./userTypes";
+import Cookies from "universal-cookie";
 
-const initialState: UserInfo = {
-  loggedIn: false,
-  loading: false,
-  error: "",
-  user: {
-    username: "",
-    userID: "",
-    token: "",
-  },
+const getStateFromCookies = (): UserInfo => {
+  const cookies = new Cookies();
+  const userInCookie = cookies.get("currentUser");
+  if (userInCookie !== undefined) {
+    return {
+      loggedIn: true,
+      loading: false,
+      error: "",
+      user: userInCookie,
+    };
+  } else {
+    return {
+      loggedIn: false,
+      loading: false,
+      error: "",
+      user: {
+        username: "",
+        userID: "",
+        token: "",
+        expires: 0,
+      },
+    };
+  }
 };
+
+const initialState: UserInfo = getStateFromCookies();
 
 const userReducer = (
   state = initialState,

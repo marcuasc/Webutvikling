@@ -49,15 +49,9 @@ type Props = PropsFromRedux;
 const PageContainer: React.FunctionComponent<Props> = (props) => {
   // Extracts necassary action and properties from the redux state.
   const updateCurrentPage = props.updateCurrentPage;
-  const results = props.searchData.results;
-  const loading = props.searchData.loading;
 
   // Set the width of the page in the state.
   const [width, setWidth] = React.useState(window.innerWidth);
-
-  // Set the class of the component in the state. Initially set to "hiding"
-  // This is to be used to not display the component when there are no results.
-  const [style, setStyle] = React.useState("hiding");
 
   // Sets an eventlistener on the window. When it resizes, it updates the components width state with the current width of the page.
   window.addEventListener("resize", () => setWidth(window.innerWidth));
@@ -67,17 +61,6 @@ const PageContainer: React.FunctionComponent<Props> = (props) => {
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
     updateCurrentPage(value);
   };
-
-  // useEffect hook triggers when the component mounts and everytime one of the dependencies from the dependency list changes.
-  React.useEffect(() => {
-    // If there are no results and it's not loading, set the style state of the component to hiding.
-    if (results.length === 0 && !loading) {
-      setStyle("hiding");
-    } else {
-      // else set it to showing
-      setStyle("showing");
-    }
-  }, [results, loading]);
 
   return (
     // Pagination component from MUI. Sets the size according to the window width.
@@ -90,7 +73,7 @@ const PageContainer: React.FunctionComponent<Props> = (props) => {
       shape="rounded"
       size={width <= 430 ? "small" : width <= 520 ? "medium" : "large"}
       variant="text"
-      className={"pagination " + style}
+      className={"pagination"}
       count={props.searchData.totalPages}
       page={props.searchData.currentPage}
       onChange={handleChange}

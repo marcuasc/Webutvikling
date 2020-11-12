@@ -25,8 +25,8 @@ router.post("/login", function (req, res, next) {
       //Gives the user a token if the login info is correct
       if (isValid) {
         const responseObject = utils.issueJWT(user);
-        responseObject.success = true;
         responseObject.userID = user._id;
+        responseObject.username = user.username;
         res.status(200).json(responseObject);
       } else {
         res.status(401).json({ success: false, message: "Wrong password" });
@@ -57,8 +57,8 @@ router.post("/register", async (req, res, next) => {
       //Saves the new user, and issues a valid token
       newUser.save().then((user) => {
         const responseObject = utils.issueJWT(user);
-        responseObject.success = true;
         responseObject.userID = user._id;
+        responseObject.username = user.username;
         res.status(200).json(responseObject);
       });
     } catch (error) {

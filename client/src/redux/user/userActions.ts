@@ -61,13 +61,18 @@ export const userLogout = (): UserActionTypes => {
 export const loginUser = (username: string, password: string) => {
   return (dispatch: Dispatch) => {
     dispatch(userLoginRequest());
-    Axios.post("http://localhost:5000/movie", {
+    Axios.post("http://localhost:5000/user/login", {
       username: username,
       password: password,
     })
       .then((response) => {
-        const data = response.data;
-        dispatch(userLoginSuccess(data));
+        const userObject: UserObject = {
+          username: response.data.username,
+          userID: response.data.userID,
+          token: response.data.token,
+          expires: response.data.expires,
+        };
+        dispatch(userLoginSuccess(userObject));
       })
       .catch((error) => {
         const errorMsg = error.message;
@@ -79,13 +84,18 @@ export const loginUser = (username: string, password: string) => {
 export const registerUser = (username: string, password: string) => {
   return (dispatch: Dispatch) => {
     dispatch(userRegisterRequest());
-    Axios.post("http://localhost:5000/movie", {
+    Axios.post("http://localhost:5000/user/register", {
       username: username,
       password: password,
     })
       .then((response) => {
-        const data = response.data;
-        dispatch(userRegisterSuccess(data));
+        const userObject: UserObject = {
+          username: response.data.username,
+          userID: response.data.userID,
+          token: response.data.token,
+          expires: response.data.expires,
+        };
+        dispatch(userRegisterSuccess(userObject));
       })
       .catch((error) => {
         const errorMsg = error.message;

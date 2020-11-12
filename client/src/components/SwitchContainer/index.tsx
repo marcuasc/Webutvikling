@@ -1,6 +1,6 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
-import LoginPage from "../LoginPage";
+import { Route, Switch, useHistory } from "react-router-dom";
+import LoginRegisterContainer from "../LoginRegisterContainer";
 import MoviePage from "../MoviePage";
 import PageContainer from "../PageContainer";
 import SearchBar from "../SearchBar";
@@ -9,6 +9,10 @@ import UserPage from "../UserPage";
 import "./style.css";
 
 const SwitchContainer: React.FunctionComponent = () => {
+  const history = useHistory();
+
+  React.useEffect(() => {}, []);
+
   return (
     <div id="switchContainer">
       <Switch>
@@ -24,7 +28,13 @@ const SwitchContainer: React.FunctionComponent = () => {
           <MoviePage />
         </Route>
         <Route path="/user/:userID">
-          <LoginPage open={true} />
+          <UserPage />
+        </Route>
+        <Route path="/login">
+          <LoginRegisterContainer type="login" />
+        </Route>
+        <Route path="/register">
+          <LoginRegisterContainer type="register" />
         </Route>
         <Route>
           <p>404</p>

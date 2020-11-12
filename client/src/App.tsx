@@ -9,14 +9,47 @@ import {
   Toolbar,
 } from "@material-ui/core";
 import "./App.css";
-import { Provider } from "react-redux";
-import store from "./redux/store";
 import { Brightness5, Brightness7 } from "@material-ui/icons";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import SwitchContainer from "./components/SwitchContainer";
+import { RootState } from "./interfaces/RootState";
+import { connect, ConnectedProps } from "react-redux";
 
-function App() {
+/* 
+
+This first part of the code is all regarding to redux. This is because this component needs to access the redux state.
+The following code follows the conventions that redux suggests. You can read more about it here: https://redux.js.org/recipes/usage-with-typescript
+
+The first thing to do is declare an interface (RootState) that fits the redux store. It is only necessary to declare the parts of the store that the component needs.
+The function mapStateToProps is responsible for mapping the redux state to the components props. This uses the RootState interface to get the parts that we need from the state.
+
+The function mapDispatchToProps is responsible for mapping the redux actions to the components props. We only map the actions that this component needs and uses.
+
+Then we declare the connector with the connect function with the mapStateToProps and mapDispatchToProps as input.
+This is to easily Use the ConnectedProps<T> to infer the types of the props from connect automatically.
+
+Then we declare the type of the final Props that the component will use. We write it like this so that it is easy to add props if the component needs it.
+
+Finally the component takes in props of the type Props.
+
+When the component is exported (at the bottom), the component gets connected to the redux store with the connector we declared.
+
+*/
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    userInfo: state.userInfo,
+  };
+};
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux;
+
+const App: React.FunctionComponent<Props> = (props) => {
   // State to hold the value for darkmade. Set to true by default.
   const [darkMode, setDarkMode] = React.useState(true);
 
@@ -75,46 +108,53 @@ function App() {
   // Make the classes from useStyles.
   const classes = useStyles();
 
-  return (
-    // Wraps the entire application in the react-redux provider so that every component can access the store.
-    // Provider is initialized with the redux store from the redux folder.
-    <Provider store={store}>
-      {/*  Wraps the entire application in the MUI theme provider so that every component can access the current theme. */}
-      <MuiThemeProvider theme={theme}>
-        <Router>
-          {/* Box works as a div, but has the possibility to dynamically change bg and text color based on the current theme. Imported from MUI */}
-          <Box className="App" bgcolor="secondary.main" color="text.secondary">
-            {/* AppBar is imported from MUI. Fixed to the top of the screen. 
-                    Makes use of the class "appBar" created with makeStyles. This overwrites the standard bgColor.*/}
-            <AppBar position="fixed" className={classes.appBar}>
-              {/* AppBar should always be used with the Toolbar component from MUI */}
-              <Toolbar>
-                {/* the logo of the website */}
-                <img id="logo" src="./resources/images/logo.png" alt="logo" />
-                {/* div that occupies remaining space of the Toolbar
-                            This is to space the IconButton to the right side of the toolbar */}
-                <div className={"grow"} />
-                {/* IconButton from MUI. When clicked, flips the darkMode state.
-                            Current icon is based on the darkMode state */}
-                <IconButton onClick={() => setDarkMode(!darkMode)}>
-                  {darkMode ? <Brightness5 /> : <Brightness7 />}
-                </IconButton>
-                <IconButton>
-                  <AccountCircleIcon />
-                </IconButton>
-              </Toolbar>
-            </AppBar>
-            <SwitchContainer />
-          </Box>
-          <Box id="footer" bgcolor="secondary.light" color="text.secondary">
-            <div id="footerContent">
-              <span>Made with love {"<3"}</span>
-            </div>
-          </Box>
-        </Router>
-      </MuiThemeProvider>
-    </Provider>
-  );
-}
+  const history = useHistory();
 
-export default App;
+  return (
+    //  Wraps the entire application in the MUI theme provider so that every component can access the current theme.
+    <MuiThemeProvider theme={theme}>
+      {/* Box works as a div, but has the possibility to dynamically change bg and text color based on the current theme. Imported from MUI */}
+      <Box className="App" bgcolor="secondary.main" color="text.secondary">
+        {/* AppBar is imported from MUI. Fixed to the top of the screen. 
+                    Makes use of the class "appBar" created with makeStyles. This overwrites the standard bgColor.*/}
+        <AppBar position="fixed" className={classes.appBar}>
+          {/* AppBar should always be used with the Toolbar component from MUI */}
+          <Toolbar>
+            {/* the logo of the website */}
+            <img id="logo" src="./resources/images/logo.png" alt="logo" />
+            {/* div that occupies remaining space of the Toolbar
+                            This is to space the IconButton to the right side of the toolbar */}
+            <div className={"grow"} />
+            {/* IconButton from MUI. When clicked, flips the darkMode state.
+                            Current icon is based on the darkMode state */}
+            <IconButton onClick={() => setDarkMode(!darkMode)}>
+              {darkMode ? <Brightness5 /> : <Brightness7 />}
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                props.userInfo.loggedIn
+                  ? history.push("/user")
+                  : history.push("/login");
+              }}
+            >
+              <AccountCircleIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <SwitchContainer />
+      </Box>
+      <Box
+        id="footer"
+        bgcolor="secondary.light"
+        color="text.secondary"
+        boxShadow={3}
+      >
+        <div id="footerContent">
+          <span>Made with love {"<3"}</span>
+        </div>
+      </Box>
+    </MuiThemeProvider>
+  );
+};
+
+export default connector(App);
