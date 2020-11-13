@@ -1,4 +1,4 @@
-import { Box, Button, Divider, TextField } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
@@ -55,71 +55,25 @@ type Props = PropsFromRedux & {
 
 const ReviewContainer: React.FunctionComponent<Props> = (props) => {
   const userInfo = props.userInfo;
-  // const loggedIn = userInfo.user.token.length > 0;
-  const loggedIn = true;
   const reviews: Array<RecievedReview> = props.reviewInfo.reviews;
-  const userReview = reviews.find(
-    (review) => review.userID === userInfo.user.userID
-  );
   const [reviewBoxes, setReviewBoxes] = React.useState<React.ReactElement[]>(
     []
   );
 
-  const getUserReviewBox = () => {
-    if (loggedIn) {
-      if (userReview === undefined) {
-        return (
-          <Box key="1" className="review" bgcolor="secondary.light">
-            <div id="reviewContent">
-              <h3 className="noMargin">
-                {reviews.length > 0
-                  ? "Write your review"
-                  : "Be the first to write a review!"}
-              </h3>
-              <Rating name="userRating" />
-              <TextField variant="filled" multiline label="Your review" />
-              <Button variant="contained" color="primary">
-                Send review
-              </Button>
-            </div>
-          </Box>
-        );
-      } else {
-        return (
-          <Box key="1" className="review" bgcolor="secondary.light">
-            <div id="reviewContent">
-              <h3 className="noMargin">Your review</h3>
-              <Rating value={userReview.rating} readOnly />
-              <span>{userReview.text}</span>
+  const updateReviewElements = () => {
+    const newReviews: React.ReactElement[] = [];
+    for (const review of reviews) {
+      if (!(props.type === "movie" && review.userID === userInfo.user.userID)) {
+        newReviews.push(
+          <Box key={review._id} className="review" bgcolor="secondary.light">
+            <div className="reviewContent">
+              <h3 className="noMargin">{review.username}</h3>
+              <Rating value={review.rating} readOnly />
+              <span>{review.text}</span>
             </div>
           </Box>
         );
       }
-    } else {
-      return (
-        <Box key="1" className="review" bgcolor="secondary.light">
-          <div id="reviewContent">
-            <h3 className="noMargin">Log in to write your review</h3>
-          </div>
-        </Box>
-      );
-    }
-  };
-
-  const updateReviewElements = () => {
-    const newReviews: React.ReactElement[] = [];
-    const userReviewBox = getUserReviewBox();
-    newReviews.push(userReviewBox);
-    for (const review of reviews) {
-      newReviews.push(
-        <Box key={review._id} className="review" bgcolor="secondary.light">
-          <div id="reviewContent">
-            <h3 className="noMargin">{review.userID}</h3>
-            <Rating value={review.rating} readOnly />
-            <span>{review.text}</span>
-          </div>
-        </Box>
-      );
     }
     setReviewBoxes(newReviews);
   };
@@ -130,9 +84,8 @@ const ReviewContainer: React.FunctionComponent<Props> = (props) => {
 
   return (
     <div id="reviewContainer">
-      <h2>Reviews</h2>
-      <Divider />
-      {reviewBoxes}
+      <h2>Other reviews</h2>
+      {reviewBoxes.length > 0 ? reviewBoxes : <p>There are no reviews yet</p>}
     </div>
   );
 };

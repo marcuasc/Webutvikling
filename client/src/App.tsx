@@ -134,7 +134,7 @@ const App: React.FunctionComponent<Props> = (props) => {
             <IconButton
               onClick={() => {
                 props.userInfo.loggedIn
-                  ? history.push("/user")
+                  ? history.push("/user/" + props.userInfo.user.userID)
                   : history.push("/login");
               }}
             >

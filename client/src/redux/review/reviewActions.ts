@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { Dispatch } from "redux";
+import { setAlert } from "../alert/alertActions";
 import {
   DELETE_REVIEW_FAILURE,
   DELETE_REVIEW_REQUEST,
@@ -97,7 +98,7 @@ const fetchReviewsFailure = (error: string): ReviewActionTypes => {
 
 const getConfig = (token: string) => {
   return {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: token },
   };
 };
 
@@ -106,10 +107,15 @@ export const postReview = (review: Review, token: string) => {
     dispatch(postReviewRequest());
     Axios.post("http://localhost:5000/review/", review, getConfig(token))
       .then((response) => {
+        dispatch(
+          setAlert({ type: "success", message: "Successfully posted review!" })
+        );
         dispatch(postReviewSuccess());
+        dispatch(fetchReviews("movie", review.movieID) as any);
       })
       .catch((error) => {
         const errorMsg = error.message;
+        dispatch(setAlert({ type: "error", message: errorMsg }));
         dispatch(postReviewFailure(errorMsg));
       });
   };
