@@ -7,6 +7,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../interfaces/RootState";
 import { fetchMovie } from "../../redux/movie/movieActions";
 import ReviewContainer from "../ReviewContainer";
+import UserReview from "../UserReview";
 import "./style.css";
 
 /* 
@@ -135,7 +136,11 @@ const MoviePage: React.FunctionComponent<Props> = (props) => {
               </div>
             </div>
           </div>
-          <ReviewContainer type="movie" />
+          <Divider />
+          <div id="reviews">
+            <UserReview />
+            <ReviewContainer type="movie" />
+          </div>
         </>
       )}
     </div>

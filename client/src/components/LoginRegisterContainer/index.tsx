@@ -104,7 +104,8 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const handleClick = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (type === "login") {
       props.loginUser(username, password);
     } else {
@@ -142,7 +143,10 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
         <Typography component="h1" variant="h5">
           {type === "login" ? "Sign in" : "Register"}
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          onSubmit={(event) => handleSubmit(event)}
+        >
           <TextField
             variant="outlined"
             margin="normal"
@@ -169,16 +173,12 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           <Button
+            type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleClick}
           >
             {type === "login" ? "Sign in" : "Register"}
           </Button>

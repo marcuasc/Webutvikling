@@ -26,6 +26,7 @@ export interface RecievedReview {
   text: string;
   movieID: string;
   userID: string;
+  username: string;
 }
 
 export interface Review {

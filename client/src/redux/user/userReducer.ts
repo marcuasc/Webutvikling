@@ -72,6 +72,7 @@ const userReducer = (
     case USER_REGISTER_SUCCESS:
       return {
         ...state,
+        loggedIn: true,
         loading: false,
         user: action.payload,
         error: "",
