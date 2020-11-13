@@ -139,6 +139,7 @@ const MoviePage: React.FunctionComponent<Props> = (props) => {
           <Divider />
           <div id="reviews">
             <UserReview />
+            <h2>Other reviews</h2>
             <ReviewContainer type="movie" />
           </div>
         </>

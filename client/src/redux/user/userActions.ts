@@ -1,7 +1,11 @@
 import Axios from "axios";
 import { Dispatch } from "redux";
 import { closeAlert, setAlert } from "../alert/alertActions";
+import { fetchReviews } from "../review/reviewActions";
 import {
+  FETCH_USER_FAILURE,
+  FETCH_USER_REQUEST,
+  FETCH_USER_SUCCESS,
   UserActionTypes,
   UserObject,
   USER_LOGIN_FAILURE,
@@ -11,6 +15,7 @@ import {
   USER_REGISTER_FAILURE,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
+  ViewingUser,
 } from "./userTypes";
 
 const userLoginRequest = (): UserActionTypes => {
@@ -49,6 +54,25 @@ const userRegisterSuccess = (userObject: UserObject): UserActionTypes => {
 const userRegisterFailure = (error: string): UserActionTypes => {
   return {
     type: USER_REGISTER_FAILURE,
+    payload: error,
+  };
+};
+const fetchUserRequest = (): UserActionTypes => {
+  return {
+    type: FETCH_USER_REQUEST,
+  };
+};
+
+const fetchUserSuccess = (viewingUser: ViewingUser): UserActionTypes => {
+  return {
+    type: FETCH_USER_SUCCESS,
+    payload: viewingUser,
+  };
+};
+
+const fetchUserFailure = (error: string): UserActionTypes => {
+  return {
+    type: FETCH_USER_FAILURE,
     payload: error,
   };
 };
@@ -112,6 +136,27 @@ export const registerUser = (username: string, password: string) => {
         const errorMsg = error.message;
         dispatch(setAlert({ type: "error", message: errorMsg }));
         dispatch(userRegisterFailure(errorMsg));
+      });
+  };
+};
+
+export const fetchUser = (userID: string) => {
+  return (dispatch: Dispatch) => {
+    dispatch(fetchUserRequest());
+    Axios.get("http://localhost:5000/user/" + userID)
+      .then((response) => {
+        const viewingUser: ViewingUser = {
+          username: response.data.username,
+          userID: response.data._id,
+          reviews: response.data.reviews,
+        };
+        dispatch(fetchUserSuccess(viewingUser));
+        dispatch(fetchReviews("user", viewingUser.userID) as any);
+      })
+      .catch((error) => {
+        const errorMsg = error.message;
+        dispatch(setAlert({ type: "error", message: errorMsg }));
+        dispatch(fetchUserFailure(errorMsg));
       });
   };
 };
