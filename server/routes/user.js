@@ -6,16 +6,18 @@ const Review = require("../models/review");
 const Movie = require("../models/movie");
 const passport = require("passport");
 
-
 //Method for returning the id, username and list of reviews for a selected user
 router.get("/:id", (req, res, next) => {
-    User.find({ _id: req.params.id }, {
-        _id: 1,
-        username: 1,
-        reviews: 1
-    })
-        .then((data) => res.status(200).json(data))
-        .catch(next);
+  User.findOne(
+    { _id: req.params.id },
+    {
+      _id: 1,
+      username: 1,
+      reviews: 1,
+    }
+  )
+    .then((data) => res.status(200).json(data))
+    .catch(next);
 });
 //Method for logging in as a user.
 router.post("/login", function (req, res, next) {

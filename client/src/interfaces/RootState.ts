@@ -31,6 +31,11 @@ export interface RootState {
       token: string;
       expires: number;
     };
+    viewingUser: {
+      username: string;
+      userID: string;
+      reviews: Array<string>;
+    };
   };
   reviewInfo: {
     loading: false;

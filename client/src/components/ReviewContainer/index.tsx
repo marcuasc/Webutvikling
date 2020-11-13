@@ -84,7 +84,6 @@ const ReviewContainer: React.FunctionComponent<Props> = (props) => {
 
   return (
     <div id="reviewContainer">
-      <h2>Other reviews</h2>
       {reviewBoxes.length > 0 ? reviewBoxes : <p>There are no reviews yet</p>}
     </div>
   );

@@ -1,4 +1,7 @@
 import {
+  FETCH_USER_FAILURE,
+  FETCH_USER_REQUEST,
+  FETCH_USER_SUCCESS,
   UserActionTypes,
   UserInfo,
   USER_LOGIN_FAILURE,
@@ -20,6 +23,11 @@ const getStateFromCookies = (): UserInfo => {
       loading: false,
       error: "",
       user: userInCookie,
+      viewingUser: {
+        username: "",
+        userID: "",
+        reviews: [],
+      },
     };
   } else {
     return {
@@ -31,6 +39,11 @@ const getStateFromCookies = (): UserInfo => {
         userID: "",
         token: "",
         expires: 0,
+      },
+      viewingUser: {
+        username: "",
+        userID: "",
+        reviews: [],
       },
     };
   }
@@ -83,6 +96,19 @@ const userReducer = (
         loading: false,
         user: initialState.user,
         error: action.payload,
+      };
+    case FETCH_USER_REQUEST:
+      return {
+        ...state,
+      };
+    case FETCH_USER_SUCCESS:
+      return {
+        ...state,
+        viewingUser: action.payload,
+      };
+    case FETCH_USER_FAILURE:
+      return {
+        ...state,
       };
     case USER_LOGOUT:
       return initialState;
