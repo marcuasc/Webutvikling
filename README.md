@@ -1,4 +1,6 @@
-# Prosjekt 3
+# Prosjekt 4
+
+Denne filen inneholder gruppens dokumentasjon fra prosjekt 3, samt en egen seksjon nederst i filen som viser til hvilke endringer som er gjort til leveransen av Prosjekt 4
 
 
 ## Oversikt
@@ -259,6 +261,107 @@ Prosjektet er delt opp i to moduler: `client` og `server`.
 `client` inneholder alt av komponenter, redux, grensesnitt og tester. 
 
 `server` inneholder Rest-APIet, med medfølgende sjema, ruter og endepunkter.
+
+# Endringer i prosjekt 4
+
+## Backend
+
+Til prosjekt 4 har vi utvidet REST-apiet vår betydelig. Vi har implementert funksjonalitet for å lage brukere og logge inn som en bruker.
+Vi har brukt biblioteket [Passport](http://www.passportjs.org/packages/passport-jwt/) til å hashe brukernes passord på databasen, samt for å dele ut gyldige tokens til brukere som er logget inn.
+
+Vi har brukt tokens for adgangskontroll på de forskjellige endepunktene, og har på denne måten laget et meget sikkert API.
+
+Vi har også endret modelleringen av databasen, til å inneholde egne objekter for users og reviews.
+
+Hvert review er koblet opp mot brukeren som skrev det og filmen den vurderer. Hver bruker har en liste med reviews den har skrevet, og alle filmer har en liste med reviews som omhandler den gitte filmen.
+
+
+
+### Objekter
+
+
+De nye objektene våre ser nå slik ut:
+
+```javascript
+movie: {
+    title: {String},
+    poster_path: {String},
+    genre: {Array<String>},
+    desc: {String},
+    budget: {Number},
+    release_date: {Date},
+    duration: {Number},
+    reviews: {Array<reviews>}
+}
+```
+
+```javascript
+User: {
+    username: {String},
+    hash: {String},
+    salt: {Array<String>},
+    reviews: {Array<reviews>}
+}
+```
+
+```javascript
+Review: {
+    reting: {Number},
+    text: {String},
+    userID: {User},
+    movieID: {Movie},
+}
+```
+
+### Endepunkter
+
+Med to helt nye typer objekter var vi også nødt til å utvide antall endepunkter. 
+
+De nye endepunktene ser nå slik ut:
+
+`GET movie/` er ikke endret siden sist, og bruker fortsatt til søk på tittel, sorterting og filtrering av filmer.
+
+`GET movie/:id` brukes til å returnere en film på ID, samt å iterere gjennom tilhørende reviews og returnere gjennomsnittsvurderingen av filmen.
+
+`GET movie/:id/reviews` brukes til å returnere alle tilhørende reviews til for en gitt film.
+
+`GET review/:id` returnerer et review på ID. Denne behøver ikke gyldig token, da alle brukere skal kunne se reviews.
+
+`POST review/` legger til et nytt review av en film. Denne krever gyldig token, da kun innloggede brukere skal kunne legge til nye vurderinger
+
+`DELETE review/:id` sletter et valgt review på ID. Denne krever gyldig token, og at det er brukeren som skrev reviewet som sletter det.
+
+`PUT review/:id` oppdaterer et valgt review på ID. Denne krever gldig token, og at det er brukeren som skrev reviewet som oppdaterer det.
+
+`GET user/:id` returnerer en bruker med ID, brukernavn og tilhørende reviews.
+
+`POST user/login ` brukes for å logge inn om bruker. Returnerer token som er gyldig i 1 dag.
+
+`POST user/register` registrerer en ny bruker, dersom valgt brukernavn ikke allerede er i bruk.
+
+`DELETE user/:id`sletter en bruker. Sjekker om token er gyldig og at brukere kun kan slette sin egen bruker.
+
+
+
+
+
+
+
+
+
+## Frontend
+
+## Tester
+
+### Backend
+
+
+Vi har brukt [Chai](https://www.chaijs.com/), [Mocha](https://mochajs.org/) og [Supertest](https://www.npmjs.com/package/supertest) for å teste API-et vårt, og har tilsammen skrevet 36 tester.
+
+Testene ligger i `server/test`, og sjekker alle endepunktene. De sjekker hovedsaklig situsjoner der API-et returnerer feilmeldinger, da vi ikke har satt opp en mock-database til å gjøre persistente endringer på.
+
+Testene sjekker ting som å gjøre handlinger uten gyldig token, POST med ugyldig format på body, endre andre brukeres reviews osv.
+
 
 
 
