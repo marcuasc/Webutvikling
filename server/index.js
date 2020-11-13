@@ -66,10 +66,6 @@ app.use((err, req, res, next) => {
   next();
 });
 
-// app.listen(port, () => {
-//   console.log(`Server running on port ${port}`);
-// });
-
 connectToDB.then(() => {
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);

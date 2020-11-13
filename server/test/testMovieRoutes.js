@@ -4,10 +4,10 @@ const request = require("supertest");
 
 const app = require("../index");
 
-before(function (done) {
+before (function (done) {
   this.timeout(5000);
   app.on("serverReady", function () {
-    console.log("Tests will now run" + "\n");
+    console.log("Tests for routes will now run" + "\n");
     done();
   });
 });
