@@ -32,7 +32,12 @@ router.get("/:id", async (req, res, next) => {
     .then((review) => {
       res.status(200).json(review);
     })
-    .catch(next);
+    .catch((error) => {
+      res.status(400).json({
+        error: "Review with id: " + req.params.id + " doesn't exist",
+        message: error.message,
+      });
+    });
 });
 
 //Method for adding new reviews
@@ -112,12 +117,23 @@ router.delete(
                 .status(200)
                 .json({ message: `Review ${deletedReview._id} deleted` });
             })
-            .catch(next);
+            .catch((error) =>
+              res.status(500).json({
+                error:
+                  "Something went wrong with updating connected user and movie",
+                message: error.message,
+              })
+            );
         } else {
           res.status(403).json({ error: "Not your review" });
         }
       })
-      .catch(next);
+      .catch((error) =>
+        res.status(400).json({
+          error: "Review with id: " + req.params.id + " doesn't exist",
+          message: error.message,
+        })
+      );
   }
 );
 
@@ -135,10 +151,18 @@ router.put(
           if (req.body.rating !== undefined || req.body.text !== undefined) {
             Review.findOneAndUpdate(
               { _id: req.params.id },
-              { rating: req.body.rating, text: req.body.text }
+              { rating: req.body.rating, text: req.body.text },
+              { useFindAndModify: false }
             )
               .then(res.status(200).json({ msg: "Review updated" }))
-              .catch(next);
+              .catch((error) =>
+                res
+                  .status(500)
+                  .json({
+                    error: "Could not update review",
+                    message: error.message,
+                  })
+              );
           } else {
             res.status(400).json({ error: "Not a valid review" });
           }
@@ -146,7 +170,12 @@ router.put(
           res.status(403).json({ error: "Not your review" });
         }
       })
-      .catch(next);
+      .catch((error) => {
+        res.status(400).json({
+          error: "Review with id: " + req.params.id + " doesn't exist",
+          message: error.message,
+        });
+      });
   }
 );
 

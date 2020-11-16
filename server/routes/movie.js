@@ -128,10 +128,18 @@ router.get("/:id", async (req, res) => {
             averageRating: averageReview,
           });
         })
-        .catch((error) => res.json({ error: "An error occured" }));
+        .catch((error) =>
+          res.json({
+            error: "An error occured with the reviews of the movie",
+            message: error.message,
+          })
+        );
     })
     .catch((error) => {
-      res.status(400).json({ error: "Could not get movie " + req.params.id });
+      res.status(400).json({
+        error: "Movie with id " + req.params.id + " doesn't exist",
+        message: error.message,
+      });
     });
 });
 
@@ -156,7 +164,10 @@ router.get("/:id/reviews", async (req, res) => {
           })
           .catch((error) => {
             res.status(400).json({
-              error: "Could not get reviews from movie " + req.params.id,
+              error:
+                "Could not get user of one of the reviews for movie " +
+                req.params.id,
+              message: error.message,
             });
           });
       }
@@ -166,9 +177,10 @@ router.get("/:id/reviews", async (req, res) => {
       res.status(200).json({ reviews: reviews });
     })
     .catch((error) => {
-      res
-        .status(400)
-        .json({ error: "Could not get reviews from movie " + req.params.id });
+      res.status(400).json({
+        error: "Could not get reviews for movie " + req.params.id,
+        message: error.message,
+      });
     });
 });
 

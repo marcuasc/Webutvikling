@@ -139,7 +139,7 @@ export const postReview = (review: Review, token: string) => {
       })
       .catch((error) => {
         const errorMsg = error.message;
-        dispatch(setAlert({ type: "error", message: errorMsg }));
+        dispatch(setAlert({ type: "error", message: "Could not post review" }));
         dispatch(postReviewFailure(errorMsg));
       });
   };
@@ -160,10 +160,16 @@ export const updateReview = (review: Review, id: string, token: string) => {
     )
       .then((response) => {
         dispatch(postReviewSuccess());
+        dispatch(
+          setAlert({ type: "success", message: "Successfully updated review!" })
+        );
         dispatch(fetchReview(id) as any);
       })
       .catch((error) => {
         const errorMsg = error.message;
+        dispatch(
+          setAlert({ type: "error", message: "Could not update review" })
+        );
         dispatch(updateReviewFailure(errorMsg));
       });
   };
@@ -174,10 +180,16 @@ export const deleteReview = (id: string, token: string) => {
     dispatch(deleteReviewRequest());
     Axios.delete("http://localhost:5000/review/" + id, getConfig(token))
       .then((response) => {
+        dispatch(
+          setAlert({ type: "success", message: "Successfully deleted review!" })
+        );
         dispatch(deleteReviewSuccess());
       })
       .catch((error) => {
         const errorMsg = error.message;
+        dispatch(
+          setAlert({ type: "error", message: "Could not delete review" })
+        );
         dispatch(deleteReviewFailure(errorMsg));
       });
   };
@@ -192,6 +204,9 @@ export const fetchReviews = (type: "movie" | "user", id: string) => {
       })
       .catch((error) => {
         const errorMsg = error.message;
+        dispatch(
+          setAlert({ type: "error", message: "Could not fetch reviews" })
+        );
         dispatch(fetchReviewsFailure(errorMsg));
       });
   };
@@ -206,6 +221,9 @@ export const fetchReview = (id: string) => {
       })
       .catch((error) => {
         const errorMsg = error.message;
+        dispatch(
+          setAlert({ type: "error", message: "Could not fetch review" })
+        );
         dispatch(fetchReviewFailure(errorMsg));
       });
   };

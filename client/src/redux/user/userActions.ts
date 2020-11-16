@@ -104,7 +104,9 @@ export const loginUser = (username: string, password: string) => {
       })
       .catch((error) => {
         const errorMsg = error.message;
-        dispatch(setAlert({ type: "error", message: errorMsg }));
+        dispatch(
+          setAlert({ type: "error", message: "Wrong username or password" })
+        );
         dispatch(userLoginFailure(errorMsg));
       });
   };
@@ -134,7 +136,12 @@ export const registerUser = (username: string, password: string) => {
       })
       .catch((error) => {
         const errorMsg = error.message;
-        dispatch(setAlert({ type: "error", message: errorMsg }));
+        dispatch(
+          setAlert({
+            type: "error",
+            message: "Could not register user. Username might be taken",
+          })
+        );
         dispatch(userRegisterFailure(errorMsg));
       });
   };
@@ -155,7 +162,7 @@ export const fetchUser = (userID: string) => {
       })
       .catch((error) => {
         const errorMsg = error.message;
-        dispatch(setAlert({ type: "error", message: errorMsg }));
+        dispatch(setAlert({ type: "error", message: "Could not fetch user" }));
         dispatch(fetchUserFailure(errorMsg));
       });
   };
