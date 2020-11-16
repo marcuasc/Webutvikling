@@ -21,32 +21,36 @@ describe('Filter on the genre Western', () => {
             .and('contain', 'Spirit: Stallion of the Cimarron')
             .and('contain', 'The Pale Door')
             .and('contain', 'The Ridiculous 6')
+            .and('contain', 'Django Unchained')
+            .and('contain', 'The Dalton Gang')
+            .and('contain', 'The Magnificent Seven')
+            .and('contain', 'The Revenant')
 
     })
 })
 
 
-
-describe('Checks if the modal shows', () => {
-    it('Displays modal correctly', () => {
+describe('Checks if movie info displays', () => {
+    it('Displays info correctly', () => {
         cy.visit('localhost:3000')
         cy.get('input#textField').type('Dora and the Lost City of Gold')
         cy.get('div#results')
             .should('contain', "Dora and the Lost City of Gold").click()
-        cy.get('body > div.MuiDialog-root.dialog > div.MuiDialog-container.MuiDialog-scrollPaper > div > div.MuiDialogContent-root.movieInfo.MuiDialogContent-dividers > div.contentContainerRight > div:nth-child(2) > span:nth-child(2)')
+        cy.get('#moviePage > div.movieInfo > div.contentContainerRight > div:nth-child(2)')
             .should('contain', '102')
 
     })
 })
 
+
 describe('Search for the movies over 200 minutes', () => {
     it('Returns the correct movie', () => {
         cy.visit('localhost:3000')
         cy.contains("Filters").click()
-        cy.get('body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div > div.MuiDialogContent-root > div:nth-child(4) > div:nth-child(1) > div > input').type('200')
+        cy.get('body > div.MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper > div > div.MuiDialogContent-root > div:nth-child(4) > div:nth-child(1) > div > input').type('210')
         cy.contains("Close").click()
         cy.get('div#results')
-            .should('contain', "The Lord of the Rings: The Return of the King")
+            .should('contain', "The Ten Commandments")
 
     })
 })
@@ -82,7 +86,7 @@ describe('Check sorting on duration', () => {
         cy.visit('localhost:3000')
         cy.get('.MuiSelect-root').click()
         cy.get('[data-value="duration"]').click()
-        cy.get('div#results').should("contain", "The Lord of the Rings: The Return of the King")
+        cy.get('div#results').should("contain", "The Ten Commandments")
         cy.get('#sortSelect > .MuiButtonBase-root').click()
         cy.get('div#results').should("contain", "Evangelion: 3.0+1.0 Thrice Upon a Time")
 
@@ -97,7 +101,7 @@ describe('Check sorting on budget', () => {
         cy.get('[data-value="budget"]').click()
         cy.get('div#results').should("contain", "Pirates of the Caribbean: On Stranger Tides")
         cy.get('#sortSelect > .MuiButtonBase-root').click()
-        cy.get('div#results').should("contain", "Code 8")
+        cy.get('div#results').should("contain", "A Quiet Place Part II")
 
     })
 })
