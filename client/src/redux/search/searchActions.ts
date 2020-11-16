@@ -9,6 +9,7 @@ import Axios from "axios";
 import qs from "qs";
 import { Dispatch } from "redux";
 import { ParamsInterface } from "../../interfaces/ParamsInterface";
+import { setAlert } from "../alert/alertActions";
 import {
   FETCH_RESULTS_FAILURE,
   FETCH_RESULTS_REQUEST,
@@ -89,6 +90,12 @@ export const fetchResults = (params: ParamsInterface) => {
       .catch((error) => {
         // If it fails, dispatch ResultsFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
+        dispatch(
+          setAlert({
+            type: "error",
+            message: "Something went wrong with your search",
+          })
+        );
         dispatch(fetchResultsFailure(errorMsg));
       });
   };
