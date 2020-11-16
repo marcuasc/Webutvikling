@@ -33,9 +33,9 @@ Til høyre i headeren befinner det seg en knapp der brukeren kan bytte mellom li
 
 # Backend
 
-## Film-objekter
-
-Databasen vår består kun av film-objekter.
+<details>
+  <summary><b> Film-objekter</b></summary>
+  Databasen vår består kun av film-objekter.
 
 Et film objekt ser slik ut:
 
@@ -57,7 +57,13 @@ Vi har valgt å lagre alle vurderinger av filmer som et array i hver film. Når 
 `poster_path` inneholder en lenke til den valgte filmens poster på [TMDB](https://www.themoviedb.org/).
 
 
-## Rest-API
+
+</details>
+
+
+<details>
+  <summary><b>Rest API</b></summary>
+  
 
 Vi har laget et Rest-API for å kunne sende og hente data fra databasen. APIet er basert på express og mongoose, og er skrevet i JavaScript.
 
@@ -86,9 +92,12 @@ Denne metoden benyttes når en bruker trykker seg inn på en film for å se fler
 
 `router.put(/id/:id)` brukes for å oppdatere rangeringen på en film. 
 
+</details>
 
-## Database
 
+<details>
+  <summary><b>Database
+</b></summary>
 Databasen vår kjøres på NTNUs virituelle maskiner.
 
 Databasen består av 1000 filmer. Dette er en tilstrekkelig mengde for å kunne teste nettsiden da alle sjangere er representert i et eksisterende film-objekt. 
@@ -99,17 +108,20 @@ Det sammen gjelder nedre/øvre grense for sortering på varighet.
 
 Datasettet er generert av en egen JSON-mapper gruppen har skrevet i JavaScript. Denne er ikke inkludert i leveransen til prosjektet. Vi hentet data gjennom APIet til [TMDB](https://developers.themoviedb.org/3), og mappet det om til å inneholde atributtene vi ønsket. 
 Alle filmene i databasen inneholder originalt to vurderinger, som er tilfeldig generert.
+
+</details>
  
 
 # Frontend
 
-## Typescript og React
+<details>
+  <summary><b>Typescript og React</b></summary>
+  Frontend er (selvfølgelig) laget i React. Hele frontend delen bruker TypeScript på en god og hensiktsmessig måte. 
+</details>
 
-Frontend er (selvfølgelig) laget i React. Hele frontend delen bruker TypeScript på en god og hensiktsmessig måte. 
-
-## Redux
-
-Vi bruker Redux for state management i vår applikasjon. All implementasjon av Redux ligger i mappen /src/redux.
+<details>
+  <summary><b>Redux</b></summary>
+  Vi bruker Redux for state management i vår applikasjon. All implementasjon av Redux ligger i mappen /src/redux.
 
 Vi har delt opp Redux state management i flere reducers, hver til sin del av applikasjonen. Vi har delt det opp i `search`, `sort`, `result` og `filter`. Disse blir satt sammen igjen til en reducer i `rootReducer.ts`. Dette har vi gjort for å få en oversiktlig, hensiktsmessig og konsekvent implementasjon av state management.
 
@@ -118,6 +130,7 @@ Vi bruker redux-thunk for asynkrone handlinger, react-redux for å gi tilgang ti
 I en ekte release ville vi fjernet redux-devtools-extension i og med at det kan åpne uønsket insikt i applikasjonen.
 
 Under vil du se en ganske detaljert beskrivelse av hvordan vi bruker redux og hvorfor vi mener vi vise Videregående kunnskap og ferdigheter i state management.
+
 
 ### Search
 
@@ -151,9 +164,11 @@ Filter har actions vår å sette disse variablene.
 
 Komponentene som tar i bruk denne delen av redux er: `FilterDialog` og `SearchResults`
 
-## Tredjepartskomponenter (MaterialUI)
+</details>
 
-I dette prosjektet har vi brukt mange tredjepartskomponenter fra [Material UI](https://material-ui.com/). 
+<details>
+  <summary><b>Tredjepartskomponenter (MaterialUI)</b></summary>
+  I dette prosjektet har vi brukt mange tredjepartskomponenter fra [Material UI](https://material-ui.com/). 
 Vi valgte dette biblioteket av komponenter fordi det er meget populært (brukt av store firmaer som Nasa, Netflix og Amazon), det har god (ikke perfekt) støtte for TypeScript og det dekker alle våre behov for tredjepartskomponenter i dette prosjektet.
 
 Ved å velge tredjepartskomponenter fra ett bibliotek, oppnår vi en gjennomgående stil med ekstra funksjonalitet som vi kanskje ellers ikke kunne fått (mer om dette i Design og responsivitet).
@@ -162,8 +177,14 @@ For å nevne noen komponenter fra MUI som vi bruker: `MUIThemeProvider`, `Box`, 
 
 Dette er begrunnelsen vår til hvorfor vi mener at vi viser Videregående ferdigheter i å finne og velge gode tredjeparts komponenter.
 
+</details>
+
 ## Søk, sortering, filtrering og store sett av data
 
+<details>
+  <summary><b>Info her</b></summary>
+  
+  
 I frontend er det én komponent som har ansvar for å kalle selve søket. Det er `SearchResults`. Vi synes det er passende fordi det er denne komponenten som skal holde alle resultatene.
 
 Søket blir utført gjennom redux handlingen fetchResults. Denne tar inn et parameter object er definert etter ParamsInterface:
@@ -198,16 +219,26 @@ Vi kunne i teorien hatt MANGE flere filmer i og med at frontend henter kun 12 fi
 
 Dette er vår begrunnelse for hvorfor vi mener vi viser Videregående kunnskap og ferdigheter i søk, sortering, filtrering og representasjon av store sett av data.
 
-## Rest API og Axios
+</details>
 
-Frontend bruker Axios for a sende get og put requests til backend. Alle kall til Rest API'et blir behandlet gjennom redux for en stabil og forutsigbar interaksjon med backend.
+
+## Rest API og Axios
+<details>
+  <summary><b>Info her</b></summary>
+  Frontend bruker Axios for a sende get og put requests til backend. Alle kall til Rest API'et blir behandlet gjennom redux for en stabil og forutsigbar interaksjon med backend.
 
 Vi har tre redux actions som kommuniserer med API'et, `fetchResults`, `fetchMovie` og `putRatings`. Siden disse kommuniserer med API'et, er alle asynkrone. Vi har derfor brukt `redux-thunk` i implementasjonen av disse handlingene.
 
 Hvis noen av axios kallene failer, blir de fanget og korrekte actions for å behandle feilene blir kallt.
 
+</details>
+
+
 ## Design og responsivitet
 
+<details>
+  <summary><b>Info her</b></summary>
+  
 Designet på siden vår blir stort sett definert av Material UI sine komponenter. Biblioteket er stilrent og moderne.
 
 Siden vi bruker bare komponenter fra MUI, har vi muligheten til å implementere themes ved hjelp av `MUIThemeProvider`. Denne gir tilgang til det nåværende temaet for alle child komponenter. Dette har vi brukt til å implementere farger som går gjennom hele veien. Vi har en hovedfarge og en sekundærfarge. Begge to har definert lys og mørk versjon av seg selv. 
@@ -216,11 +247,13 @@ Vi bruker også dette til å implementere darkmode/lightmode etter hva brukeren 
 
 Applikasjonen er så responsiv som mulig og fungerer godt på skjermer helt ned til 320x320 px. Vi har fått til dette ved MYE bruk av flex.
 
+</details>
 
 # Testing
 
-## End-2-end
-
+<details>
+  <summary><b>End-2-end</b></summary>
+  
 Vi bruker [Cypress](https://www.cypress.io/) for end-2-end testing av nettsiden vår.
 
 Testene ligger i `/client/cypress/integration/test.js` og består av syv tester.
@@ -235,10 +268,13 @@ Testene simulerer bruk av de mest sentrale brukstilfellene av nettsiden:
 * Sortering på budsjett
 * Sortering på varighet
 * Vise ekstra informasjon om valgt film
+  
+</details>
 
 
-## Enhetstesting
-
+<details>
+  <summary><b>Enhetstesting</b></summary>
+ 
 Til enhetstesting på nettsiden vår bruker vi [Jest](https://jestjs.io/).
 
  Testene finnes i `client/src/components/__tests__/`
@@ -250,33 +286,40 @@ Til enhetstesting på nettsiden vår bruker vi [Jest](https://jestjs.io/).
  - `SearchResultTest.test.tsx`, som tester at Result har riktig state etter at en action har blitt kjørt.
  
 For å kjøre alle testene skriver du `npm test` i `client` 
+</details>
 
 
 # Git & kode
 
-## Git
-
-Vi har brukt git til å dele opp utviklingsprosessen i issues. Nye branches ble laget for hvert issue, og alle et uniformt navn på formen `issue-xx-beskrivelse-her`. På denne måten er det lett å se hva som er blitt jobbet på i hver branch.
+<details>
+  <summary><b>Git</b></summary>
+  Vi har brukt git til å dele opp utviklingsprosessen i issues. Nye branches ble laget for hvert issue, og alle et uniformt navn på formen `issue-xx-beskrivelse-her`. På denne måten er det lett å se hva som er blitt jobbet på i hver branch.
 Merge-requester knyttes til hvilket issue det jobber på eller avslutter. Dette gir en ryddig historikk, der endringer tilbake i tid lett kan finnes, dersom det blir behov for det.
 
 Alle merge-requester har blitt sett gjennom av et annent gruppemedlem for å forsikre oss om at koden som merges er feilfri. 
 
+</details>
 
-## Kode
 
-Koden er kommentert der det kan være utfordrende å forstå hva den gjør. 
+<details>
+  <summary><b>Kode</b></summary>
+  Koden er kommentert der det kan være utfordrende å forstå hva den gjør. 
 
 Prosjektet er delt opp i to moduler: `client` og `server`.
 
 `client` inneholder alt av komponenter, redux, grensesnitt og tester. 
 
 `server` inneholder Rest-APIet, med medfølgende sjema, ruter og endepunkter.
+  
+</details>
+
+
 
 # Endringer i prosjekt 4
 
-## Backend
-
-Til prosjekt 4 har vi utvidet REST-apiet vår betydelig. Vi har implementert funksjonalitet for å lage brukere og logge inn som en bruker.
+<details>
+  <summary><b>Backend</b></summary>
+  Til prosjekt 4 har vi utvidet REST-apiet vår betydelig. Vi har implementert funksjonalitet for å lage brukere og logge inn som en bruker.
 Vi har brukt biblioteket [Passport](http://www.passportjs.org/packages/passport-jwt/) til å hashe brukernes passord på databasen, samt for å dele ut gyldige tokens til brukere som er logget inn.
 
 Vi har brukt tokens for adgangskontroll på de forskjellige endepunktene, og har på denne måten laget et meget sikkert API.
@@ -285,11 +328,12 @@ Vi har også endret modelleringen av databasen, til å inneholde egne objekter f
 
 Hvert review er koblet opp mot brukeren som skrev det og filmen den vurderer. Hver bruker har en liste med reviews den har skrevet, og alle filmer har en liste med reviews som omhandler den gitte filmen.
 
+</details>
 
 
-### Objekter
-
-
+<details>
+  <summary><b>Objekter</b></summary>
+  
 De nye objektene våre ser nå slik ut:
 
 ```javascript
@@ -322,8 +366,12 @@ Review: {
     movieID: {Movie},
 }
 ```
+</details>
 
-### Endepunkter
+
+<details>
+  <summary><b>Endepunkter</b></summary>
+  
 
 Med to helt nye typer objekter var vi også nødt til å utvide antall endepunkter. 
 
@@ -351,9 +399,7 @@ De nye endepunktene ser nå slik ut:
 
 `DELETE user/:id`sletter en bruker. Sjekker om token er gyldig og at brukere kun kan slette sin egen bruker.
 
-
-
-
+</details>
 
 
 
@@ -363,15 +409,17 @@ De nye endepunktene ser nå slik ut:
 
 ## Tester
 
-### Backend
 
-
+<details>
+  <summary><b>Backend</b></summary>
+  
 Vi har brukt [Chai](https://www.chaijs.com/), [Mocha](https://mochajs.org/) og [Supertest](https://www.npmjs.com/package/supertest) for å teste API-et vårt, og har tilsammen skrevet 36 tester.
 
 Testene ligger i `server/test`, og sjekker alle endepunktene. De sjekker hovedsaklig situsjoner der API-et returnerer feilmeldinger, da vi ikke har satt opp en mock-database til å gjøre persistente endringer på.
 
 Testene sjekker ting som å gjøre handlinger uten gyldig token, POST med ugyldig format på body, endre andre brukeres reviews osv.
 
+</details>
 
 
 
