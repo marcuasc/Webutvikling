@@ -65,19 +65,22 @@ const App: React.FunctionComponent<Props> = (props) => {
   // State to hold the value for darkmade. Set to true by default.
   const [darkMode, setDarkMode] = React.useState(true);
 
+  const primaryColors = {
+    main: "#7cec9f",
+    light: "#b0ffd0",
+    dark: "#47b970",
+  };
+
   // Creates the lightTheme for our website with primary and secondary colors. Part of Material UI.
   const lightTheme = createMuiTheme({
     palette: {
-      primary: {
-        main: "#7cec9f",
-        light: "#b0ffd0",
-        dark: "#47b970",
-      },
+      primary: primaryColors,
       secondary: {
         main: "#e8e8e8",
         light: "#ffffff",
         dark: "#b6b6b6",
       },
+      success: primaryColors,
       type: "light",
     },
   });
@@ -85,16 +88,13 @@ const App: React.FunctionComponent<Props> = (props) => {
   // Creates the lightTheme for our website with primary and secondary colors. Part of Material UI.
   const darkTheme = createMuiTheme({
     palette: {
-      primary: {
-        main: "#7cec9f",
-        light: "#b0ffd0",
-        dark: "#47b970",
-      },
+      primary: primaryColors,
       secondary: {
         main: "#212121",
         light: "#484848",
         dark: "#000000",
       },
+      success: primaryColors,
       type: "dark",
     },
   });

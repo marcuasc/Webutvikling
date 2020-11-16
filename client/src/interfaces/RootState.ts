@@ -41,6 +41,7 @@ export interface RootState {
     loading: false;
     error: string;
     reviews: Array<RecievedReview>;
+    viewingReview: RecievedReview;
   };
   alertInfo: {
     open: boolean;

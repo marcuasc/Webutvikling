@@ -1,12 +1,21 @@
-import { Box, Button, FormControl, TextField } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  FormControl,
+  IconButton,
+  Link,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { OpenInNew } from "@material-ui/icons";
 import { Rating } from "@material-ui/lab";
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../interfaces/RootState";
-import { fetchReviews, postReview } from "../../redux/review/reviewActions";
+import { postReview } from "../../redux/review/reviewActions";
 import { Review } from "../../redux/review/reviewTypes";
 import "./style.css";
 
@@ -53,6 +62,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
 const UserReview: React.FunctionComponent<Props> = (props) => {
+  const history = useHistory();
   const [rating, setRating] = React.useState(1);
   const [text, setText] = React.useState("");
   const loggedIn = props.userInfo.loggedIn;
@@ -109,15 +119,24 @@ const UserReview: React.FunctionComponent<Props> = (props) => {
               </>
             ) : (
               <>
-                <h3 className="noMargin">{userReview.username}</h3>
+                <div className="reviewTop">
+                  <h3 className="noMargin">{userReview.username}</h3>
+                  <IconButton
+                    onClick={() => history.replace("/review/" + userReview._id)}
+                    size="small"
+                  >
+                    <OpenInNew />
+                  </IconButton>
+                </div>
                 <Rating value={userReview.rating} readOnly />
                 <span>{userReview.text}</span>
               </>
             )
           ) : (
-            <h3>
-              <Link to="/login">Login </Link> to write a review
-            </h3>
+            <Typography>
+              <Link href="/login">Login</Link>
+              <span> to write a review</span>
+            </Typography>
           )}
         </div>
       </Box>

@@ -14,10 +14,15 @@ export const FETCH_REVIEWS_REQUEST = "FETCH_REVIEWS_REQUEST";
 export const FETCH_REVIEWS_SUCCESS = "FETCH_REVIEWS_SUCCESS";
 export const FETCH_REVIEWS_FAILURE = "FETCH_REVIEWS_FAILURE";
 
+export const FETCH_REVIEW_REQUEST = "FETCH_REVIEW_REQUEST";
+export const FETCH_REVIEW_SUCCESS = "FETCH_REVIEW_SUCCESS";
+export const FETCH_REVIEW_FAILURE = "FETCH_REVIEW_FAILURE";
+
 export interface ReviewInfo {
   loading: boolean;
   error: string;
   reviews: Array<RecievedReview>;
+  viewingReview: RecievedReview;
 }
 
 export interface RecievedReview {
@@ -27,6 +32,7 @@ export interface RecievedReview {
   movieID: string;
   userID: string;
   username: string;
+  movieTitle: string;
 }
 
 export interface Review {
@@ -88,6 +94,20 @@ interface FetchReviewsFailureAction {
   error: string;
 }
 
+interface FetchReviewRequestAction {
+  type: typeof FETCH_REVIEW_REQUEST;
+}
+
+interface FetchReviewSuccessAction {
+  type: typeof FETCH_REVIEW_SUCCESS;
+  payload: RecievedReview;
+}
+
+interface FetchReviewFailureAction {
+  type: typeof FETCH_REVIEW_FAILURE;
+  error: string;
+}
+
 export type ReviewActionTypes =
   | PostReviewRequestAction
   | PostReviewSuccessAction
@@ -100,4 +120,7 @@ export type ReviewActionTypes =
   | DeleteReviewFailureAction
   | FetchReviewsRequestAction
   | FetchReviewsSuccessAction
-  | FetchReviewsFailureAction;
+  | FetchReviewsFailureAction
+  | FetchReviewRequestAction
+  | FetchReviewSuccessAction
+  | FetchReviewFailureAction;

@@ -1,7 +1,9 @@
-import { Box } from "@material-ui/core";
+import { Box, IconButton } from "@material-ui/core";
+import { OpenInNew } from "@material-ui/icons";
 import { Rating } from "@material-ui/lab";
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../interfaces/RootState";
@@ -54,6 +56,7 @@ type Props = PropsFromRedux & {
 };
 
 const ReviewContainer: React.FunctionComponent<Props> = (props) => {
+  const history = useHistory();
   const userInfo = props.userInfo;
   const reviews: Array<RecievedReview> = props.reviewInfo.reviews;
   const [reviewBoxes, setReviewBoxes] = React.useState<React.ReactElement[]>(
@@ -67,7 +70,15 @@ const ReviewContainer: React.FunctionComponent<Props> = (props) => {
         newReviews.push(
           <Box key={review._id} className="review" bgcolor="secondary.light">
             <div className="reviewContent">
-              <h3 className="noMargin">{review.username}</h3>
+              <div className="reviewTop">
+                <h3 className="noMargin">{review.username}</h3>
+                <IconButton
+                  onClick={() => history.replace("/review/" + review._id)}
+                  size="small"
+                >
+                  <OpenInNew />
+                </IconButton>
+              </div>
               <Rating value={review.rating} readOnly />
               <span>{review.text}</span>
             </div>

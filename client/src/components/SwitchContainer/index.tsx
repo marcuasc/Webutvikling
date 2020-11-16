@@ -3,6 +3,7 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import LoginRegisterContainer from "../LoginRegisterContainer";
 import MoviePage from "../MoviePage";
 import PageContainer from "../PageContainer";
+import ReviewPage from "../ReviewPage";
 import SearchBar from "../SearchBar";
 import SearchResults from "../SearchResults";
 import UserPage from "../UserPage";
@@ -29,6 +30,9 @@ const SwitchContainer: React.FunctionComponent = () => {
         </Route>
         <Route path="/user/:userID">
           <UserPage />
+        </Route>
+        <Route path="/review/:reviewID">
+          <ReviewPage />
         </Route>
         <Route path="/login">
           <LoginRegisterContainer type="login" />
