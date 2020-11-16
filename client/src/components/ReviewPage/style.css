@@ -1,0 +1,18 @@
+#reviewPage {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#reviewButtons {
+  gap: 10px;
+}
+
+.hiding {
+  display: none;
+}
+
+.showing {
+  display: flex;
+}

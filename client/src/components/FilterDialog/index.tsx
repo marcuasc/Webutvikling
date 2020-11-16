@@ -86,7 +86,11 @@ const genres = [
 const FilterDialog: React.FunctionComponent<Props> = (props) => {
   // Sets a list of strings in the state of the component. Initially set to be empty.
   // Is to be used for holding of the selected genres to filter on.
-  const [selectedGenres, setSelectedGenres] = React.useState<Array<string>>([]);
+  const [selectedGenres, setSelectedGenres] = React.useState<Array<string>>(
+    props.filterData.filters.genre === undefined
+      ? []
+      : props.filterData.filters.genre
+  );
 
   // Sets a list of ReactElemets in the state of the component. Initially set to be empty.
   // Is to be used for holding the buttons for the genres to toggle.
@@ -96,17 +100,25 @@ const FilterDialog: React.FunctionComponent<Props> = (props) => {
 
   // Sets an object in the state of the component. Initially set to greater than (gt) 0, less than (lt) infinity.
   // Is to be used for holding the current value of the duration filtration and the creation of the filterObject.
-  const [durationObject, setDurationObject] = React.useState({
-    gt: 0,
-    lt: Infinity,
-  });
+  const [durationObject, setDurationObject] = React.useState(
+    props.filterData.filters.duration === undefined
+      ? {
+          gt: 0,
+          lt: Infinity,
+        }
+      : props.filterData.filters.duration
+  );
 
   // Sets an object in the state of the component. Initially set to greater than (gt) 0, less than (lt) infinity.
   // Is to be used for holding the current value of the budget filtration and the creation of the filterObject.
-  const [budgetObject, setBudgetObject] = React.useState({
-    gt: 0,
-    lt: Infinity,
-  });
+  const [budgetObject, setBudgetObject] = React.useState(
+    props.filterData.filters.budget === undefined
+      ? {
+          gt: 0,
+          lt: Infinity,
+        }
+      : props.filterData.filters.budget
+  );
 
   // Function that is responsible for toggling a genre. Takes in genre as a string.
   // Because of the useCallback hook, this function only updates what it does when a dependency from the dependency list updates and not every time the component updates.

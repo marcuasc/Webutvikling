@@ -91,7 +91,7 @@ const SortSelect: React.FunctionComponent<Props> = (props) => {
         <Select
           className="select"
           variant="outlined"
-          defaultValue="title"
+          defaultValue={props.sortData.type}
           label="Sort by:"
           onChange={handleChange}
         >
