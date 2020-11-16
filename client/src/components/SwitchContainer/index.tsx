@@ -1,4 +1,6 @@
 import React from "react";
+import ReactDOM from "react-dom";
+import App from "../../App";
 import { Route, Switch, useHistory } from "react-router-dom";
 import LoginRegisterContainer from "../LoginRegisterContainer";
 import MoviePage from "../MoviePage";

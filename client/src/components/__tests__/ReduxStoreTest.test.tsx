@@ -1,4 +1,4 @@
-import { openMovieDialog } from "../../redux/movie/movieActions";
+import { setAlert } from "../../redux/alert/alertActions";
 import thunk from "redux-thunk";
 import configureStore from "redux-mock-store"; //ES6 modules
 
@@ -25,7 +25,6 @@ const initialState = {
     descending: true,
   },
   movieInfo: {
-    open: false,
     loading: false,
     error: "",
     movie: {
@@ -38,7 +37,30 @@ const initialState = {
       budget: -1,
       release_date: "",
       duration: -1,
-      avarageRating: -1,
+      averageRating: -1,
+    },
+  },
+  userInfo: {
+    loggedIn: false,
+    loading: false,
+    error: "",
+    user: {
+      username: "",
+      userID: "",
+      token: "",
+      expires: 0,
+    },
+  },
+  reviewInfo: {
+    loading: false,
+    error: "",
+    reviews: [],
+  },
+  alertInfo: {
+    open: false,
+    alert: {
+      type: "success",
+      message: "",
     },
   },
 };
@@ -47,9 +69,12 @@ const initialState = {
 const store = mockStore(initialState);
 
 test("Dispatches correct action in redux store", () => {
-  store.dispatch(openMovieDialog("heijegerid"));
+  store.dispatch(setAlert({ type: "error", message: "heipadeg" }));
 
   const actions = store.getActions();
-  const expectedPayload = { type: "OPEN_MOVIE_DIALOG", payload: "heijegerid" };
+  const expectedPayload = {
+    type: "SET_ALERT",
+    payload: { type: "error", message: "heipadeg" },
+  };
   expect(actions).toEqual([expectedPayload]);
 });
