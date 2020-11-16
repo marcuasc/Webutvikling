@@ -109,9 +109,9 @@ const UserReview: React.FunctionComponent<Props> = (props) => {
               </>
             ) : (
               <>
-                <h3 className="noMargin">{userReview.userID}</h3>
+                <h3 className="noMargin">{userReview.username}</h3>
                 <Rating value={userReview.rating} readOnly />
-                <p>{userReview.text}</p>
+                <span>{userReview.text}</span>
               </>
             )
           ) : (

@@ -10,9 +10,12 @@ Also reates an interface for Search state.
 export const FETCH_RESULTS_REQUEST = "FETCH_RESULTS_REQUEST";
 export const FETCH_RESULTS_SUCCESS = "FETCH_RESULTS_SUCCESS";
 export const FETCH_RESULTS_FAILURE = "FETCH_RESULTS_FAILURE";
+
 export const UPDATE_SEARCH_QUERY = "UDATE_SEARCH_QUERY";
 export const UPDATE_TOTAL_PAGES = "UPDATE_TOTAL_PAGES";
 export const UPDATE_CURRENT_PAGE = "UPDATE_CURRENT_PAGE";
+
+export const RESET_SEARCH = "RESET_SEARCH";
 
 interface FetchResultsRequestAction {
   type: typeof FETCH_RESULTS_REQUEST;
@@ -43,6 +46,10 @@ interface UpdateCurrentPage {
   payload: number;
 }
 
+interface ResetSearchAction {
+  type: typeof RESET_SEARCH;
+}
+
 export interface Search {
   loading: Boolean;
   results: Array<any>;
@@ -58,4 +65,5 @@ export type SearchActionTypes =
   | FetchResultsFailureAction
   | UpdateSearchQueryAction
   | UpdateCurrentPage
-  | UpdateTotalPages;
+  | UpdateTotalPages
+  | ResetSearchAction;

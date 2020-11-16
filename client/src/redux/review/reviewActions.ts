@@ -1,6 +1,7 @@
 import Axios from "axios";
 import { Dispatch } from "redux";
 import { setAlert } from "../alert/alertActions";
+import { fetchMovie } from "../movie/movieActions";
 import {
   DELETE_REVIEW_FAILURE,
   DELETE_REVIEW_REQUEST,
@@ -111,7 +112,7 @@ export const postReview = (review: Review, token: string) => {
           setAlert({ type: "success", message: "Successfully posted review!" })
         );
         dispatch(postReviewSuccess());
-        dispatch(fetchReviews("movie", review.movieID) as any);
+        dispatch(fetchMovie(review.movieID) as any);
       })
       .catch((error) => {
         const errorMsg = error.message;
