@@ -18,7 +18,17 @@ Til høyre i headeren befinner det seg en knapp der brukeren kan bytte mellom li
 * Installer [Node.js](https://nodejs.org)
 * Naviger deg inn i `server` mappen, og skriv `npm install`for å installere nødvendige pakker. Deretter skriv `npm start` i terminalen for å starte backend
 * Åpne en ny terminal, naviger deg inn i `client` mappen, og skriv `npm install`for å installere nødvendige pakker. Deretter skriv `npm start` for å starte frontend
-* Skriv `npm test` i `client` for å kjøre tester
+
+
+**Hvordan kjøre tester frontend**
+* Naviger deg inn i `client`mappen, og skriv `npm test`
+* For at cypress skal funke må både `client` og `server` kjøre 
+
+
+**Hvordan kjøre tester backend**
+* Avslutt prosessen som kjører backend
+* Naviger deg inn i `server`mappen, og skriv `npm test`
+
 
 
 # Backend
