@@ -21,7 +21,7 @@ describe("Route tests: '/user'", function () {
                 .get(baseRoute + "/5fae3c70c51dfb29ec5c2d96")
                 .set("Accept", "application/json")
                 .then((response) => {
-                    expect(response.body[0]).to.have.property("username");
+                    expect(response.body).to.have.property("username");
                     done();
                 })
                 .catch((error) => {
@@ -34,7 +34,7 @@ describe("Route tests: '/user'", function () {
                 .get(baseRoute + "/5fae3c70c51dfb29ec5c2d96")
                 .set("Accept", "application/json")
                 .then((response) => {
-                    expect(response.body[0]).to.have.property("_id");
+                    expect(response.body).to.have.property("_id");
                     done();
                 })
                 .catch((error) => {
@@ -47,7 +47,7 @@ describe("Route tests: '/user'", function () {
                 .get(baseRoute + "/5fae3c70c51dfb29ec5c2d96")
                 .set("Accept", "application/json")
                 .then((response) => {
-                    expect(response.body[0]).to.have.property("reviews");
+                    expect(response.body).to.have.property("reviews");
                     done();
                 })
                 .catch((error) => {
