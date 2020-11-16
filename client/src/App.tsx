@@ -16,6 +16,10 @@ import SwitchContainer from "./components/SwitchContainer";
 import { RootState } from "./interfaces/RootState";
 import { connect, ConnectedProps } from "react-redux";
 import CustomSnackbar from "./components/CustomSnackbar";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { resetSearch } from "./redux/search/searchActions";
+import { resetFilters } from "./redux/filter/filterActions";
 
 /* 
 
@@ -44,7 +48,14 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const connector = connect(mapStateToProps);
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    resetSearch: () => dispatch(resetSearch()),
+    resetFilters: () => dispatch(resetFilters()),
+  };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
@@ -122,7 +133,16 @@ const App: React.FunctionComponent<Props> = (props) => {
           {/* AppBar should always be used with the Toolbar component from MUI */}
           <Toolbar>
             {/* the logo of the website */}
-            <img id="logo" src="./resources/images/logo.png" alt="logo" />
+            <img
+              id="logo"
+              src="./resources/images/logo.png"
+              alt="logo"
+              onClick={() => {
+                history.replace("/");
+                props.resetSearch();
+                props.resetFilters();
+              }}
+            />
             {/* div that occupies remaining space of the Toolbar
                             This is to space the IconButton to the right side of the toolbar */}
             <div className={"grow"} />

@@ -6,6 +6,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../interfaces/RootState";
 import { fetchMovie } from "../../redux/movie/movieActions";
 import { fetchUser } from "../../redux/user/userActions";
+import BackButton from "../BackButton";
 import ReviewContainer from "../ReviewContainer";
 
 /* 
@@ -58,6 +59,7 @@ const UserPage: React.FunctionComponent<Props> = (props) => {
 
   return (
     <>
+      <BackButton />
       <h1>
         {myUser
           ? "Your user info:"
