@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+Array [
+  <h2>
+    Your review
+  </h2>,
+  <div
+    className="MuiBox-root MuiBox-root-1 review"
+  >
+    <div
+      className="reviewContent"
+    >
+      <p
+        className="MuiTypography-root MuiTypography-body1"
+      >
+        <a
+          className="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
+          href="/login"
+          onBlur={[Function]}
+          onFocus={[Function]}
+        >
+          Login
+        </a>
+        <span>
+           to write a review
+        </span>
+      </p>
+    </div>
+  </div>,
+]
+`;
