@@ -145,14 +145,49 @@ router.delete(
 );
 
 router.get("/:id/reviews", async (req, res) => {
-  await Review.find({ userID: req.params.id })
+  Review.find({ userID: req.params.id })
+    .then(async (reviews) => {
+      const completeReviews = [];
+      for (let review of reviews) {
+        review = review.toObject();
+        await User.findOne({ _id: review.userID })
+          .select("username")
+          .then((user) => {
+            review.username = user.username;
+          })
+          .catch((error) => {
+            res.status(400).json({
+              error:
+                "Could not get user of one of the reviews for movie " +
+                req.params.id,
+              message: error.message,
+            });
+          });
+        await Movie.findOne({ _id: review.movieID })
+          .select("title")
+          .then((movie) => {
+            review.movieTitle = movie.title;
+          })
+          .catch((error) => {
+            res.status(400).json({
+              error:
+                "Could not get movie title of one of the reviews for movie " +
+                req.params.id,
+              message: error.message,
+            });
+          });
+        completeReviews.push(review);
+      }
+      return completeReviews;
+    })
     .then((reviews) => {
       res.status(200).json({ reviews: reviews });
     })
-    .catch(() => {
-      res
-        .status(400)
-        .json({ error: "Could not get reviews from user " + req.params.id });
+    .catch((error) => {
+      res.status(400).json({
+        error: "Could not get reviews for movie " + req.params.id,
+        message: error.message,
+      });
     });
 });
 

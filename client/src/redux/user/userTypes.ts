@@ -10,6 +10,10 @@ export const FETCH_USER_REQUEST = "FETCH_USER_REQUEST";
 export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";
 export const FETCH_USER_FAILURE = "FETCH_USER_FAILURE";
 
+export const DELETE_USER_REQUEST = "DELETE_USER_REQUEST";
+export const DELETE_USER_SUCCESS = "DELETE_USER_SUCCESS";
+export const DELETE_USER_FAILURE = "DELETE_USER_FAILURE";
+
 export const USER_LOGOUT = "USER_LOGOUT";
 
 export interface UserInfo {
@@ -75,6 +79,20 @@ interface FetchUserFailureAction {
   payload: string;
 }
 
+interface DeleteUserRequestAction {
+  type: typeof DELETE_USER_REQUEST;
+  payload: string;
+}
+
+interface DeleteUserSuccessAction {
+  type: typeof DELETE_USER_SUCCESS;
+}
+
+interface DeleteUserFailureAction {
+  type: typeof DELETE_USER_FAILURE;
+  payload: string;
+}
+
 interface UserLogoutAction {
   type: typeof USER_LOGOUT;
 }
@@ -89,4 +107,7 @@ export type UserActionTypes =
   | FetchUserRequestAction
   | FetchUserSuccessAction
   | FetchUserFailureAction
+  | DeleteUserRequestAction
+  | DeleteUserSuccessAction
+  | DeleteUserFailureAction
   | UserLogoutAction;

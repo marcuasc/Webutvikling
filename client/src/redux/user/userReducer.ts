@@ -1,4 +1,7 @@
 import {
+  DELETE_USER_FAILURE,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
   FETCH_USER_FAILURE,
   FETCH_USER_REQUEST,
   FETCH_USER_SUCCESS,
@@ -13,9 +16,9 @@ import {
   USER_REGISTER_SUCCESS,
 } from "./userTypes";
 import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 const getStateFromCookies = (): UserInfo => {
-  const cookies = new Cookies();
   const userInCookie = cookies.get("currentUser");
   if (userInCookie !== undefined) {
     return {
@@ -110,8 +113,44 @@ const userReducer = (
       return {
         ...state,
       };
+    case DELETE_USER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_USER_SUCCESS:
+      return {
+        ...state,
+        loggedIn: false,
+        loading: false,
+        error: "",
+        user: {
+          username: "",
+          userID: "",
+          token: "",
+          expires: 0,
+        },
+      };
+    case DELETE_USER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
     case USER_LOGOUT:
-      return initialState;
+      cookies.remove("currentUser", { path: "/" });
+      return {
+        ...state,
+        loggedIn: false,
+        loading: false,
+        error: "",
+        user: {
+          username: "",
+          userID: "",
+          token: "",
+          expires: 0,
+        },
+      };
     default:
       return state;
   }

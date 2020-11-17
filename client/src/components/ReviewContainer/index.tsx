@@ -1,4 +1,4 @@
-import { Box, IconButton } from "@material-ui/core";
+import { Box, IconButton, Link } from "@material-ui/core";
 import { OpenInNew } from "@material-ui/icons";
 import { Rating } from "@material-ui/lab";
 import React from "react";
@@ -71,7 +71,17 @@ const ReviewContainer: React.FunctionComponent<Props> = (props) => {
           <Box key={review._id} className="review" bgcolor="secondary.light">
             <div className="reviewContent">
               <div className="reviewTop">
-                <h3 className="noMargin">{review.username}</h3>
+                <h3 className="noMargin">
+                  {props.type === "movie" ? (
+                    <Link href={"/user/" + review.userID}>
+                      {review.username}
+                    </Link>
+                  ) : (
+                    <Link href={"/movie/" + review.movieID}>
+                      {review.movieTitle}
+                    </Link>
+                  )}
+                </h3>
                 <IconButton
                   onClick={() => history.replace("/review/" + review._id)}
                   size="small"

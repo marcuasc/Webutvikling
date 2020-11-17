@@ -151,16 +151,20 @@ const ReviewPage: React.FunctionComponent<Props> = (props) => {
                   color="primary"
                   startIcon={<Check />}
                   onClick={() => {
-                    updateReview(
-                      {
-                        rating: rating,
-                        text: text,
-                        movieID: viewingReview.movieID,
-                      },
-                      viewingReview._id,
-                      props.userInfo.user.token
-                    );
-                    setEditing(false);
+                    if (text === "") {
+                      window.alert("You must write something in your review");
+                    } else {
+                      updateReview(
+                        {
+                          rating: rating,
+                          text: text,
+                          movieID: viewingReview.movieID,
+                        },
+                        viewingReview._id,
+                        props.userInfo.user.token
+                      );
+                      setEditing(false);
+                    }
                   }}
                 >
                   Update
