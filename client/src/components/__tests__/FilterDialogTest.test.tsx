@@ -9,29 +9,12 @@ import rootReducer from "../../redux/rootReducer";
 import thunk from "redux-thunk";
 import { BrowserRouter as Router } from "react-router-dom";
 import SearchBar from "../SearchBar";
-import filterReducer from "../../redux/filter/filterReducer";
-import App from "../../App";
+import ReactDOM from "react-dom";
 
-import configureStore from "redux-mock-store"; //ES6 modules
-/*
-const initialState = {
-  genre: ["hei", "ho"],
-  duration: {
-    gt: 1,
-    lt: 2,
-  },
-  budget: {
-    gt: 3,
-    lt: 4,
-  },
-};
-
-// Definerer mockstore-funksjonen med thunk
-const middlewares: any = [thunk];
-const mockStore = configureStore(middlewares);
-
-const store = mockStore(initialState);*/
-
+/*const rewire = require("rewire");
+const filterDialog = rewire('"../FilterDialog/index"');
+const createFilterObject = filterDialog.__get__("createFilterObject");
+*/
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 describe("Redux actions", () => {
@@ -82,5 +65,18 @@ describe("Component tests", () => {
     );
     const genres = getByText("Genres");
     expect(genres).toBeInTheDocument();
+  });
+
+  it("it renders without crashing", () => {
+    const element = document.createElement("div");
+    ReactDOM.render(
+      <Provider store={store}>
+        <Router>
+          <FilterDialog />
+        </Router>
+      </Provider>,
+      element
+    );
+    ReactDOM.unmountComponentAtNode(element);
   });
 });

@@ -171,6 +171,8 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
         >
           {/* Textfield for username. Value based on state. Updates state with new value when changed. */}
           <TextField
+            data-testid="username1"
+            inputProps={{ "data-testid": "username_input" }}
             variant="outlined"
             margin="normal"
             required
@@ -185,6 +187,7 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
           />
           {/* Textfield for password. Value based on state. Updates state with new value when changed. */}
           <TextField
+            data-testid="password"
             variant="outlined"
             margin="normal"
             required
@@ -199,6 +202,7 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
           />
           {/* Submit button. Makes the form run onSubmit. Text based on type prop */}
           <Button
+            data-testid="submit"
             type="submit"
             fullWidth
             variant="contained"
