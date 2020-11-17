@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import LoginRegisterContainer from "../LoginRegisterContainer";
 import MoviePage from "../MoviePage";
 import PageContainer from "../PageContainer";
@@ -10,8 +10,6 @@ import UserPage from "../UserPage";
 import "./style.css";
 
 const SwitchContainer: React.FunctionComponent = () => {
-  const history = useHistory();
-
   React.useEffect(() => {}, []);
 
   return (

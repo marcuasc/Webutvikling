@@ -1,0 +1,11 @@
+#userButtons {
+  gap: 10px;
+}
+
+.hiding {
+  display: none;
+}
+
+.showing {
+  display: flex;
+}

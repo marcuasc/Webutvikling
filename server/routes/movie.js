@@ -146,21 +146,13 @@ router.get("/:id", async (req, res) => {
 router.get("/:id/reviews", async (req, res) => {
   Review.find({ movieID: req.params.id })
     .then(async (reviews) => {
-      const reviewsWithUsername = [];
-      for (const review of reviews) {
+      const completeReviews = [];
+      for (let review of reviews) {
+        review = review.toObject();
         await User.findOne({ _id: review.userID })
           .select("username")
           .then((user) => {
-            const username = user.username;
-            const newReview = {
-              _id: review.id,
-              rating: review.rating,
-              text: review.text,
-              userID: review.userID,
-              movieID: review.movieID,
-              username: username,
-            };
-            reviewsWithUsername.push(newReview);
+            review.username = user.username;
           })
           .catch((error) => {
             res.status(400).json({
@@ -170,8 +162,22 @@ router.get("/:id/reviews", async (req, res) => {
               message: error.message,
             });
           });
+        await Movie.findOne({ _id: review.movieID })
+          .select("title")
+          .then((movie) => {
+            review.movieTitle = movie.title;
+          })
+          .catch((error) => {
+            res.status(400).json({
+              error:
+                "Could not get movie title of one of the reviews for movie " +
+                req.params.id,
+              message: error.message,
+            });
+          });
+        completeReviews.push(review);
       }
-      return reviewsWithUsername;
+      return completeReviews;
     })
     .then((reviews) => {
       res.status(200).json({ reviews: reviews });

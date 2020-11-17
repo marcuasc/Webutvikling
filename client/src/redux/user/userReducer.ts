@@ -1,4 +1,7 @@
 import {
+  DELETE_USER_FAILURE,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
   FETCH_USER_FAILURE,
   FETCH_USER_REQUEST,
   FETCH_USER_SUCCESS,
@@ -12,17 +15,22 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
 } from "./userTypes";
-import Cookies from "universal-cookie";
 
 const getStateFromCookies = (): UserInfo => {
-  const cookies = new Cookies();
-  const userInCookie = cookies.get("currentUser");
-  if (userInCookie !== undefined) {
+  let userInStorage = localStorage.getItem("currentUser");
+  if (userInStorage !== null) {
+    const currentTime = new Date();
+    if (JSON.parse(userInStorage).expires < currentTime.getTime()) {
+      localStorage.removeItem("currentUser");
+      userInStorage = null;
+    }
+  }
+  if (userInStorage !== null) {
     return {
       loggedIn: true,
       loading: false,
       error: "",
-      user: userInCookie,
+      user: JSON.parse(userInStorage),
       viewingUser: {
         username: "",
         userID: "",
@@ -110,8 +118,44 @@ const userReducer = (
       return {
         ...state,
       };
+    case DELETE_USER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_USER_SUCCESS:
+      return {
+        ...state,
+        loggedIn: false,
+        loading: false,
+        error: "",
+        user: {
+          username: "",
+          userID: "",
+          token: "",
+          expires: 0,
+        },
+      };
+    case DELETE_USER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
     case USER_LOGOUT:
-      return initialState;
+      localStorage.removeItem("currentUser");
+      return {
+        ...state,
+        loggedIn: false,
+        loading: false,
+        error: "",
+        user: {
+          username: "",
+          userID: "",
+          token: "",
+          expires: 0,
+        },
+      };
     default:
       return state;
   }

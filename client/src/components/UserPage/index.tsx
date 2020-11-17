@@ -1,13 +1,19 @@
+import { Button, makeStyles } from "@material-ui/core";
+import { Delete, ExitToApp } from "@material-ui/icons";
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../interfaces/RootState";
-import { fetchMovie } from "../../redux/movie/movieActions";
-import { fetchUser } from "../../redux/user/userActions";
+import {
+  deleteUser,
+  fetchUser,
+  userLogout,
+} from "../../redux/user/userActions";
 import BackButton from "../BackButton";
 import ReviewContainer from "../ReviewContainer";
+import "./style.css";
 
 /* 
 
@@ -39,6 +45,8 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
     fetchUser: (userID: string) => dispatch(fetchUser(userID)),
+    userLogout: () => dispatch(userLogout()),
+    deleteUser: (id: string, token: string) => dispatch(deleteUser(id, token)),
   };
 };
 
@@ -48,14 +56,32 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 
+const useStyles = makeStyles((theme) => ({
+  warningButton: {
+    backgroundColor: theme.palette.warning.main,
+    "&:hover": {
+      backgroundColor: theme.palette.warning.dark,
+    },
+  },
+  errorButton: {
+    backgroundColor: theme.palette.error.main,
+    "&:hover": {
+      backgroundColor: theme.palette.error.dark,
+    },
+  },
+}));
+
 const UserPage: React.FunctionComponent<Props> = (props) => {
+  const history = useHistory();
+  const classes = useStyles();
   const { userID } = useParams<{ userID: string }>();
   const myUser = userID === props.userInfo.user.userID;
   const viewingUser = props.userInfo.viewingUser;
+  const fetchUser = props.fetchUser;
 
   React.useEffect(() => {
-    props.fetchUser(userID);
-  }, [userID]);
+    fetchUser(userID);
+  }, [userID, fetchUser]);
 
   return (
     <>
@@ -67,6 +93,35 @@ const UserPage: React.FunctionComponent<Props> = (props) => {
       </h1>
       <p>Username: {viewingUser.username}</p>
       <p>User ID: {viewingUser.userID}</p>
+      <div id="userButtons" className={myUser ? "showing" : "hiding"}>
+        <Button
+          className={classes.warningButton}
+          variant="contained"
+          startIcon={<ExitToApp />}
+          onClick={() => {
+            props.userLogout();
+            history.replace("/");
+          }}
+        >
+          Logout
+        </Button>
+        <Button
+          className={classes.errorButton}
+          variant="contained"
+          startIcon={<Delete />}
+          onClick={() => {
+            if (window.confirm("Do you want to delete your user?")) {
+              props.deleteUser(
+                props.userInfo.user.userID,
+                props.userInfo.user.token
+              );
+              history.replace("/");
+            }
+          }}
+        >
+          Delete
+        </Button>
+      </div>
       <h2>{myUser ? "Your reviews" : "Reviews of " + viewingUser.username}</h2>
       <ReviewContainer type="user" />
     </>

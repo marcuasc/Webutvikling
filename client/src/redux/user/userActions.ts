@@ -1,8 +1,11 @@
 import Axios from "axios";
 import { Dispatch } from "redux";
-import { closeAlert, setAlert } from "../alert/alertActions";
+import { setAlert } from "../alert/alertActions";
 import { fetchReviews } from "../review/reviewActions";
 import {
+  DELETE_USER_FAILURE,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
   FETCH_USER_FAILURE,
   FETCH_USER_REQUEST,
   FETCH_USER_SUCCESS,
@@ -57,6 +60,7 @@ const userRegisterFailure = (error: string): UserActionTypes => {
     payload: error,
   };
 };
+
 const fetchUserRequest = (): UserActionTypes => {
   return {
     type: FETCH_USER_REQUEST,
@@ -77,9 +81,35 @@ const fetchUserFailure = (error: string): UserActionTypes => {
   };
 };
 
+const deleteUserRequest = (id: string): UserActionTypes => {
+  return {
+    type: DELETE_USER_REQUEST,
+    payload: id,
+  };
+};
+
+const deleteUserSuccess = (): UserActionTypes => {
+  return {
+    type: DELETE_USER_SUCCESS,
+  };
+};
+
+const deleteUserFailure = (error: string): UserActionTypes => {
+  return {
+    type: DELETE_USER_FAILURE,
+    payload: error,
+  };
+};
+
 export const userLogout = (): UserActionTypes => {
   return {
     type: USER_LOGOUT,
+  };
+};
+
+const getConfig = (token: string) => {
+  return {
+    headers: { Authorization: token },
   };
 };
 
@@ -164,6 +194,25 @@ export const fetchUser = (userID: string) => {
         const errorMsg = error.message;
         dispatch(setAlert({ type: "error", message: "Could not fetch user" }));
         dispatch(fetchUserFailure(errorMsg));
+      });
+  };
+};
+
+export const deleteUser = (userID: string, token: string) => {
+  return (dispatch: Dispatch) => {
+    dispatch(deleteUserRequest(userID));
+    Axios.delete("http://localhost:5000/user/" + userID, getConfig(token))
+      .then((response) => {
+        dispatch(deleteUserSuccess());
+        dispatch(
+          setAlert({ type: "success", message: "User successfully deleted!" })
+        );
+        dispatch(userLogout());
+      })
+      .catch((error) => {
+        const errorMsg = error.message;
+        dispatch(deleteUserFailure(errorMsg));
+        dispatch(setAlert({ type: "error", message: "Could not delete user" }));
       });
   };
 };
