@@ -7,8 +7,6 @@ import { applyMiddleware, createStore } from "redux";
 import rootReducer from "../../redux/rootReducer";
 import thunk from "redux-thunk";
 import userEvent from "@testing-library/user-event";
-import { assert } from "console";
-import { TextField } from "@material-ui/core";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -36,10 +34,10 @@ describe("LoginForm test", () => {
 
     const inputField = getByTestId("username_input");
 
-    //uses userevent for typing in a name
+    //uses userEvent for typing in a name
     userEvent.type(inputField, "Ola");
 
-    //checks that correct
+    //checks that the correct name was typed
     expect(inputField).toHaveValue("Ola");
   });
 });

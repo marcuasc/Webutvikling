@@ -7,9 +7,10 @@ import rootReducer from "../../redux/rootReducer";
 import thunk from "redux-thunk";
 import { BrowserRouter as Router } from "react-router-dom";
 
+//creates a store for the provider
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
-it("renders correctly when there are no items", () => {
+it("renders correctly", () => {
   const tree = renderer
     .create(
       <Provider store={store}>

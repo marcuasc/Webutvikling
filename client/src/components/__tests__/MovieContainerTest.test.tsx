@@ -13,8 +13,8 @@ import { screen } from "@testing-library/dom";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
-describe("LoginForm test", () => {
-  it("Test that loginform renders and that inputs ar empty", async () => {
+describe("MovieContainer test", () => {
+  it("Renders MovieContainer and tests onClick (userEvent)", async () => {
     const { getByTestId } = render(
       <Provider store={store}>
         <Router>

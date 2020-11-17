@@ -11,14 +11,14 @@ import Backbutton from "../BackButton/index";
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 test("it renders without crashing", () => {
-  const element = document.createElement("div");
+  const divTest = document.createElement("div");
   ReactDOM.render(
     <Provider store={store}>
       <Router>
         <Backbutton />
       </Router>
     </Provider>,
-    element
+    divTest
   );
-  ReactDOM.unmountComponentAtNode(element);
+  ReactDOM.unmountComponentAtNode(divTest);
 });
