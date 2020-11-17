@@ -66,6 +66,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 
+// Use makeStyles from MUI to overwrite the styling of MUI components
 const useStyles = makeStyles((theme) => ({
   warningButton: {
     backgroundColor: theme.palette.warning.main,
@@ -82,24 +83,38 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ReviewPage: React.FunctionComponent<Props> = (props) => {
+  // The useHistory hook gives access to the history instance used for navigation.
   const history = useHistory();
-  const viewingReview = props.reviewInfo.viewingReview;
+
+  // Make the classes from useStyles.
   const classes = useStyles();
+
+  // Extracts relevant state and functions from redux props
+  const viewingReview = props.reviewInfo.viewingReview;
   const fetchReview = props.fetchReview;
-  const { reviewID } = useParams<{ reviewID: string }>();
-  const userIsWriter = viewingReview.userID === props.userInfo.user.userID;
-  const [editing, setEditing] = React.useState(false);
-
-  const [rating, setRating] = React.useState(viewingReview.rating);
-  const [text, setText] = React.useState(viewingReview.text);
-
   const updateReview = props.updateReview;
   const deleteReview = props.deleteReview;
 
+  // The useParams() hook returns an object of key/value pairs of URL parameters.
+  const { reviewID } = useParams<{ reviewID: string }>();
+
+  // Declares a boolean depending on if the user is the writer of the displayed review
+  const userIsWriter = viewingReview.userID === props.userInfo.user.userID;
+
+  // Sets editing, rating, and text in the component state.
+  const [editing, setEditing] = React.useState(false);
+  const [rating, setRating] = React.useState(viewingReview.rating);
+  const [text, setText] = React.useState(viewingReview.text);
+
+  // The React.useEffect() hook runs whenever the component mounts or one of the dependencies in the dependency list changes
+  // When the rating in the redux state changes, update the component rate state to the rating from redux.
+  // Had to to this because of some problems with the Rating component
   React.useEffect(() => {
     setRating(viewingReview.rating);
   }, [viewingReview.rating]);
 
+  // The React.useEffect() hook runs whenever the component mounts or one of the dependencies in the dependency list changes
+  // When the reviewID from the url changes, fetch the relevant review to redux.
   React.useEffect(() => {
     fetchReview(reviewID);
   }, [reviewID, fetchReview]);
@@ -113,6 +128,7 @@ const ReviewPage: React.FunctionComponent<Props> = (props) => {
         ) : (
           <>
             <h1>
+              {/* Title depends on the writer of the review and movie title */}
               <Link href={"/user/" + viewingReview.userID}>
                 {viewingReview.username}
               </Link>
@@ -123,17 +139,21 @@ const ReviewPage: React.FunctionComponent<Props> = (props) => {
               "
             </h1>
             <Divider />
+            {/* Rating component from MUI. When changed update the state to the correct value. Can only be edited if the user is in editing state */}
             <Rating
               name="rating"
               readOnly={!editing}
               value={rating}
+              // Rating is set to 1 if it is set to null.
               onChange={(_, value) => {
                 setRating(value === null ? 1 : value);
               }}
             />
+            {/* If user is editing, display textfield. Else display the text of the review from redux state */}
             {editing ? (
               <TextField
                 value={text}
+                // When changed, update the state of the component
                 onChange={(event) => {
                   setText(event.target.value);
                 }}
@@ -141,15 +161,18 @@ const ReviewPage: React.FunctionComponent<Props> = (props) => {
             ) : (
               <p>{viewingReview.text}</p>
             )}
+            {/* These buttons only show if the user is the writer of the review. */}
             <div
               id="reviewButtons"
               className={userIsWriter ? "showing" : "hiding"}
             >
+              {/* This button only shows if the user is editing */}
               <div className={editing ? "showing" : "hiding"}>
                 <Button
                   variant="contained"
                   color="primary"
                   startIcon={<Check />}
+                  // When clicked, if text is blank alert user. Else dispatch updateReview action from redux with a valid review and the token of the user. Then turns of editing.
                   onClick={() => {
                     if (text === "") {
                       window.alert("You must write something in your review");
@@ -170,14 +193,17 @@ const ReviewPage: React.FunctionComponent<Props> = (props) => {
                   Update
                 </Button>
               </div>
+              {/* Button used for flipping the editing state */}
               <Button
                 className={classes.warningButton}
                 variant="contained"
+                // When clicked, flips editing state and resets text and rating.
                 onClick={() => {
                   setEditing(!editing);
                   setRating(viewingReview.rating);
                   setText(viewingReview.text);
                 }}
+                // Text and icon depends on if the user is editing or not.
                 startIcon={editing ? <Close /> : <Edit />}
               >
                 {editing ? "Cancel" : "Edit"}
@@ -186,6 +212,7 @@ const ReviewPage: React.FunctionComponent<Props> = (props) => {
                 variant="contained"
                 className={classes.errorButton}
                 startIcon={<Delete />}
+                // When delete button is clicked, if the user confirms, dispatches deleteReview action with id and token. Redirects to homepage.
                 onClick={() => {
                   if (window.confirm("Do you want to delete this review?")) {
                     deleteReview(viewingReview._id, props.userInfo.user.token);

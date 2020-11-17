@@ -1,3 +1,10 @@
+/*
+
+This file exports action creators for the different types. Used to trigger actions in the redux store.
+Some have payloads that correspond to the action.
+
+*/
+
 import Axios from "axios";
 import { Dispatch } from "redux";
 import { setAlert } from "../alert/alertActions";
@@ -126,105 +133,146 @@ const getConfig = (token: string) => {
   };
 };
 
+// Async action that uses axios to post review.
 export const postReview = (review: Review, token: string) => {
+  // Takes in review object and token
   return (dispatch: Dispatch) => {
+    // First dispatch postReviewRequest
     dispatch(postReviewRequest());
+    // Then try to post review with axios. Sends the review object with a config object with the token.
     Axios.post("http://localhost:5000/review/", review, getConfig(token))
       .then((response) => {
+        // If it works
+        // Dispatch postReviewSuccess
+        dispatch(postReviewSuccess());
+        // Dispatch fetchMovie so the movie in state is up to date.
+        dispatch(fetchMovie(review.movieID) as any);
+        // Set a success alert with fitting message
         dispatch(
           setAlert({ type: "success", message: "Successfully posted review!" })
         );
-        dispatch(postReviewSuccess());
-        dispatch(fetchMovie(review.movieID) as any);
       })
       .catch((error) => {
+        // If it fails, dispatch postReviewFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
-        dispatch(setAlert({ type: "error", message: "Could not post review" }));
         dispatch(postReviewFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
+        dispatch(setAlert({ type: "error", message: "Could not post review" }));
       });
   };
 };
 
+// Async action that uses axios to update review.
 export const updateReview = (review: Review, id: string, token: string) => {
+  // Takes in review object, id to put on, and token
   return (dispatch: Dispatch) => {
+    // First dispatch updateReviewRequest
     dispatch(updateReviewRequest());
+    // Declare the updatedReview
     const updatedReview = {
       rating: review.rating,
       text: review.text,
       movieID: review.movieID,
     };
+    // Put on correct path with updatedReview and configobject with token.
     Axios.put(
       "http://localhost:5000/review/" + id,
       updatedReview,
       getConfig(token)
     )
       .then((response) => {
+        // If it works, dispatch updateReviewSuccess
         dispatch(updateReviewSuccess());
+        // Disaptch success alert
         dispatch(
           setAlert({ type: "success", message: "Successfully updated review!" })
         );
+        // Dispatch fetchReview on id so that the review in the state is updated
         dispatch(fetchReview(id) as any);
       })
       .catch((error) => {
+        // If it fails, dispatch updateReviewFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
+        dispatch(updateReviewFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
         dispatch(
           setAlert({ type: "error", message: "Could not update review" })
         );
-        dispatch(updateReviewFailure(errorMsg));
       });
   };
 };
 
+// Async action that uses axios to delete review.
 export const deleteReview = (id: string, token: string) => {
+  // Takes in id of review and token
   return (dispatch: Dispatch) => {
+    // First, dispatch deleteReviewRequest
     dispatch(deleteReviewRequest());
+    // Then try to delete on path with config object of token.
     Axios.delete("http://localhost:5000/review/" + id, getConfig(token))
       .then((response) => {
+        // If it works, dispatch deleteReviewSuccess
+        dispatch(deleteReviewSuccess());
+        // Dispatch success alert with message
         dispatch(
           setAlert({ type: "success", message: "Successfully deleted review!" })
         );
-        dispatch(deleteReviewSuccess());
       })
       .catch((error) => {
+        // If it fails, dispatch deleteReviewFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
+        dispatch(deleteReviewFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
         dispatch(
           setAlert({ type: "error", message: "Could not delete review" })
         );
-        dispatch(deleteReviewFailure(errorMsg));
       });
   };
 };
 
+// Async action that uses axios to delete review.
 export const fetchReviews = (type: "movie" | "user", id: string) => {
+  // Takes in type of either movie or user and id
   return (dispatch: Dispatch) => {
+    // First, dispatch fetchReviewsRequest
     dispatch(fetchReviewsRequest());
     Axios.get("http://localhost:5000/" + type + "/" + id + "/reviews/")
       .then((response) => {
+        // If it works, dispatch fetchReviewsSuccess with the reviews in data in the response
         dispatch(fetchReviewsSuccess(response.data.reviews));
       })
       .catch((error) => {
         const errorMsg = error.message;
+        // If it fails, dispatch fetchReviewsFailure, with the errorMsg extracted from the response.
+        dispatch(fetchReviewsFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
         dispatch(
           setAlert({ type: "error", message: "Could not fetch reviews" })
         );
-        dispatch(fetchReviewsFailure(errorMsg));
       });
   };
 };
 
+// Async action that uses axios to fetch a single review.
 export const fetchReview = (id: string) => {
+  // Takes in id of review
   return (dispatch: Dispatch) => {
+    // First dispatch fetchReviewRequest
     dispatch(fetchReviewRequest());
+    // Then try to get on correct path
     Axios.get("http://localhost:5000/review/" + id)
       .then((response) => {
+        // If it works, dispatch fetchReviewSuccess with the data of the response
         dispatch(fetchReviewSuccess(response.data));
       })
       .catch((error) => {
+        // If it fails, dispatch fetchReviewFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
+        dispatch(fetchReviewFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
         dispatch(
           setAlert({ type: "error", message: "Could not fetch review" })
         );
-        dispatch(fetchReviewFailure(errorMsg));
       });
   };
 };

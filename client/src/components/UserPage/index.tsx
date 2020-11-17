@@ -56,6 +56,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 
+// Use makeStyles from MUI to overwrite the styling of MUI components
 const useStyles = makeStyles((theme) => ({
   warningButton: {
     backgroundColor: theme.palette.warning.main,
@@ -72,13 +73,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserPage: React.FunctionComponent<Props> = (props) => {
+  // The useHistory hook gives access to the history instance used for navigation.
   const history = useHistory();
+
+  // Make the classes from useStyles.
   const classes = useStyles();
+
+  // The useParams() hook returns an object of key/value pairs of URL parameters.
   const { userID } = useParams<{ userID: string }>();
+
+  // Declares a boolean dependent if the user that is currently being viewed is the users user.
   const myUser = userID === props.userInfo.user.userID;
+
+  // Extracts relevant state and functions from redux props
   const viewingUser = props.userInfo.viewingUser;
   const fetchUser = props.fetchUser;
 
+  // The React.useEffect() hook runs whenever the component mounts or one of the dependencies in the dependency list changes
+  // Dispatches redux action fetchUser when the userID from url changes
   React.useEffect(() => {
     fetchUser(userID);
   }, [userID, fetchUser]);
@@ -87,17 +99,20 @@ const UserPage: React.FunctionComponent<Props> = (props) => {
     <>
       <BackButton />
       <h1>
+        {/* Title is dependent on myUser */}
         {myUser
           ? "Your user info:"
           : "User info of user " + viewingUser.username + ":"}
       </h1>
       <p>Username: {viewingUser.username}</p>
       <p>User ID: {viewingUser.userID}</p>
+      {/* If it is my user, display these buttons */}
       <div id="userButtons" className={myUser ? "showing" : "hiding"}>
         <Button
           className={classes.warningButton}
           variant="contained"
           startIcon={<ExitToApp />}
+          // When clicked, dispatches redux logout action and redirects to startpage
           onClick={() => {
             props.userLogout();
             history.replace("/");
@@ -109,6 +124,7 @@ const UserPage: React.FunctionComponent<Props> = (props) => {
           className={classes.errorButton}
           variant="contained"
           startIcon={<Delete />}
+          // When clicked, warns the user of the delete action. If confirmed, dispatch deleteUser action with userID and token
           onClick={() => {
             if (window.confirm("Do you want to delete your user?")) {
               props.deleteUser(
@@ -122,6 +138,7 @@ const UserPage: React.FunctionComponent<Props> = (props) => {
           Delete
         </Button>
       </div>
+      {/* Displayes the reviews of the user being viewed */}
       <h2>{myUser ? "Your reviews" : "Reviews of " + viewingUser.username}</h2>
       <ReviewContainer type="user" />
     </>

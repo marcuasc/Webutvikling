@@ -48,19 +48,25 @@ type Props = PropsFromRedux;
 
 const CustomSnackbar: React.FunctionComponent<Props> = (props) => {
   return (
+    // The snackbar is located at the bottom to the right.
     <Snackbar
+      // redux state determines if the snacbar is open.
       open={props.alertInfo.open}
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      // It runs the onClose automatically after 5000 ms
       autoHideDuration={5000}
+      // onClose runs the closeAlert action from redux
       onClose={() => {
         props.closeAlert();
       }}
     >
       <Alert
         variant="filled"
+        // onClose runs the closeAlert action from redux
         onClose={() => {
           props.closeAlert();
         }}
+        // Gets severity and message from redux props
         severity={props.alertInfo.alert.type}
       >
         {props.alertInfo.alert.message}

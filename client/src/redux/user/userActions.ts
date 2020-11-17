@@ -1,3 +1,10 @@
+/*
+
+This file exports action creators for the different types. Used to trigger actions in the redux store.
+Some have payloads that correspond to the action.
+
+*/
+
 import Axios from "axios";
 import { Dispatch } from "redux";
 import { setAlert } from "../alert/alertActions";
@@ -113,105 +120,142 @@ const getConfig = (token: string) => {
   };
 };
 
+// Async action that uses axios to login user.
 export const loginUser = (username: string, password: string) => {
+  // Takes in username and password
   return (dispatch: Dispatch) => {
+    // First dispatch userLoginRequest
     dispatch(userLoginRequest());
+    // Then try to post user with axios. Sends the user object.
     Axios.post("http://localhost:5000/user/login", {
       username: username,
       password: password,
     })
       .then((response) => {
+        // If it works
+        // Dispatch userLoginSuccess with correct userObject based on response
         const userObject: UserObject = {
           username: response.data.username,
           userID: response.data.userID,
           token: response.data.token,
           expires: response.data.expires,
         };
+        dispatch(userLoginSuccess(userObject));
+        // Set a success alert with fitting message
         dispatch(
           setAlert({ type: "success", message: "Successfully logged in!" })
         );
-        dispatch(userLoginSuccess(userObject));
       })
       .catch((error) => {
+        // If it fails, dispatch userLoginFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
+        dispatch(userLoginFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
         dispatch(
           setAlert({ type: "error", message: "Wrong username or password" })
         );
-        dispatch(userLoginFailure(errorMsg));
       });
   };
 };
 
+// Async action that uses axios to register user.
 export const registerUser = (username: string, password: string) => {
+  // Takes in username and password
   return (dispatch: Dispatch) => {
+    // First dispatch userRegisterRequest
     dispatch(userRegisterRequest());
+    // Then try to post user with axios. Sends the user object.
     Axios.post("http://localhost:5000/user/register", {
       username: username,
       password: password,
     })
       .then((response) => {
+        // If it works
+        // Dispatch userRegisterSuccess with correct userObject based on response
         const userObject: UserObject = {
           username: response.data.username,
           userID: response.data.userID,
           token: response.data.token,
           expires: response.data.expires,
         };
+        dispatch(userRegisterSuccess(userObject));
+        // Set a success alert with fitting message
         dispatch(
           setAlert({
             type: "success",
             message: "Successfully registered user!",
           })
         );
-        dispatch(userRegisterSuccess(userObject));
       })
       .catch((error) => {
+        // If it fails, dispatch userRegisterFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
+        dispatch(userRegisterFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
         dispatch(
           setAlert({
             type: "error",
             message: "Could not register user. Username might be taken",
           })
         );
-        dispatch(userRegisterFailure(errorMsg));
       });
   };
 };
 
+// Async action that uses axios to fetch user.
 export const fetchUser = (userID: string) => {
+  // Takes in userID
   return (dispatch: Dispatch) => {
+    // First dispatch fetchUserRequest
     dispatch(fetchUserRequest());
+    // Then try to get user with axios.
     Axios.get("http://localhost:5000/user/" + userID)
       .then((response) => {
+        // If it works
+        // Dispatch fetchUserSuccess with correct viewingUser based on response
         const viewingUser: ViewingUser = {
           username: response.data.username,
           userID: response.data._id,
           reviews: response.data.reviews,
         };
         dispatch(fetchUserSuccess(viewingUser));
+        // Dispatch fetchReviews such that the review state is updated with the users reviews.
         dispatch(fetchReviews("user", viewingUser.userID) as any);
       })
       .catch((error) => {
+        // If it fails, dispatch fetchUserFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
-        dispatch(setAlert({ type: "error", message: "Could not fetch user" }));
         dispatch(fetchUserFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
+        dispatch(setAlert({ type: "error", message: "Could not fetch user" }));
       });
   };
 };
 
+// Async action that uses axios to login user.
 export const deleteUser = (userID: string, token: string) => {
+  // Takes in userID and token
   return (dispatch: Dispatch) => {
+    // First dispatch deleteUserRequest with userID
     dispatch(deleteUserRequest(userID));
+    // Then try to delete user with axios. Sends the config object with token.
     Axios.delete("http://localhost:5000/user/" + userID, getConfig(token))
       .then((response) => {
+        // If it works
+        // Dispatch deleteUserSuccess
         dispatch(deleteUserSuccess());
+        // Dispatch userLogout
+        dispatch(userLogout());
+        // Set a success alert with fitting message
         dispatch(
           setAlert({ type: "success", message: "User successfully deleted!" })
         );
-        dispatch(userLogout());
       })
       .catch((error) => {
+        // If it fails, dispatch deleteUserFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
         dispatch(deleteUserFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
         dispatch(setAlert({ type: "error", message: "Could not delete user" }));
       });
   };

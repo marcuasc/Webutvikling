@@ -10,10 +10,10 @@ import UserPage from "../UserPage";
 import "./style.css";
 
 const SwitchContainer: React.FunctionComponent = () => {
-  React.useEffect(() => {}, []);
-
+  // Returns a div with content dependent on the current url. Some paths have variables declared with :
   return (
     <div id="switchContainer">
+      {/* Switch and Route component from react-router-dom. Responsible for rendering correct components */}
       <Switch>
         <Route exact path="/">
           <div id="searchContainer">
@@ -39,7 +39,7 @@ const SwitchContainer: React.FunctionComponent = () => {
           <LoginRegisterContainer type="register" />
         </Route>
         <Route>
-          <p>404</p>
+          <h1>404</h1>
         </Route>
       </Switch>
     </div>

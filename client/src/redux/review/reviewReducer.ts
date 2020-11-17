@@ -18,6 +18,8 @@ import {
   UPDATE_REVIEW_SUCCESS,
 } from "./reviewTypes";
 
+// Uses ReviewInfo interface for state.
+// The initial state of the reducer is set to:
 const initialState: ReviewInfo = {
   loading: false,
   error: "",
@@ -33,10 +35,13 @@ const initialState: ReviewInfo = {
   },
 };
 
+// Reducer takes in state and action and returns a state in the form of the ReviewInfo interface.
 const reviewReducer = (
   state = initialState,
   action: ReviewActionTypes
 ): ReviewInfo => {
+  // Switch an the type of action it takes in.
+  // The different cases are quite self-explanetory
   switch (action.type) {
     case POST_REVIEW_REQUEST:
       return {
