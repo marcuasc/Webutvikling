@@ -1,6 +1,7 @@
-import { setAlert } from "../../redux/alert/alertActions";
+import { closeAlert, setAlert } from "../../redux/alert/alertActions";
 import thunk from "redux-thunk";
 import configureStore from "redux-mock-store";
+import alertReducer from "../../redux/alert/alertReducer";
 
 // Defines mockstore-function with thunk
 const middlewares: any = [thunk];
@@ -68,13 +69,45 @@ const initialState = {
 //Defines store from ininital state
 const store = mockStore(initialState);
 
-test("Dispatches correct action in redux store", () => {
-  store.dispatch(setAlert({ type: "error", message: "heipadeg" }));
+describe("Testing Alert actions", () => {
+  beforeEach(() => {
+    // Runs before each test in the suite
+    store.clearActions();
+  });
 
-  const actions = store.getActions();
-  const expectedPayload = {
-    type: "SET_ALERT",
-    payload: { type: "error", message: "heipadeg" },
-  };
-  expect(actions).toEqual([expectedPayload]);
+  test("Dispatches correct action in redux store", () => {
+    store.dispatch(setAlert({ type: "error", message: "heipadeg" }));
+
+    const actions = store.getActions();
+    const expectedPayload = {
+      type: "SET_ALERT",
+      payload: { type: "error", message: "heipadeg" },
+    };
+    expect(actions).toEqual([expectedPayload]);
+  });
+
+  test("Dispatches correct action in redux store", () => {
+    store.dispatch(closeAlert());
+
+    const actions = store.getActions();
+    const expectedPayload = {
+      type: "CLOSE_ALERT",
+    };
+    expect(actions).toEqual([expectedPayload]);
+  });
 });
+
+/*describe("INITIAL_STATE", () => {
+  test("is correct", () => {
+    const action = { type: "dummy_action" };
+    const initialState = {
+      open: false,
+      alert: {
+        type: "success",
+        message: "",
+      },
+    };
+
+    expect(alertReducer(undefined, action)).toEqual(initialState);
+  });
+});*/
