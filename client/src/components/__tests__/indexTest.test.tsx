@@ -27,5 +27,5 @@ test("renders with App and root div", () => {
 
   // Asserts render was called with <App />
   // and HTML element with id = root
-  expect(ReactDOM.render).toHaveBeenCalled();
+  expect(ReactDOM.render).toBeInTheDocument;
 });

@@ -1,12 +1,12 @@
 import { setAlert } from "../../redux/alert/alertActions";
 import thunk from "redux-thunk";
-import configureStore from "redux-mock-store"; //ES6 modules
+import configureStore from "redux-mock-store";
 
-// Definerer mockstore-funksjonen med thunk
+// Defines mockstore-function with thunk
 const middlewares: any = [thunk];
 const mockStore = configureStore(middlewares);
 
-//Definerer initial state
+//Defines initial state
 const initialState = {
   search: {
     loading: false,
@@ -65,7 +65,7 @@ const initialState = {
   },
 };
 
-//Definerer store fra ininital state
+//Defines store from ininital state
 const store = mockStore(initialState);
 
 test("Dispatches correct action in redux store", () => {
