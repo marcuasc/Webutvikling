@@ -28,6 +28,8 @@ import {
   ViewingUser,
 } from "./userTypes";
 
+Axios.defaults.adapter = require("axios/lib/adapters/http");
+
 const userLoginRequest = (): UserActionTypes => {
   return {
     type: USER_LOGIN_REQUEST,
@@ -127,7 +129,7 @@ export const loginUser = (username: string, password: string) => {
     // First dispatch userLoginRequest
     dispatch(userLoginRequest());
     // Then try to post user with axios. Sends the user object.
-    Axios.post("http://localhost:5000/user/login", {
+    return Axios.post("http://localhost:5000/user/login", {
       username: username,
       password: password,
     })
@@ -165,7 +167,7 @@ export const registerUser = (username: string, password: string) => {
     // First dispatch userRegisterRequest
     dispatch(userRegisterRequest());
     // Then try to post user with axios. Sends the user object.
-    Axios.post("http://localhost:5000/user/register", {
+    return Axios.post("http://localhost:5000/user/register", {
       username: username,
       password: password,
     })
@@ -209,7 +211,7 @@ export const fetchUser = (userID: string) => {
     // First dispatch fetchUserRequest
     dispatch(fetchUserRequest());
     // Then try to get user with axios.
-    Axios.get("http://localhost:5000/user/" + userID)
+    return Axios.get("http://localhost:5000/user/" + userID)
       .then((response) => {
         // If it works
         // Dispatch fetchUserSuccess with correct viewingUser based on response
@@ -239,7 +241,10 @@ export const deleteUser = (userID: string, token: string) => {
     // First dispatch deleteUserRequest with userID
     dispatch(deleteUserRequest(userID));
     // Then try to delete user with axios. Sends the config object with token.
-    Axios.delete("http://localhost:5000/user/" + userID, getConfig(token))
+    return Axios.delete(
+      "http://localhost:5000/user/" + userID,
+      getConfig(token)
+    )
       .then((response) => {
         // If it works
         // Dispatch deleteUserSuccess
