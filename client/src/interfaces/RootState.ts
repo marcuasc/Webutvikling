@@ -2,6 +2,7 @@ import { Filters } from "../redux/filter/filterTypes";
 import { Movie } from "../redux/movie/movieTypes";
 import { RecievedReview } from "../redux/review/reviewTypes";
 
+// Interface for describing the values available from redux
 export interface RootState {
   movieInfo: {
     loading: boolean;
@@ -31,11 +32,17 @@ export interface RootState {
       token: string;
       expires: number;
     };
+    viewingUser: {
+      username: string;
+      userID: string;
+      reviews: Array<string>;
+    };
   };
   reviewInfo: {
     loading: false;
     error: string;
     reviews: Array<RecievedReview>;
+    viewingReview: RecievedReview;
   };
   alertInfo: {
     open: boolean;

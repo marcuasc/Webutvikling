@@ -63,12 +63,9 @@ app.use("/review", reviewRoute);
 
 app.use((err, req, res, next) => {
   console.log(err);
+  res.status(500).json({ error: "Something went wrong", message: err.message });
   next();
 });
-
-// app.listen(port, () => {
-//   console.log(`Server running on port ${port}`);
-// });
 
 connectToDB.then(() => {
   app.listen(port, () => {

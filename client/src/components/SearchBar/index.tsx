@@ -57,7 +57,7 @@ const SearchBar: React.FunctionComponent<Props> = (props) => {
 
   // Sets a value in the state of the component. Initially set to an empty string.
   // This is the current value of the text field in the searchbar
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState(props.searchData.query);
 
   // Extracts the redux action updateSearchQuery from the props of the component.
   const updateSearchQuery = props.updateSearchQuery;

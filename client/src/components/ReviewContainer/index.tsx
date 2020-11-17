@@ -1,7 +1,9 @@
-import { Box, Button, Divider, TextField } from "@material-ui/core";
+import { Box, IconButton, Link } from "@material-ui/core";
+import { OpenInNew } from "@material-ui/icons";
 import { Rating } from "@material-ui/lab";
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../interfaces/RootState";
@@ -49,90 +51,81 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
+// Takes type as prop from parent
 type Props = PropsFromRedux & {
   type: "movie" | "user";
 };
 
 const ReviewContainer: React.FunctionComponent<Props> = (props) => {
+  // The useHistory hook gives access to the history instance used for navigation.
+  const history = useHistory();
+
+  // Extracts relevant state and functions from redux props
+  const type = props.type;
   const userInfo = props.userInfo;
-  // const loggedIn = userInfo.user.token.length > 0;
-  const loggedIn = true;
   const reviews: Array<RecievedReview> = props.reviewInfo.reviews;
-  const userReview = reviews.find(
-    (review) => review.userID === userInfo.user.userID
-  );
+
+  // Sets a list of React Elements in the state of the component.
+  // Is used for containing all reviewBoxes
   const [reviewBoxes, setReviewBoxes] = React.useState<React.ReactElement[]>(
     []
   );
 
-  const getUserReviewBox = () => {
-    if (loggedIn) {
-      if (userReview === undefined) {
-        return (
-          <Box key="1" className="review" bgcolor="secondary.light">
-            <div id="reviewContent">
-              <h3 className="noMargin">
-                {reviews.length > 0
-                  ? "Write your review"
-                  : "Be the first to write a review!"}
-              </h3>
-              <Rating name="userRating" />
-              <TextField variant="filled" multiline label="Your review" />
-              <Button variant="contained" color="primary">
-                Send review
-              </Button>
-            </div>
-          </Box>
-        );
-      } else {
-        return (
-          <Box key="1" className="review" bgcolor="secondary.light">
-            <div id="reviewContent">
-              <h3 className="noMargin">Your review</h3>
-              <Rating value={userReview.rating} readOnly />
-              <span>{userReview.text}</span>
+  // Function for updating the component reviewBoxes state with the relevant reviews
+  const updateReviewElements = React.useCallback(() => {
+    const newReviews: React.ReactElement[] = [];
+    // Iterates over all the reviews in the state
+    for (const review of reviews) {
+      // Only creates a reviewBox when the review is not written by the current user and the type prop is movie
+      if (!(type === "movie" && review.userID === userInfo.user.userID)) {
+        // Pushes to newReviews list.
+        newReviews.push(
+          <Box key={review._id} className="review" bgcolor="secondary.light">
+            <div className="reviewContent">
+              <div className="reviewTop">
+                <h3 className="noMargin">
+                  {/* Title depends on type prop */}
+                  {type === "movie" ? (
+                    <Link href={"/user/" + review.userID}>
+                      {review.username}
+                    </Link>
+                  ) : (
+                    <Link href={"/movie/" + review.movieID}>
+                      {review.movieTitle}
+                    </Link>
+                  )}
+                </h3>
+                {/* When clicked opens the corrosponding review */}
+                <IconButton
+                  onClick={() => history.replace("/review/" + review._id)}
+                  size="small"
+                >
+                  <OpenInNew />
+                </IconButton>
+              </div>
+              {/* Rating component from MUI. Cannot be changed */}
+              <Rating value={review.rating} readOnly />
+              {/* Inserts review text */}
+              <span>{review.text}</span>
             </div>
           </Box>
         );
       }
-    } else {
-      return (
-        <Box key="1" className="review" bgcolor="secondary.light">
-          <div id="reviewContent">
-            <h3 className="noMargin">Log in to write your review</h3>
-          </div>
-        </Box>
-      );
     }
-  };
-
-  const updateReviewElements = () => {
-    const newReviews: React.ReactElement[] = [];
-    const userReviewBox = getUserReviewBox();
-    newReviews.push(userReviewBox);
-    for (const review of reviews) {
-      newReviews.push(
-        <Box key={review._id} className="review" bgcolor="secondary.light">
-          <div id="reviewContent">
-            <h3 className="noMargin">{review.userID}</h3>
-            <Rating value={review.rating} readOnly />
-            <span>{review.text}</span>
-          </div>
-        </Box>
-      );
-    }
+    // Sets the state with the updated reviewBoxes.
     setReviewBoxes(newReviews);
-  };
+  }, [type, history, reviews, userInfo.user.userID]);
 
+  // The React.useEffect() hook runs whenever the component mounts or one of the dependencies in the dependency list changes
+  // When reviews changes, run updateReviewElements
   React.useEffect(() => {
     updateReviewElements();
-  }, [reviews]);
+  }, [reviews, updateReviewElements]);
 
   return (
     <div id="reviewContainer">
-      <h2>Reviews</h2>
-      <Divider />
-      {reviewBoxes}
+      {/* If there are no reviews, display fitting response. Else display reviewBoxes from state */}
+      {reviewBoxes.length > 0 ? reviewBoxes : <p>There are no reviews yet</p>}
     </div>
   );
 };

@@ -16,6 +16,10 @@ import SwitchContainer from "./components/SwitchContainer";
 import { RootState } from "./interfaces/RootState";
 import { connect, ConnectedProps } from "react-redux";
 import CustomSnackbar from "./components/CustomSnackbar";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { resetSearch } from "./redux/search/searchActions";
+import { resetFilters } from "./redux/filter/filterActions";
 
 /* 
 
@@ -44,7 +48,14 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const connector = connect(mapStateToProps);
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    resetSearch: () => dispatch(resetSearch()),
+    resetFilters: () => dispatch(resetFilters()),
+  };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
@@ -54,19 +65,22 @@ const App: React.FunctionComponent<Props> = (props) => {
   // State to hold the value for darkmade. Set to true by default.
   const [darkMode, setDarkMode] = React.useState(true);
 
+  const primaryColors = {
+    main: "#7cec9f",
+    light: "#b0ffd0",
+    dark: "#47b970",
+  };
+
   // Creates the lightTheme for our website with primary and secondary colors. Part of Material UI.
   const lightTheme = createMuiTheme({
     palette: {
-      primary: {
-        main: "#7cec9f",
-        light: "#b0ffd0",
-        dark: "#47b970",
-      },
+      primary: primaryColors,
       secondary: {
         main: "#e8e8e8",
         light: "#ffffff",
         dark: "#b6b6b6",
       },
+      success: primaryColors,
       type: "light",
     },
   });
@@ -74,16 +88,13 @@ const App: React.FunctionComponent<Props> = (props) => {
   // Creates the lightTheme for our website with primary and secondary colors. Part of Material UI.
   const darkTheme = createMuiTheme({
     palette: {
-      primary: {
-        main: "#7cec9f",
-        light: "#b0ffd0",
-        dark: "#47b970",
-      },
+      primary: primaryColors,
       secondary: {
         main: "#212121",
         light: "#484848",
         dark: "#000000",
       },
+      success: primaryColors,
       type: "dark",
     },
   });
@@ -109,6 +120,7 @@ const App: React.FunctionComponent<Props> = (props) => {
   // Make the classes from useStyles.
   const classes = useStyles();
 
+  // The useHistory hook gives access to the history instance used for navigation.
   const history = useHistory();
 
   return (
@@ -122,7 +134,16 @@ const App: React.FunctionComponent<Props> = (props) => {
           {/* AppBar should always be used with the Toolbar component from MUI */}
           <Toolbar>
             {/* the logo of the website */}
-            <img id="logo" src="./resources/images/logo.png" alt="logo" />
+            <img
+              id="logo"
+              src="./resources/images/logo.png"
+              alt="logo"
+              onClick={() => {
+                history.replace("/");
+                props.resetSearch();
+                props.resetFilters();
+              }}
+            />
             {/* div that occupies remaining space of the Toolbar
                             This is to space the IconButton to the right side of the toolbar */}
             <div className={"grow"} />
@@ -134,7 +155,7 @@ const App: React.FunctionComponent<Props> = (props) => {
             <IconButton
               onClick={() => {
                 props.userInfo.loggedIn
-                  ? history.push("/user")
+                  ? history.push("/user/" + props.userInfo.user.userID)
                   : history.push("/login");
               }}
             >

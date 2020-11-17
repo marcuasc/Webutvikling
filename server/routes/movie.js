@@ -3,6 +3,7 @@ const router = express.Router();
 const Movie = require("../models/movie");
 const qs = require("qs");
 const Review = require("../models/review");
+const User = require("../models/user");
 
 // Generates an FindObject that the get(/) method uses to filter.
 const makeFindObject = (queryObject) => {
@@ -113,32 +114,79 @@ router.get("/:id", async (req, res) => {
       await Review.find({ movieID: movie._id })
         .then((reviews) => {
           if (reviews.length > 0) {
-            for (review of reviews) {
+            for (const review of reviews) {
               averageReview += review.rating;
             }
             averageReview =
-              Math.round((avarageReview / reviews.length) * 100) / 100;
+              Math.round((averageReview / reviews.length) * 100) / 100;
           }
+          return averageReview;
         })
-        .then(
-          res.status(200).json({ movie: movie, averageRating: averageReview })
-        )
-        .catch((error) => res.json({ error: "An error occured" }));
+        .then((averageReview) => {
+          res.status(200).json({
+            movie: movie,
+            averageRating: averageReview,
+          });
+        })
+        .catch((error) =>
+          res.json({
+            error: "An error occured with the reviews of the movie",
+            message: error.message,
+          })
+        );
     })
     .catch((error) => {
-      res.status(400).json({ error: "Could not get movie " + req.params.id });
+      res.status(400).json({
+        error: "Movie with id " + req.params.id + " doesn't exist",
+        message: error.message,
+      });
     });
 });
 
 router.get("/:id/reviews", async (req, res) => {
   Review.find({ movieID: req.params.id })
+    .then(async (reviews) => {
+      const completeReviews = [];
+      for (let review of reviews) {
+        review = review.toObject();
+        await User.findOne({ _id: review.userID })
+          .select("username")
+          .then((user) => {
+            review.username = user.username;
+          })
+          .catch((error) => {
+            res.status(400).json({
+              error:
+                "Could not get user of one of the reviews for movie " +
+                req.params.id,
+              message: error.message,
+            });
+          });
+        await Movie.findOne({ _id: review.movieID })
+          .select("title")
+          .then((movie) => {
+            review.movieTitle = movie.title;
+          })
+          .catch((error) => {
+            res.status(400).json({
+              error:
+                "Could not get movie title of one of the reviews for movie " +
+                req.params.id,
+              message: error.message,
+            });
+          });
+        completeReviews.push(review);
+      }
+      return completeReviews;
+    })
     .then((reviews) => {
       res.status(200).json({ reviews: reviews });
     })
     .catch((error) => {
-      res
-        .status(400)
-        .json({ error: "Could not get reviews from movie " + req.params.id });
+      res.status(400).json({
+        error: "Could not get reviews for movie " + req.params.id,
+        message: error.message,
+      });
     });
 });
 

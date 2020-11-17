@@ -6,7 +6,9 @@ import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../interfaces/RootState";
 import { fetchMovie } from "../../redux/movie/movieActions";
+import BackButton from "../BackButton";
 import ReviewContainer from "../ReviewContainer";
+import UserReview from "../UserReview";
 import "./style.css";
 
 /* 
@@ -49,9 +51,12 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
 const MoviePage: React.FunctionComponent<Props> = (props) => {
+  // Extracts relevant state and functions from redux props
   const fetchMovie = props.fetchMovie;
   const movieInfo = props.movieInfo;
   const movie = movieInfo.movie;
+
+  // The useParams() hook returns an object of key/value pairs of URL parameters.
   const { movieID } = useParams<{ movieID: string }>();
   // Makes a datestring according to the release date of the movie.
   const dateString = new Date(Date.parse(movie.release_date)).toDateString();
@@ -63,82 +68,89 @@ const MoviePage: React.FunctionComponent<Props> = (props) => {
   }, [movieID, fetchMovie]);
 
   return (
-    <div id="moviePage">
-      <h1 id="title">
-        {movieInfo.error
-          ? movieInfo.error
-          : movieInfo.loading
-          ? "Loading..."
-          : movie.title}
-      </h1>
-      <Divider />
-      {movieInfo.loading || movieInfo.error ? (
-        <> </>
-      ) : (
-        <>
-          <div className="movieInfo">
-            {/* Poster of current movie */}
-            <div className="contentContainerLeft">
-              <img
-                className="poster"
-                src={movie.poster_path}
-                alt="This is the poster of the movie"
-              />
+    <>
+      <BackButton />
+      <div id="moviePage">
+        {/* Title depends on if there is an error or if it is currently loading */}
+        <h1 id="title">
+          {movieInfo.error
+            ? movieInfo.error
+            : movieInfo.loading
+            ? "Loading..."
+            : movie.title}
+        </h1>
+        <Divider />
+        {/* If its loading or there is an error or its loading, display nothing */}
+        {movieInfo.loading || movieInfo.error ? (
+          <> </>
+        ) : (
+          <>
+            <div className="movieInfo">
+              {/* Poster of current movie */}
+              <div className="contentContainerLeft">
+                <img
+                  className="poster"
+                  src={movie.poster_path}
+                  alt="This is the poster of the movie"
+                />
+              </div>
+              <div className="contentContainerRight">
+                <div>
+                  <span className="infoTitle">Description: </span>
+                  <br />
+                  {/* Description of current movie */}
+                  <span>{movie.desc}</span>
+                </div>
+                <div>
+                  <span className="infoTitle">Duration: </span>
+                  {/* Duration of current movie. If 0 display N/A */}
+                  <span>
+                    {movie.duration === 0 ? "N/A" : movie.duration + " min"}
+                  </span>
+                </div>
+                <div>
+                  <span className="infoTitle">Genre: </span>
+                  {/* Genre of current movie. If length 0, display N/A */}
+                  <span>
+                    {movie.genre.length === 0 ? "N/A" : movie.genre.join(", ")}
+                  </span>
+                </div>
+                <div>
+                  <span className="infoTitle">Release date: </span>
+                  {/* Release date of current movie. If "Invalid date", display N/A */}
+                  <span>
+                    {dateString === "Invalid Date" ? "N/A" : dateString}
+                  </span>
+                </div>
+                <div>
+                  <span className="infoTitle">Budget: </span>
+                  {/* Budget of current movie. If 0, display N/A */}
+                  <span>
+                    {movie.budget === 0 ? "N/A" : movie.budget + " USD"}
+                  </span>
+                </div>
+                <div>
+                  <span className="infoTitle">Average rating: </span>
+                  {/* Avarage rating of current movie. Finds the avaragem from the ratings list. */}
+                  <span>
+                    {movie.averageRating === null
+                      ? "No reviews yet"
+                      : movie.averageRating}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="contentContainerRight">
-              <div>
-                <span className="infoTitle">Description: </span>
-                <br />
-                {/* Description of current movie */}
-                <span>{movie.desc}</span>
-              </div>
-              <div>
-                <span className="infoTitle">Duration: </span>
-                {/* Duration of current movie. If 0 display N/A */}
-                <span>
-                  {movie.duration === 0 ? "N/A" : movie.duration + " min"}
-                </span>
-              </div>
-              <div>
-                <span className="infoTitle">Genre: </span>
-                {/* Genre of current movie. If length 0, display N/A */}
-                <span>
-                  {movie.genre.length === 0 ? "N/A" : movie.genre.join(", ")}
-                </span>
-              </div>
-              <div>
-                <span className="infoTitle">Release date: </span>
-                {/* Release date of current movie. If "Invalid date", display N/A */}
-                <span>
-                  {dateString === "Invalid Date" ? "N/A" : dateString}
-                </span>
-              </div>
-              <div>
-                <span className="infoTitle">Budget: </span>
-                {/* Budget of current movie. If 0, display N/A */}
-                <span>
-                  {movie.budget === 0 ? "N/A" : movie.budget + " USD"}
-                </span>
-              </div>
-              <div>
-                <span className="infoTitle">Average rating: </span>
-                {/* Avarage rating of current movie. Finds the avaragem from the ratings list. */}
-                <span>
-                  {/* {(
-                                movie.ratings.reduce((a, b) => a + b, 0) /
-                                movie.ratings.length
-                            ).toFixed(1) + "/5"} */}
-                  {movie.averageRating === null
-                    ? "No reviews yet"
-                    : movie.averageRating}
-                </span>
-              </div>
+            <Divider />
+            {/* Components for reviews */}
+            <div id="reviews">
+              <UserReview />
+              <h2>Other reviews</h2>
+              <ReviewContainer type="movie" />
             </div>
-          </div>
-          <ReviewContainer type="movie" />
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

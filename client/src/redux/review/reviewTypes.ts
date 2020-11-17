@@ -1,3 +1,12 @@
+/*
+
+This file creates the necessary types for Review actions. 
+It also creates interfaces for the different actions and combines them to a single ActionTypes type which is exported .
+
+Also creates an interface for Review state.
+
+*/
+
 export const POST_REVIEW_REQUEST = "POST_REVIEW_REQUEST";
 export const POST_REVIEW_SUCCESS = "POST_REVIEW_SUCCESS";
 export const POST_REVIEW_FAILURE = "POST_REVIEW_FAILURE";
@@ -14,10 +23,15 @@ export const FETCH_REVIEWS_REQUEST = "FETCH_REVIEWS_REQUEST";
 export const FETCH_REVIEWS_SUCCESS = "FETCH_REVIEWS_SUCCESS";
 export const FETCH_REVIEWS_FAILURE = "FETCH_REVIEWS_FAILURE";
 
+export const FETCH_REVIEW_REQUEST = "FETCH_REVIEW_REQUEST";
+export const FETCH_REVIEW_SUCCESS = "FETCH_REVIEW_SUCCESS";
+export const FETCH_REVIEW_FAILURE = "FETCH_REVIEW_FAILURE";
+
 export interface ReviewInfo {
   loading: boolean;
   error: string;
   reviews: Array<RecievedReview>;
+  viewingReview: RecievedReview;
 }
 
 export interface RecievedReview {
@@ -26,6 +40,8 @@ export interface RecievedReview {
   text: string;
   movieID: string;
   userID: string;
+  username: string;
+  movieTitle: string;
 }
 
 export interface Review {
@@ -87,6 +103,20 @@ interface FetchReviewsFailureAction {
   error: string;
 }
 
+interface FetchReviewRequestAction {
+  type: typeof FETCH_REVIEW_REQUEST;
+}
+
+interface FetchReviewSuccessAction {
+  type: typeof FETCH_REVIEW_SUCCESS;
+  payload: RecievedReview;
+}
+
+interface FetchReviewFailureAction {
+  type: typeof FETCH_REVIEW_FAILURE;
+  error: string;
+}
+
 export type ReviewActionTypes =
   | PostReviewRequestAction
   | PostReviewSuccessAction
@@ -99,4 +129,7 @@ export type ReviewActionTypes =
   | DeleteReviewFailureAction
   | FetchReviewsRequestAction
   | FetchReviewsSuccessAction
-  | FetchReviewsFailureAction;
+  | FetchReviewsFailureAction
+  | FetchReviewRequestAction
+  | FetchReviewSuccessAction
+  | FetchReviewFailureAction;

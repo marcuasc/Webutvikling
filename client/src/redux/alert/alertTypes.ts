@@ -1,3 +1,12 @@
+/*
+
+This file creates the necessary types for Alert actions. 
+It also creates interfaces for the different actions and combines them to a single ActionTypes type which is exported.
+
+Also creates an interface for AlertInfo state.
+
+*/
+
 export const SET_ALERT = "SET_ALERT";
 export const CLOSE_ALERT = "CLOSE_ALERT";
 

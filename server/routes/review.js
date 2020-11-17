@@ -6,10 +6,38 @@ const User = require("../models/user");
 const passport = require("passport");
 
 //Method for retrieving a review from id. Does not need to check token, as everyone should be able to see reviews
-router.get("/:id", (req, res, next) => {
-  Review.find({ _id: req.params.id })
-    .then((data) => res.status(200).json(data))
-    .catch(next);
+router.get("/:id", async (req, res, next) => {
+  Review.findOne({ _id: req.params.id })
+    .select("-__v")
+    .then(async (review) => {
+      review = review.toObject();
+      await User.findOne({ _id: review.userID })
+        .select("username")
+        .then((user) => {
+          review.username = user.username;
+        })
+        .catch((error) => {
+          next(error);
+        });
+      await Movie.findOne({ _id: review.movieID })
+        .select("title")
+        .then((movie) => {
+          review.movieTitle = movie.title;
+        })
+        .catch((error) => {
+          next(error);
+        });
+      return review;
+    })
+    .then((review) => {
+      res.status(200).json(review);
+    })
+    .catch((error) => {
+      res.status(400).json({
+        error: "Review with id: " + req.params.id + " doesn't exist",
+        message: error.message,
+      });
+    });
 });
 
 //Method for adding new reviews
@@ -89,12 +117,23 @@ router.delete(
                 .status(200)
                 .json({ message: `Review ${deletedReview._id} deleted` });
             })
-            .catch(next);
+            .catch((error) =>
+              res.status(500).json({
+                error:
+                  "Something went wrong with updating connected user and movie",
+                message: error.message,
+              })
+            );
         } else {
           res.status(403).json({ error: "Not your review" });
         }
       })
-      .catch(next);
+      .catch((error) =>
+        res.status(400).json({
+          error: "Review with id: " + req.params.id + " doesn't exist",
+          message: error.message,
+        })
+      );
   }
 );
 
@@ -112,10 +151,18 @@ router.put(
           if (req.body.rating !== undefined || req.body.text !== undefined) {
             Review.findOneAndUpdate(
               { _id: req.params.id },
-              { rating: req.body.rating, text: req.body.text }
+              { rating: req.body.rating, text: req.body.text },
+              { useFindAndModify: false }
             )
               .then(res.status(200).json({ msg: "Review updated" }))
-              .catch(next);
+              .catch((error) =>
+                res
+                  .status(500)
+                  .json({
+                    error: "Could not update review",
+                    message: error.message,
+                  })
+              );
           } else {
             res.status(400).json({ error: "Not a valid review" });
           }
@@ -123,7 +170,12 @@ router.put(
           res.status(403).json({ error: "Not your review" });
         }
       })
-      .catch(next);
+      .catch((error) => {
+        res.status(400).json({
+          error: "Review with id: " + req.params.id + " doesn't exist",
+          message: error.message,
+        });
+      });
   }
 );
 

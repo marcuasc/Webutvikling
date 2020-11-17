@@ -2,8 +2,6 @@ import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
@@ -18,7 +16,6 @@ import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { useHistory } from "react-router-dom";
 import { loginUser, registerUser } from "../../redux/user/userActions";
-import Cookies from "universal-cookie";
 
 /* 
 
@@ -60,10 +57,12 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
+// Takes in prop "type" from parent. Determines if the Container is supposed to login or register user
 type Props = PropsFromRedux & {
   type: "login" | "register";
 };
 
+// Function for returning a fancy copyright declaration.
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -74,6 +73,7 @@ function Copyright() {
   );
 }
 
+// Use makeStyles from MUI to overwrite the styling of MUI components
 const useStyles = makeStyles((theme) => ({
   paper: {
     display: "flex",
@@ -96,15 +96,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
-  const cookies = new Cookies();
+  // The useHistory hook gives access to the history instance used for navigation.
   const history = useHistory();
+
+  // Make the classes from useStyles.
   const classes = useStyles();
+
+  // Gets relevant state from props.
   const type = props.type;
   const userInfo = props.userInfo;
+
+  // Creates username and password in the component state.
+  // Used for storing the current input in username and password textfields and for submitting.
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const handleClick = () => {
+  // Function that runs when submit button is pressed.
+  // Varies based on the type prop.
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (type === "login") {
       props.loginUser(username, password);
     } else {
@@ -112,20 +122,30 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
     }
   };
 
+  // Function that runs when the link/register link is clicked.
+  // Varies based on the type prop.
   const handleLinkClick = () => {
     type === "login" ? history.replace("/register") : history.replace("/login");
   };
 
+  // The React.useEffect() hook runs whenever the component mounts or one of the dependencies in the dependency list changes.
+  // If the user is logged in and the user is not set in localstorage, set the user in localstorage
+  React.useEffect(() => {
+    if (userInfo.loggedIn && localStorage.getItem("currentUser") === null) {
+      localStorage.setItem("currentUser", JSON.stringify(userInfo.user));
+    }
+  }, [userInfo.loggedIn, userInfo.user]);
+
+  // The React.useEffect() hook runs whenever the component mounts or one of the dependencies in the dependency list changes.
+  // If the user is logged in, redirect to the users page.
   React.useEffect(() => {
     if (userInfo.loggedIn) {
-      cookies.set("currentUser", JSON.stringify(userInfo.user), {
-        expires: new Date(userInfo.user.expires),
-      });
       history.replace("/user/" + userInfo.user.userID);
     }
   }, [userInfo.loggedIn, userInfo.user.userID, history]);
 
   return (
+    // MUI, grid for responsive design
     <Grid
       item
       xs={12}
@@ -136,13 +156,20 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
       id="paperContainer"
     >
       <div className={classes.paper}>
+        {/* Avatar icon */}
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
+        {/* Title based on type prop */}
         <Typography component="h1" variant="h5">
           {type === "login" ? "Sign in" : "Register"}
         </Typography>
-        <form className={classes.form} noValidate>
+        {/* Form for login info. Runs handle submit when submitted */}
+        <form
+          className={classes.form}
+          onSubmit={(event) => handleSubmit(event)}
+        >
+          {/* Textfield for username. Value based on state. Updates state with new value when changed. */}
           <TextField
             variant="outlined"
             margin="normal"
@@ -156,6 +183,7 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
             value={username}
             onChange={(event) => setUsername(event.target.value)}
           />
+          {/* Textfield for password. Value based on state. Updates state with new value when changed. */}
           <TextField
             variant="outlined"
             margin="normal"
@@ -169,21 +197,19 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+          {/* Submit button. Makes the form run onSubmit. Text based on type prop */}
           <Button
+            type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleClick}
           >
             {type === "login" ? "Sign in" : "Register"}
           </Button>
           <Grid container>
             <Grid item>
+              {/* Link from MUI. Runs handleLinkClick when clicked. Text depends on type prop */}
               <Link onClick={handleLinkClick} variant="body2">
                 {type === "login"
                   ? "Don't have an account? Register"
@@ -191,6 +217,7 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
               </Link>
             </Grid>
           </Grid>
+          {/* Inserts Copyright declaration */}
           <Box mt={5}>
             <Copyright />
           </Box>

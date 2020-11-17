@@ -15,6 +15,7 @@ import {
 import Axios from "axios";
 import { Dispatch } from "redux";
 import { fetchReviews } from "../review/reviewActions";
+import { setAlert } from "../alert/alertActions";
 
 const fetchMovieRequest = (): MovieActionTypes => {
   return {
@@ -50,9 +51,10 @@ export const fetchMovie = (id: string) => {
         dispatch(fetchMovieSuccess(movie));
         dispatch(fetchReviews("movie", id) as any);
       })
-      .catch((error) => {
+      .catch((response) => {
         // If it fails, dispatch MovieFailure, with the errorMsg extracted from the response.
-        const errorMsg = error.message;
+        const errorMsg = response.message;
+        dispatch(setAlert({ type: "error", message: "Could not fetch movie" }));
         dispatch(fetchMovieFailure(errorMsg));
       });
   };
