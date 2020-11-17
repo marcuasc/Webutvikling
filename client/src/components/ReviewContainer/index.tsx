@@ -51,28 +51,40 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
+// Takes type as prop from parent
 type Props = PropsFromRedux & {
   type: "movie" | "user";
 };
 
 const ReviewContainer: React.FunctionComponent<Props> = (props) => {
-  const type = props.type;
+  // The useHistory hook gives access to the history instance used for navigation.
   const history = useHistory();
+
+  // Extracts relevant state and functions from redux props
+  const type = props.type;
   const userInfo = props.userInfo;
   const reviews: Array<RecievedReview> = props.reviewInfo.reviews;
+
+  // Sets a list of React Elements in the state of the component.
+  // Is used for containing all reviewBoxes
   const [reviewBoxes, setReviewBoxes] = React.useState<React.ReactElement[]>(
     []
   );
 
+  // Function for updating the component reviewBoxes state with the relevant reviews
   const updateReviewElements = React.useCallback(() => {
     const newReviews: React.ReactElement[] = [];
+    // Iterates over all the reviews in the state
     for (const review of reviews) {
+      // Only creates a reviewBox when the review is not written by the current user and the type prop is movie
       if (!(type === "movie" && review.userID === userInfo.user.userID)) {
+        // Pushes to newReviews list.
         newReviews.push(
           <Box key={review._id} className="review" bgcolor="secondary.light">
             <div className="reviewContent">
               <div className="reviewTop">
                 <h3 className="noMargin">
+                  {/* Title depends on type prop */}
                   {type === "movie" ? (
                     <Link href={"/user/" + review.userID}>
                       {review.username}
@@ -83,6 +95,7 @@ const ReviewContainer: React.FunctionComponent<Props> = (props) => {
                     </Link>
                   )}
                 </h3>
+                {/* When clicked opens the corrosponding review */}
                 <IconButton
                   onClick={() => history.replace("/review/" + review._id)}
                   size="small"
@@ -90,22 +103,28 @@ const ReviewContainer: React.FunctionComponent<Props> = (props) => {
                   <OpenInNew />
                 </IconButton>
               </div>
+              {/* Rating component from MUI. Cannot be changed */}
               <Rating value={review.rating} readOnly />
+              {/* Inserts review text */}
               <span>{review.text}</span>
             </div>
           </Box>
         );
       }
     }
+    // Sets the state with the updated reviewBoxes.
     setReviewBoxes(newReviews);
   }, [type, history, reviews, userInfo.user.userID]);
 
+  // The React.useEffect() hook runs whenever the component mounts or one of the dependencies in the dependency list changes
+  // When reviews changes, run updateReviewElements
   React.useEffect(() => {
     updateReviewElements();
   }, [reviews, updateReviewElements]);
 
   return (
     <div id="reviewContainer">
+      {/* If there are no reviews, display fitting response. Else display reviewBoxes from state */}
       {reviewBoxes.length > 0 ? reviewBoxes : <p>There are no reviews yet</p>}
     </div>
   );

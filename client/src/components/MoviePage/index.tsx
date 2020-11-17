@@ -51,9 +51,12 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
 const MoviePage: React.FunctionComponent<Props> = (props) => {
+  // Extracts relevant state and functions from redux props
   const fetchMovie = props.fetchMovie;
   const movieInfo = props.movieInfo;
   const movie = movieInfo.movie;
+
+  // The useParams() hook returns an object of key/value pairs of URL parameters.
   const { movieID } = useParams<{ movieID: string }>();
   // Makes a datestring according to the release date of the movie.
   const dateString = new Date(Date.parse(movie.release_date)).toDateString();
@@ -68,6 +71,7 @@ const MoviePage: React.FunctionComponent<Props> = (props) => {
     <>
       <BackButton />
       <div id="moviePage">
+        {/* Title depends on if there is an error or if it is currently loading */}
         <h1 id="title">
           {movieInfo.error
             ? movieInfo.error
@@ -76,6 +80,7 @@ const MoviePage: React.FunctionComponent<Props> = (props) => {
             : movie.title}
         </h1>
         <Divider />
+        {/* If its loading or there is an error or its loading, display nothing */}
         {movieInfo.loading || movieInfo.error ? (
           <> </>
         ) : (
@@ -128,10 +133,6 @@ const MoviePage: React.FunctionComponent<Props> = (props) => {
                   <span className="infoTitle">Average rating: </span>
                   {/* Avarage rating of current movie. Finds the avaragem from the ratings list. */}
                   <span>
-                    {/* {(
-                                movie.ratings.reduce((a, b) => a + b, 0) /
-                                movie.ratings.length
-                            ).toFixed(1) + "/5"} */}
                     {movie.averageRating === null
                       ? "No reviews yet"
                       : movie.averageRating}
@@ -140,6 +141,7 @@ const MoviePage: React.FunctionComponent<Props> = (props) => {
               </div>
             </div>
             <Divider />
+            {/* Components for reviews */}
             <div id="reviews">
               <UserReview />
               <h2>Other reviews</h2>

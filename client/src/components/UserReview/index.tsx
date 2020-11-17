@@ -61,15 +61,22 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
 const UserReview: React.FunctionComponent<Props> = (props) => {
+  // The useHistory hook gives access to the history instance used for navigation.
   const history = useHistory();
+
+  // Sets rating and text in the component state
   const [rating, setRating] = React.useState(1);
   const [text, setText] = React.useState("");
+
+  // Extracts relevant state from redux props
   const loggedIn = props.userInfo.loggedIn;
 
+  // Finds the review of the user that is logged in, if it exists.
   const userReview = props.reviewInfo.reviews.find(
     (review) => review.userID === props.userInfo.user.userID
   );
 
+  // function that runs when submit button is pressed. Dispatches the postReview action with the review object and token.
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     props.postReview(
@@ -87,11 +94,16 @@ const UserReview: React.FunctionComponent<Props> = (props) => {
       <h2>Your review</h2>
       <Box className="review" bgcolor="secondary.light">
         <div className="reviewContent">
+          {/* If the user is logged in ... */}
           {loggedIn ? (
+            // ... and has not written a review
             userReview === undefined ? (
               <>
+                {/* Display a form for submitting review */}
                 <h3>Write your review</h3>
+                {/* On submit, run handleSubmit function */}
                 <form onSubmit={(event) => handleSubmit(event)} id="reviewForm">
+                  {/* Rating component from MUI. Value dependent on state, updates state with new value when changed. Cannot be null */}
                   <Rating
                     name="rating"
                     aria-required="true"
@@ -100,6 +112,7 @@ const UserReview: React.FunctionComponent<Props> = (props) => {
                       setRating(value === null ? 1 : value);
                     }}
                   ></Rating>
+                  {/* TextField component from MUI. Value dependent on state, updates state with new value when changed. Cannot be blank */}
                   <TextField
                     multiline
                     variant="filled"
@@ -111,15 +124,19 @@ const UserReview: React.FunctionComponent<Props> = (props) => {
                       setText(event.target.value);
                     }}
                   />
+                  {/* Submit button */}
                   <Button variant="contained" color="primary" type="submit">
                     Post review
                   </Button>
                 </form>
               </>
             ) : (
+              // ... and has written a review
               <>
+                {/* Display the users review */}
                 <div className="reviewTop">
                   <h3 className="noMargin">{userReview.username}</h3>
+                  {/* When clicked, redirects to review */}
                   <IconButton
                     onClick={() => history.replace("/review/" + userReview._id)}
                     size="small"
@@ -127,11 +144,13 @@ const UserReview: React.FunctionComponent<Props> = (props) => {
                     <OpenInNew />
                   </IconButton>
                 </div>
+                {/* Displays the rating and text of the review */}
                 <Rating value={userReview.rating} readOnly />
                 <span>{userReview.text}</span>
               </>
             )
           ) : (
+            // If the user is not logged in, encourage user to log in
             <Typography>
               <Link href="/login">Login</Link>
               <span> to write a review</span>

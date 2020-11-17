@@ -120,6 +120,7 @@ const App: React.FunctionComponent<Props> = (props) => {
   // Make the classes from useStyles.
   const classes = useStyles();
 
+  // The useHistory hook gives access to the history instance used for navigation.
   const history = useHistory();
 
   return (

@@ -3,7 +3,7 @@
 This file creates the necessary types for search actions. 
 It also creates interfaces for the different actions and combines them to a single ActionTypes type which is exported .
 
-Also reates an interface for Search state.
+Also creates an interface for Search state.
 
 */
 

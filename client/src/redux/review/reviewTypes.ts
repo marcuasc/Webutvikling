@@ -1,3 +1,12 @@
+/*
+
+This file creates the necessary types for Review actions. 
+It also creates interfaces for the different actions and combines them to a single ActionTypes type which is exported .
+
+Also creates an interface for Review state.
+
+*/
+
 export const POST_REVIEW_REQUEST = "POST_REVIEW_REQUEST";
 export const POST_REVIEW_SUCCESS = "POST_REVIEW_SUCCESS";
 export const POST_REVIEW_FAILURE = "POST_REVIEW_FAILURE";

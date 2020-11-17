@@ -2,6 +2,7 @@ import { Filters } from "../redux/filter/filterTypes";
 import { Movie } from "../redux/movie/movieTypes";
 import { RecievedReview } from "../redux/review/reviewTypes";
 
+// Interface for describing the values available from redux
 export interface RootState {
   movieInfo: {
     loading: boolean;

@@ -4,6 +4,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 const BackButton: React.FunctionComponent = () => {
+  // The useHistory hook gives access to the history instance used for navigation.
   const history = useHistory();
 
   return (
@@ -12,6 +13,7 @@ const BackButton: React.FunctionComponent = () => {
         variant="contained"
         color="primary"
         startIcon={<ArrowBack />}
+        // When clicked, goes back in the history instance.
         onClick={() => {
           history.goBack();
         }}

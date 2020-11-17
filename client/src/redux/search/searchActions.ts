@@ -90,13 +90,14 @@ export const fetchResults = (params: ParamsInterface) => {
       .catch((error) => {
         // If it fails, dispatch ResultsFailure, with the errorMsg extracted from the response.
         const errorMsg = error.message;
+        dispatch(fetchResultsFailure(errorMsg));
+        // Dispatch setAlert with type error and corresponding message.
         dispatch(
           setAlert({
             type: "error",
             message: "Something went wrong with your search",
           })
         );
-        dispatch(fetchResultsFailure(errorMsg));
       });
   };
 };
