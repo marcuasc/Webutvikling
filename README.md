@@ -533,10 +533,17 @@ Testene sjekker ting som å gjøre handlinger uten gyldig token, POST med ugyldi
   - Det som blir skrevet inn i input felt er det samme som blir hentet ut
   - Sjekker at onClick blir kallt ('called') på komponenter som har onClick
   - Sjekker at komponenter finnes på nettsiden etter den har renderet
-  
-  
+
   
   <b>Enhetstesting av Redux</b>
+  
+  For enhetstesting av redux, har vi brukt `nock` for mocking av api'et og `redux-mock-store` for mocking av redux store.
+  
+  Ting som blir testet:
+  
+  
+  - At asynkrone redux actions dispatcher rikitige redux actions og i riktig rekkefølge.
+  - At redux actions har riktig effekt på en state.
   
   
   
