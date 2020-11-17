@@ -1,12 +1,13 @@
-import { openMovieDialog } from "../../redux/movie/movieActions";
+import { closeAlert, setAlert } from "../../redux/alert/alertActions";
 import thunk from "redux-thunk";
-import configureStore from "redux-mock-store"; //ES6 modules
+import configureStore from "redux-mock-store";
+import alertReducer from "../../redux/alert/alertReducer";
 
-// Definerer mockstore-funksjonen med thunk
+// Defines mockstore-function with thunk
 const middlewares: any = [thunk];
 const mockStore = configureStore(middlewares);
 
-//Definerer initial state
+//Defines initial state
 const initialState = {
   search: {
     loading: false,
@@ -25,7 +26,6 @@ const initialState = {
     descending: true,
   },
   movieInfo: {
-    open: false,
     loading: false,
     error: "",
     movie: {
@@ -38,18 +38,76 @@ const initialState = {
       budget: -1,
       release_date: "",
       duration: -1,
-      avarageRating: -1,
+      averageRating: -1,
+    },
+  },
+  userInfo: {
+    loggedIn: false,
+    loading: false,
+    error: "",
+    user: {
+      username: "",
+      userID: "",
+      token: "",
+      expires: 0,
+    },
+  },
+  reviewInfo: {
+    loading: false,
+    error: "",
+    reviews: [],
+  },
+  alertInfo: {
+    open: false,
+    alert: {
+      type: "success",
+      message: "",
     },
   },
 };
 
-//Definerer store fra ininital state
+//Defines store from ininital state
 const store = mockStore(initialState);
 
-test("Dispatches correct action in redux store", () => {
-  store.dispatch(openMovieDialog("heijegerid"));
+describe("Testing Alert actions", () => {
+  beforeEach(() => {
+    // Runs before each test in the suite
+    store.clearActions();
+  });
 
-  const actions = store.getActions();
-  const expectedPayload = { type: "OPEN_MOVIE_DIALOG", payload: "heijegerid" };
-  expect(actions).toEqual([expectedPayload]);
+  test("Dispatches correct action in redux store", () => {
+    store.dispatch(setAlert({ type: "error", message: "heipadeg" }));
+
+    const actions = store.getActions();
+    const expectedPayload = {
+      type: "SET_ALERT",
+      payload: { type: "error", message: "heipadeg" },
+    };
+    expect(actions).toEqual([expectedPayload]);
+  });
+
+  test("Dispatches correct action in redux store", () => {
+    store.dispatch(closeAlert());
+
+    const actions = store.getActions();
+    const expectedPayload = {
+      type: "CLOSE_ALERT",
+    };
+    expect(actions).toEqual([expectedPayload]);
+  });
 });
+
+/*describe("INITIAL_STATE", () => {
+  test("is correct", () => {
+    const action = { type: "dummy_action" };
+    const initialState = {
+      open: false,
+      alert: {
+        type: "success",
+        message: "",
+      },
+    };
+
+    expect(alertReducer(undefined, action)).toEqual(initialState);
+  });
+});*/

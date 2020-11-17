@@ -7,27 +7,16 @@ import rootReducer from "../../redux/rootReducer";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
+import ReviewContainer from "../ReviewContainer/index";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
-
-test("renders Search-button", () => {
-  const { getByText } = render(
-    <Provider store={store}>
-      <Router>
-        <App />
-      </Router>
-    </Provider>
-  );
-  const SearchButton = getByText("Search");
-  expect(SearchButton).toBeInTheDocument();
-});
 
 test("it renders without crashing", () => {
   const element = document.createElement("div");
   ReactDOM.render(
     <Provider store={store}>
       <Router>
-        <App />
+        <ReviewContainer type={"movie"} />
       </Router>
     </Provider>,
     element

@@ -24,6 +24,7 @@ const MovieContainer: React.FunctionComponent<Props> = (props) => {
       bgcolor="secondary.light"
       boxShadow={3}
       color="text.secondary"
+      data-testid="boxen"
     >
       <img
         className="resultImg"

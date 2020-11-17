@@ -202,7 +202,7 @@ const FilterDialog: React.FunctionComponent<Props> = (props) => {
   return (
     // Dialog component from MUI. Open prop set to the open prop from the component (that comes from the redux state).
     // When closed (clicking outside the dialog, runs handleClose)
-    <Dialog open={props.filterData.open} onClose={handleClose}>
+    <Dialog open={props.filterData.open} onClose={handleClose} id="filters">
       <DialogTitle>Filters</DialogTitle>
       <DialogContent>
         <DialogContentText>Genres</DialogContentText>
