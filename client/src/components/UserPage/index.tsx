@@ -77,10 +77,11 @@ const UserPage: React.FunctionComponent<Props> = (props) => {
   const { userID } = useParams<{ userID: string }>();
   const myUser = userID === props.userInfo.user.userID;
   const viewingUser = props.userInfo.viewingUser;
+  const fetchUser = props.fetchUser;
 
   React.useEffect(() => {
-    props.fetchUser(userID);
-  }, [userID]);
+    fetchUser(userID);
+  }, [userID, fetchUser]);
 
   return (
     <>

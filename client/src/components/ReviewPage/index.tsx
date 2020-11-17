@@ -102,7 +102,7 @@ const ReviewPage: React.FunctionComponent<Props> = (props) => {
 
   React.useEffect(() => {
     fetchReview(reviewID);
-  }, [reviewID]);
+  }, [reviewID, fetchReview]);
 
   return (
     <>

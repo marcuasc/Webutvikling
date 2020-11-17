@@ -2,8 +2,6 @@ import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
@@ -18,7 +16,6 @@ import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { useHistory } from "react-router-dom";
 import { loginUser, registerUser } from "../../redux/user/userActions";
-import Cookies from "universal-cookie";
 
 /* 
 
@@ -96,7 +93,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
-  const cookies = new Cookies();
   const history = useHistory();
   const classes = useStyles();
   const type = props.type;
@@ -118,10 +114,13 @@ const LoginRegisterContainer: React.FunctionComponent<Props> = (props) => {
   };
 
   React.useEffect(() => {
+    if (userInfo.loggedIn && localStorage.getItem("currentUser") === null) {
+      localStorage.setItem("currentUser", JSON.stringify(userInfo.user));
+    }
+  }, [userInfo.loggedIn, userInfo.user]);
+
+  React.useEffect(() => {
     if (userInfo.loggedIn) {
-      cookies.set("currentUser", JSON.stringify(userInfo.user), {
-        expires: new Date(userInfo.user.expires),
-      });
       history.replace("/user/" + userInfo.user.userID);
     }
   }, [userInfo.loggedIn, userInfo.user.userID, history]);

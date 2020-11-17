@@ -15,17 +15,22 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
 } from "./userTypes";
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
 
 const getStateFromCookies = (): UserInfo => {
-  const userInCookie = cookies.get("currentUser");
-  if (userInCookie !== undefined) {
+  let userInStorage = localStorage.getItem("currentUser");
+  if (userInStorage !== null) {
+    const currentTime = new Date();
+    if (JSON.parse(userInStorage).expires < currentTime.getTime()) {
+      localStorage.removeItem("currentUser");
+      userInStorage = null;
+    }
+  }
+  if (userInStorage !== null) {
     return {
       loggedIn: true,
       loading: false,
       error: "",
-      user: userInCookie,
+      user: JSON.parse(userInStorage),
       viewingUser: {
         username: "",
         userID: "",
@@ -138,7 +143,7 @@ const userReducer = (
         error: action.payload,
       };
     case USER_LOGOUT:
-      cookies.remove("currentUser", { path: "/" });
+      localStorage.removeItem("currentUser");
       return {
         ...state,
         loggedIn: false,

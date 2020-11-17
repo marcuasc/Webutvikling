@@ -56,6 +56,7 @@ type Props = PropsFromRedux & {
 };
 
 const ReviewContainer: React.FunctionComponent<Props> = (props) => {
+  const type = props.type;
   const history = useHistory();
   const userInfo = props.userInfo;
   const reviews: Array<RecievedReview> = props.reviewInfo.reviews;
@@ -63,16 +64,16 @@ const ReviewContainer: React.FunctionComponent<Props> = (props) => {
     []
   );
 
-  const updateReviewElements = () => {
+  const updateReviewElements = React.useCallback(() => {
     const newReviews: React.ReactElement[] = [];
     for (const review of reviews) {
-      if (!(props.type === "movie" && review.userID === userInfo.user.userID)) {
+      if (!(type === "movie" && review.userID === userInfo.user.userID)) {
         newReviews.push(
           <Box key={review._id} className="review" bgcolor="secondary.light">
             <div className="reviewContent">
               <div className="reviewTop">
                 <h3 className="noMargin">
-                  {props.type === "movie" ? (
+                  {type === "movie" ? (
                     <Link href={"/user/" + review.userID}>
                       {review.username}
                     </Link>
@@ -97,11 +98,11 @@ const ReviewContainer: React.FunctionComponent<Props> = (props) => {
       }
     }
     setReviewBoxes(newReviews);
-  };
+  }, [type, history, reviews, userInfo.user.userID]);
 
   React.useEffect(() => {
     updateReviewElements();
-  }, [reviews]);
+  }, [reviews, updateReviewElements]);
 
   return (
     <div id="reviewContainer">

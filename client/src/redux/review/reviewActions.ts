@@ -159,7 +159,7 @@ export const updateReview = (review: Review, id: string, token: string) => {
       getConfig(token)
     )
       .then((response) => {
-        dispatch(postReviewSuccess());
+        dispatch(updateReviewSuccess());
         dispatch(
           setAlert({ type: "success", message: "Successfully updated review!" })
         );

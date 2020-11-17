@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { Dispatch } from "redux";
-import { closeAlert, setAlert } from "../alert/alertActions";
+import { setAlert } from "../alert/alertActions";
 import { fetchReviews } from "../review/reviewActions";
 import {
   DELETE_USER_FAILURE,
