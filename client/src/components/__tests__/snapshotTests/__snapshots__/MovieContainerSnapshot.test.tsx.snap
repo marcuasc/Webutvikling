@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="MuiBox-root MuiBox-root-1 result"
+  data-testid="boxen"
+  onClick={[Function]}
+>
+  <img
+    alt="title1 poster"
+    className="resultImg"
+    src="posterpath1"
+  />
+  <p
+    className="title"
+  >
+    title1
+  </p>
+</div>
+`;
