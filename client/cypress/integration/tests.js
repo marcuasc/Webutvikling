@@ -102,6 +102,5 @@ describe('Check sorting on budget', () => {
         cy.get('div#results').should("contain", "Pirates of the Caribbean: On Stranger Tides")
         cy.get('#sortSelect > .MuiButtonBase-root').click()
         cy.get('div#results').should("contain", "A Quiet Place Part II")
-
     })
 })
