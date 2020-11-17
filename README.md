@@ -1,4 +1,4 @@
-# Prosjekt 4
+# Prosjekt 4b
 
 Denne filen inneholder gruppens dokumentasjon fra prosjekt 3, samt en egen seksjon nederst i filen som viser til hvilke endringer som er gjort til leveransen av Prosjekt 4
 
@@ -29,6 +29,9 @@ Til høyre i headeren befinner det seg en knapp der brukeren kan bytte mellom li
 * Avslutt prosessen som kjører backend
 * Naviger deg inn i `server`mappen, og skriv `npm test`
 
+**Merknader**
+* Merk at man må være koblet til NTNU-nettverket (enten ved å være på NTNU, eller bruke VPN) for at serveren skal kunne koble seg til databasen.
+* VPN kan forårsake noen tester til å "time ut"
 
 
 # Backend
