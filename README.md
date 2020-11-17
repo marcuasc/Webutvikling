@@ -414,13 +414,13 @@ De nye endepunktene ser nå slik ut:
 ## Tester
 
 
-I prosjekt 4 har vi systematisk enhetstestet både backend og frontend. Målet har vært å få oppmot 100% testdekning. Under står det forklart hvilke teknolgier vi har brukt til testing og hva de tester.
+I prosjekt 4 har vi systematisk enhetstestet både backend og frontend. Under står det forklart hvilke teknologier vi har brukt til testing og hva som blir testet. I tillegg til enhetstester har vi lagt til flere end-2-end tester etterhvert som vi har lagt til mer funksjonalitet.
 <details>
   <summary><b>Backend</b></summary>
   
 Vi har brukt [Chai](https://www.chaijs.com/), [Mocha](https://mochajs.org/) og [Supertest](https://www.npmjs.com/package/supertest) for å teste API-et vårt, og har tilsammen skrevet 36 tester.
 
-Testene ligger i `server/test`, og sjekker alle endepunktene. De sjekker hovedsaklig situsjoner der API-et returnerer feilmeldinger, da vi ikke har satt opp en mock-database til å gjøre persistente endringer på.
+Testene ligger i `server/test`, og sjekker alle endepunktene. De sjekker hovedsaklig situasjoner der API-et returnerer feilmeldinger, da vi ikke har satt opp en mock-database til å gjøre persistente endringer på.
 
 Testene sjekker ting som å gjøre handlinger uten gyldig token, POST med ugyldig format på body, endre andre brukeres reviews osv.
 
@@ -429,6 +429,26 @@ Testene sjekker ting som å gjøre handlinger uten gyldig token, POST med ugyldi
 
 <details>
   <summary><b>Frontend</b></summary>
+  For testing av frontend har vi lagt vekt på å få dekket komponenter og redux (siden håndtering av state og annen funksjonalitet hovedsaklig er gjort gjennom redux). Vi har 12 testsuites med totalt 64 tester derav en snapshottest og resten enhetstester.
+  
+  Vi har brukt [Jest](https://jestjs.io/) og vi har tatt i bruk React testing library + @testing-library/user-event for simulere brukerhandling.
+  
+  
+  Testene ligger i `client/components/__tests__`
+  
+  <b>Enhetstesting av Komponenter</b>
+  
+  For testing av komponentene har det blitt brukt blant annet userEvents for å simulere f.eks onClick og typing.
+  
+  Diverse ting som blir testet:
+  - Det sjekkes at komponenter renderer korrekt
+  - Det som blir skrevet inn i input felt er det samme som blir hentet ut
+  - Sjekker at onClick blir kallt ('called') på komponenter som har onClick
+  - Sjekker at komponenter finnes på nettsiden etter den har renderet
+  
+  
+  
+  <b>Enhetstesting av Redux</b>
   
   
   
