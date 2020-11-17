@@ -23,14 +23,14 @@ test("renders Search-button", () => {
 });
 
 test("it renders without crashing", () => {
-  const element = document.createElement("div");
+  const divTest = document.createElement("div");
   ReactDOM.render(
     <Provider store={store}>
       <Router>
         <App />
       </Router>
     </Provider>,
-    element
+    divTest
   );
-  ReactDOM.unmountComponentAtNode(element);
+  ReactDOM.unmountComponentAtNode(divTest);
 });

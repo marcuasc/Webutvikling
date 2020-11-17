@@ -11,10 +11,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import SearchBar from "../SearchBar";
 import ReactDOM from "react-dom";
 
-/*const rewire = require("rewire");
-const filterDialog = rewire('"../FilterDialog/index"');
-const createFilterObject = filterDialog.__get__("createFilterObject");
-*/
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 describe("Redux actions", () => {
@@ -54,8 +50,8 @@ describe("Redux reducer", () => {
   });
 });
 
-describe("Component tests", () => {
-  it("renders Search-button", () => {
+describe("FilterDialog; Component tests", () => {
+  it("renders FilterDialog", () => {
     const { getByText } = render(
       <Provider store={store}>
         <Router>

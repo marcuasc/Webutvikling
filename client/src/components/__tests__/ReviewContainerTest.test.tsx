@@ -1,6 +1,5 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import App from "../../App";
 import ReactDOM from "react-dom";
 import { applyMiddleware, createStore } from "redux";
 import rootReducer from "../../redux/rootReducer";

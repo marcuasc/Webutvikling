@@ -96,18 +96,3 @@ describe("Testing Alert actions", () => {
     expect(actions).toEqual([expectedPayload]);
   });
 });
-
-/*describe("INITIAL_STATE", () => {
-  test("is correct", () => {
-    const action = { type: "dummy_action" };
-    const initialState = {
-      open: false,
-      alert: {
-        type: "success",
-        message: "",
-      },
-    };
-
-    expect(alertReducer(undefined, action)).toEqual(initialState);
-  });
-});*/
