@@ -43,7 +43,7 @@ describe('Checks if movie info displays', () => {
 })
 
 
-describe('Search for the movies over 200 minutes', () => {
+describe('Search for the movies over 210 minutes', () => {
     it('Returns the correct movie', () => {
         cy.visit('localhost:3000')
         cy.contains("Filters").click()
@@ -104,3 +104,30 @@ describe('Check sorting on budget', () => {
         cy.get('div#results').should("contain", "A Quiet Place Part II")
     })
 })
+
+describe('Check if login works', () => {
+    it('Successfully logs in', () => {
+        cy.visit('localhost:3000')
+        cy.get('#root > div.MuiBox-root.MuiBox-root-2.App > header > div > button:nth-child(4)').click()
+        cy.get('#username').click().type('admin')
+        cy.get('#password').click().type('admin')
+        cy.get('#paperContainer > div > form > button').click()
+        cy.get('#switchContainer > p:nth-child(3)').should("contain", "Username: admin")
+    })
+})
+
+describe('Checks if reviews displays correctly', () => {
+    it('Displays info correctly', () => {
+        cy.visit('localhost:3000')
+        cy.get('input#textField').type('10x10')
+        cy.wait(1000)
+        cy.get('div#results')
+            .should('contain', "10x10").click()
+        cy.wait(1000)
+        cy.get('#reviewContainer > div > div')
+            .should('contain', 'Sykt nice film')
+
+    })
+})
+
+
