@@ -522,7 +522,8 @@ Testene sjekker ting som å gjøre handlinger uten gyldig token, POST med ugyldi
   Vi har brukt [Jest](https://jestjs.io/) og vi har tatt i bruk React testing library + @testing-library/user-event for simulere brukerhandling.
   
   
-  Testene ligger i `client/components/__tests__`
+  Enhetstestene ligger i `client/components/__tests__`  
+  Snapshottestene ligger `client/components/__tests__/snapshotTests`
   
   <b>Enhetstesting av Komponenter</b>
   
