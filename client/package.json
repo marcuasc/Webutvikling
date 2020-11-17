@@ -35,7 +35,7 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "cy:open": "cypress open",
-    "test:jest": "react-scripts test --watchAll=false --coverage --verbose",
+    "test:jest": "react-scripts test --watchAll=false  --verbose",
     "test:cy": "cypress run",
     "test": "npm run test:jest && npm run test:cy",
     "test:snap": "jest -i src/components/__tests__/snapTest.snapshot.test.tsx -t"
