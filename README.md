@@ -517,7 +517,7 @@ Testene sjekker ting som å gjøre handlinger uten gyldig token, POST med ugyldi
 
 <details>
   <summary><b>Frontend</b></summary>
-  For testing av frontend har vi lagt vekt på å få dekket komponenter og redux (siden håndtering av state og annen funksjonalitet hovedsaklig er gjort gjennom redux). Vi har 12 testsuites med totalt 64 tester derav en snapshottest og resten enhetstester.
+  For testing av frontend har vi lagt vekt på å få dekket komponenter og redux (siden håndtering av state og annen funksjonalitet hovedsaklig er gjort gjennom redux). Vi har 27 testsuites med totalt 79 tester derav 16 snapshottest og 63 enhetstester.
   
   Vi har brukt [Jest](https://jestjs.io/) og vi har tatt i bruk React testing library + @testing-library/user-event for simulere brukerhandling.
   
