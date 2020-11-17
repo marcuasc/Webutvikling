@@ -407,7 +407,95 @@ De nye endepunktene ser nå slik ut:
 
 <details>
   <summary><b>Ny funksjonalitet</b></summary>
+  Nye ting som brukeren kan gjøre:
   
+  
+  - Registrere bruker
+  - Logge inn
+  - Logge ut
+  - Slette bruker
+  - Skrive reviews på filmer
+  - Oppdatere sine reviews på filmer
+  - Slette sine reviews på filmer
+  - Se alle sine egne reviews på filmer
+  - Se andre brukere sine reviews
+  - Se på informasjon om andre brukere
+  - Se alle reviews på en film
+  - Få respons i form av en alert i forhold til brukerhandlinger
+  - Få korrekt side vist basert på url
+
+
+</details>
+
+<details>
+  <summary><b>Komponenter</b></summary>
+  
+
+  I frontend har vi lagt til og slettet komponenter for å få implementert den nye funksjonaliteten:
+
+  Komponenter som er fjernet:
+  
+  
+  - `CustomizedRatings`
+    - Denne slettet vi fordi rating av filmer ble lagt inn i nye komponenter.
+  - `MovieDialog`
+    - Denne slettet vi fordi filminformasjon ble lagt flyttet til MoviePage.
+  - `ResultContainer`
+    - Ikke egentlig slettet, bare reformatert til MovieContainer.
+  - `SearchContainer`
+    - Denne slettet vi fordi den var litt unødvendig. Dens innhold ligger på i SwitchContainer.
+ 
+
+  Komponenter som er lagt til:
+  
+  
+  - `BackButton`
+    - Siden vi nå har begynt å bruke `react-router-dom` for navigasjon i frontend, la vi inn en tilbakeknapp som går til forrige side.
+  - `CustomSnackbar`
+    - Denne komponenten har ansvaret for å holde alle alerts som blir gitt til brukeren. Koblet til alert i redux.
+  - `LoginRegisterContainer`
+    - Denne komponenten har ansvaret for å logge inn/registrere brukeren med brukernavn og passord. Lagrer "currentuser" i localStorage.
+  - `MovieContainer`
+    - Ikke egentlig ny, nye versjonen av ResultContainer.
+  - `MoviePage`
+    - Denne komponenten har nå ansvaret for å vise informasjon om filmene. Vises på url `movie/:id` hvor `:id` er id til film.
+  - `ReviewContainer`
+    - Denne komponenten har ansvaret for å vise alle reviews til enten film eller bruker. "Child" av MoviePage og UserPage.
+  - `ReviewPage`
+    - Denne komponenten viser informasjon om et review og gir brukeren mulighet til å slette/oppdatere hvis brukeren er eier. Vises på url `review/:id` hvor `:id` er id til review.
+  - `SwitchContainer`
+    - Denne komponenten har ansvaret for å "rendere" riktige komponenter basert på url'en.
+  - `UserPage`
+    - Denne komponenten har ansvaret for å vise informasjon om brukere. Hvis brukeren ser på sin egen bruker, kan man logge ut eller slette bruker.
+  - `UserReview`
+    - Denne komponenten har ansvaret for å la brukeren skrive et nytt review til en film. Hvis brukeren allerede har skrevet et review til filmen, viser denne det reviewet.
+  
+
+  Mindre endringer har også blitt gjort i (nesten alle) andre komponenter.
+</details>
+
+<details>
+  <summary><b>Redux</b></summary>
+  Vi har også gjort noen endringer i redux'en vår, spesifikt lagt til flere deler.
+  
+  
+  Nytt i redux:
+  
+  
+  - `alert`
+    - Denne delen har ansvaret for å holde informasjon og behandle om hvilken alert som forløpig vises.
+    - Kontrollerer i stor fra komponenten `CustomizedSnackbar`
+  - `movie`
+    - Endret result fra prosjekt-3 til movie. Denne har ansvaret for å holde og behandle informasjon om filmen som foreløpig blir sett på.
+    - Oppdatert for oppdaterte objekter fra backend.
+  - `review`
+    - Denne delen har ansvaret for å holde og behandle informasjon om reviews til enten film eller bruker. Holder også informasjon om et enkelt review som man ser på.
+  - `user`
+    - Denne delen har ansvaret for å holde og behandle informasjon om bruker som er logget inn og hvilken bruker som blir sett på.
+    - Henter informasjon fra localStorage hvis det eksisterer.
+  
+
+  Mindre endringer har også blitt gjort i andre deler av redux for å passe den nye funksjonaliteten.
 </details>
 
 
