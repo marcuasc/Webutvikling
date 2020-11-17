@@ -403,13 +403,18 @@ De nye endepunktene ser nå slik ut:
 
 
 
-
-
 ## Frontend
+
+<details>
+  <summary><b>Ny funksjonalitet</b></summary>
+  
+</details>
+
 
 ## Tester
 
 
+I prosjekt 4 har vi systematisk enhetstestet både backend og frontend. Målet har vært å få oppmot 100% testdekning. Under står det forklart hvilke teknolgier vi har brukt til testing og hva de tester.
 <details>
   <summary><b>Backend</b></summary>
   
@@ -420,6 +425,15 @@ Testene ligger i `server/test`, og sjekker alle endepunktene. De sjekker hovedsa
 Testene sjekker ting som å gjøre handlinger uten gyldig token, POST med ugyldig format på body, endre andre brukeres reviews osv.
 
 </details>
+
+
+<details>
+  <summary><b>Frontend</b></summary>
+  
+  
+  
+</details>
+
 
 
 
